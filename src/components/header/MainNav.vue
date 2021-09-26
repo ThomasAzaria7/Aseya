@@ -120,7 +120,6 @@ export default {
     .logo {
       position: relative;
       & > * {
-        padding: 5px 10px;
         position: relative;
         top: 50%;
         transform: translateY(-50%);
@@ -129,9 +128,14 @@ export default {
       h1 {
         text-transform: uppercase;
         margin: 0;
+        padding: 5px 0px;
+
+        
         a {
           text-decoration: none;
           color: inherit;
+          padding: 0;
+          margin:0;
         }
       }
     }
