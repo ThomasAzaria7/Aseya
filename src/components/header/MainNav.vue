@@ -17,13 +17,13 @@
         <i class="fas fa-search"></i>
       </div>
       <div class="account">
-        <router-link to="my-account">
+        <router-link to="/my-account">
           <i class="fas fa-user"></i>
         </router-link>
-        <router-link to="my-favorites">
+        <router-link to="/my-favorites">
           <i class="far fa-heart"> (0)</i>
         </router-link>
-        <router-link to="my-cart">
+        <router-link to="/my-cart">
           <i class="fas fa-shopping-cart"> (0)</i>
         </router-link>
       </div>
@@ -33,7 +33,7 @@
         <router-link to="/">home</router-link>
       </li>
       <li>
-        <router-link to="store">store</router-link>
+        <router-link to="/store">store</router-link>
       </li>
       <li>
         <a @click="toggleSlide">sale</a>
@@ -73,7 +73,7 @@ export default {
     },
     handleScroll() {
       let num = window.scrollY;
-      console.log("scrollYposition", num);
+      // console.log("scrollYposition", num);
 
       if (num === 0) {
         this.slideActive = true;
@@ -98,6 +98,7 @@ export default {
 .header {
   position: sticky;
   top: 0;
+  z-index: 1;
   &__promo {
     margin: 0;
     p {
@@ -130,12 +131,11 @@ export default {
         margin: 0;
         padding: 5px 0px;
 
-        
         a {
           text-decoration: none;
           color: inherit;
           padding: 0;
-          margin:0;
+          margin: 0;
         }
       }
     }

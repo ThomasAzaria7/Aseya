@@ -4,11 +4,12 @@ import StorePage from "../components/body/shop/StorePage";
 import ShopCart from "../components/header/ShopCart";
 import UserFav from "../components/header/UserFav";
 import AccountManagement from "../components/header/myaccount/AccountManagement";
-// import ShopCart from "../components/header/ShopCart";
+import ItemPreview from "../components/body/shop/ItemPreview.vue";
 
 const routes = [
   { path: "", component: HomePage },
   { path: "/store", component: StorePage },
+  { path: "/store/:id", component: ItemPreview },
   { path: "/my-cart", component: ShopCart },
   { path: "/my-favorites", component: UserFav },
   { path: "/my-account", component: AccountManagement }

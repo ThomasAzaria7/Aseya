@@ -1,9 +1,11 @@
 <template>
   <div class="shopContainer">
     <div class="shopContainer__itemBox" v-for="item in data" :key="item.code">
-      <div class="imageBox">
-        <img :src="item.imgLink" alt="" />
-      </div>
+      <router-link :to="'/store/' + item.name + item.code">
+        <div class="imageBox">
+          <img :src="item.imgLink" alt />
+        </div>
+      </router-link>
       <div class="textDescription">
         <h2>{{ item.name }}</h2>
         <p>${{ item.price }}</p>
@@ -17,7 +19,7 @@ import data from "./data.js";
 export default {
   data() {
     return {
-      data: data,
+      data: data
     };
   },
   methods: {
@@ -26,8 +28,8 @@ export default {
     created() {
       console.log("hi");
       // console.log(data);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -40,7 +42,7 @@ export default {
   // flex-direction: row;
   flex-wrap: wrap;
   box-sizing: border-box;
-  z-index: -1;
+  z-index: 0;
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
   // gap: 10px 0;

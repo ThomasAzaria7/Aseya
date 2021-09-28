@@ -4,12 +4,18 @@
 
     <div class="routerContainer">
       <router-view></router-view>
+      <main-footer></main-footer>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import MainFooter from "./components/footer/MainFooter.vue";
+export default {
+  components: {
+    MainFooter
+  }
+};
 </script>
 
 <style lang="scss">

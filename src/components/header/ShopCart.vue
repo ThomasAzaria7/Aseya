@@ -1,12 +1,12 @@
 <template>
   <div class="cartContainer">
-    <h2>shop cart page works</h2>
+    <div class="cartContainer__items"></div>
+    <div class="cartContainer__payments"></div>
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-  .cartContainer{
-    padding: 0 10%;
-  }
+.cartContainer {
+  padding: 0 10%;
+}
 </style>
