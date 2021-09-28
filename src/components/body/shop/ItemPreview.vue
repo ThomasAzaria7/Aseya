@@ -2,10 +2,7 @@
   <div class="previewContainer">
     <div class="previewContainer__view">
       <div class="itemImgageBox">
-        <img
-          src="https://static.wixstatic.com/media/4663cc_f4d0890f69004da782c60d368f1c652d~mv2_d_3456_5184_s_4_2.jpg/v1/fill/w_489,h_734,al_c,q_80,usm_0.66_1.00_0.01/4663cc_f4d0890f69004da782c60d368f1c652d~mv2_d_3456_5184_s_4_2.webp"
-          alt
-        />
+        <img :src="getItemData.imgLink" alt />
       </div>
       <div class="altImageBox">
         <div>
@@ -34,13 +31,13 @@
         </div>
       </div>
       <div class="itemDescrption">
-        <p style="line-spacing:25px">
+        <p style="line-spacing: 25px">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum magnam
           optio ad velit tenetur labore doloribus similique, dicta impedit
           dignissimos incidunt nostrum quia aliquid quam possimus deserunt vitae
           natus neque!
         </p>
-        <p style="line-spacing:25px">
+        <p style="line-spacing: 25px">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum magnam
           optio ad velit tenetur labore doloribus similique, dicta impedit
           dignissimos incidunt nostrum quia aliquid quam possimus deserunt vitae
@@ -50,12 +47,12 @@
     </div>
     <div class="previewContainer__selectors">
       <div>
-        <h2>{{items}}</h2>
-        <p>$153</p>
+        <h2>{{ getItemData.name }}</h2>
+        <p>$ {{ getItemData.price }}</p>
       </div>
       <br />
       <br />
-      <form @submit.prevent="getItemData">
+      <form @submit.prevent="addItemToCart">
         <div class="formControl">
           <label for>Select your Style</label>
           <select name id>
@@ -72,7 +69,7 @@
         </div>
 
         <div class="formControl">
-          <button @click="getItemData">Add to card</button>
+          <button type="submit" >Add to card</button>
         </div>
       </form>
     </div>
@@ -83,21 +80,34 @@
 export default {
   data() {
     return {
-      items: "Thomas"
+      items: "Thomas",
+      itemCode: "",
     };
   },
   created() {
     // this.items = this.$store.getters["items/getItems"];
     // console.log(this.items);
-    console.log(this.$store.getters["items/getItems"]);
-    console.log(this.$store.getters["items/getdata"]);
+    // console.log(this.$store.getters["items/getItems"][0]);
+    // console.log(this.$store.getters["items/getdata"]);
+
+    console.log();
+    this.itemCode = this.$route.params;
+    this.$store.dispatch("items/getSelectedProduct", this.itemCode);
+  },
+  computed: {
+    getItemData() {
+      // console.log(this.items);
+      // console.log(this.$store.getters["items/getItems"]);
+      // console.log(this.$store.getters["items/getSelectedItem"]);
+      return this.$store.getters["items/getSelectedItem"];
+    },
   },
   methods: {
-    getItemData() {
-      this.items = this.$store.getters["items/getItems"];
-      // console.log(this.items);
-    }
-  }
+    addItemToCart() {
+      document.cookie = "cart" + "=" + "hello" + ";" + 30 + ";path=/";
+      // this.$cookies.set("cart", this.getItemData);
+    },
+  },
 };
 </script>
 

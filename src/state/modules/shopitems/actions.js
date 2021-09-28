@@ -1,6 +1,5 @@
 export default {
-  //   addtocart(context, payload) {
-  //     context.commit("", coaches);
-  //     payload;
-  //   }
+	getSelectedProduct(context, payload) {
+		context.commit("changeData", payload);
+	},
 };

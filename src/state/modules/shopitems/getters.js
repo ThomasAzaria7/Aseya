@@ -1,9 +1,14 @@
 export default {
-  getItems(state) {
-    return "hiiii " + state.greet;
-  },
+	getItems(state) {
+		// console.log(state.shopItems[0]);
+		return state.shopItems;
+	},
 
-  getdata(state) {
-    return state.coaches;
-  }
+	getSelectedItem(state) {
+		return state.selectedItem[0];
+	},
+
+	getdata(state) {
+		return state.coaches;
+	},
 };

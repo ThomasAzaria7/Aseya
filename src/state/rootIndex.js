@@ -5,7 +5,7 @@ const store = createStore({
   modules: {
     items: shopItemsModule
   },
-  data() {
+  state() {
     return {};
   },
   actions: {},

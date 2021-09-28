@@ -1,7 +1,7 @@
 <template>
   <div class="shopContainer">
     <div class="shopContainer__itemBox" v-for="item in data" :key="item.code">
-      <router-link :to="'/store/' + item.name + item.code">
+      <router-link :to="'/store/'+ item.code">
         <div class="imageBox">
           <img :src="item.imgLink" alt />
         </div>

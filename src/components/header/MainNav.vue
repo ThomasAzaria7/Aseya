@@ -3,7 +3,7 @@
     <div class="header__promo">
       <p>Free Shipping for orders over $50 | Aus. wide</p>
     </div>
-    <div class="header__titles " :class="slideActive ? 'full' : ' short'">
+    <div class="header__titles" :class="slideActive ? 'full' : ' short'">
       <div class="logo">
         <h1><router-link to="/">Aseya</router-link></h1>
       </div>
@@ -36,7 +36,7 @@
         <router-link to="/store">store</router-link>
       </li>
       <li>
-        <a @click="toggleSlide">sale</a>
+        <a >sale</a>
       </li>
       <li>
         <a>contact</a>
@@ -58,11 +58,11 @@
 export default {
   data() {
     return {
-      slideActive: false
+      slideActive: false,
     };
   },
 
-  created: function() {
+  created: function () {
     window.addEventListener("scroll", this.handleScroll);
   },
 
@@ -80,8 +80,8 @@ export default {
       } else if (num > 100) {
         this.slideActive = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -155,11 +155,13 @@ export default {
       }
 
       select {
-        border: solid 1px black;
+        border: solid 1px rgba(0, 0, 0, 0.514);
       }
 
       input {
-        outline: none;
+        border: solid 1px black;
+        box-sizing: border-box;
+
         // animation: inputTransit 1s ease-in-out reverse;
 
         width: 200px;
@@ -202,10 +204,11 @@ export default {
 
   &__nav {
     list-style-type: none;
-    background-color: rgba(143, 143, 143, 0.811);
+    background-color: rgba(41, 41, 41, 0.811);
     margin: 0;
     // height: 100px;
-    position: relative;
+    position: fixed;
+    width: 100%;
 
     display: flex;
     justify-content: center;
@@ -222,7 +225,7 @@ export default {
         text-transform: capitalize;
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.185);
+          background-color: rgba(255, 255, 255, 0.157);
           color: rgb(255, 255, 255);
         }
       }
