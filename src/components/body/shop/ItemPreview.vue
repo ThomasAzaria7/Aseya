@@ -68,8 +68,9 @@
           <input type="number" value="1" />
         </div>
 
-        <div class="formControl">
-          <button type="submit" >Add to card</button>
+        <div class="buttons">
+          <button type="submit">Add to card</button>
+          <i class="fas fa-heart"><span>fav</span></i>
         </div>
       </form>
     </div>
@@ -81,7 +82,7 @@ export default {
   data() {
     return {
       items: "Thomas",
-      itemCode: "",
+      itemCode: ""
     };
   },
   created() {
@@ -100,21 +101,42 @@ export default {
       // console.log(this.$store.getters["items/getItems"]);
       // console.log(this.$store.getters["items/getSelectedItem"]);
       return this.$store.getters["items/getSelectedItem"];
-    },
+    }
   },
   methods: {
     addItemToCart() {
-      document.cookie = "cart" + "=" + "hello" + ";" + 30 + ";path=/";
-      // this.$cookies.set("cart", this.getItemData);
-    },
-  },
+      // value = favCart|| shopCart
+
+      console.log(this.getItemData);
+
+      const storeageData = localStorage.getItem("cartItems");
+      let myCartItems = JSON.parse(storeageData);
+      if (!myCartItems) {
+        myCartItems = [this.getItemData];
+      } else {
+        myCartItems.unshift(this.getItemData);
+      }
+
+      const cartItems = JSON.stringify(myCartItems);
+
+      localStorage.setItem("cartItems", cartItems);
+
+      //
+      // dispatch action to update total
+      //
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .previewContainer {
+  position: relative;
+  top: 50px;
+  box-sizing: border-box;
   padding: 2% 10%;
   display: flex;
+  margin-bottom: 50px;
 
   &__view {
     flex: 0 0 40%;
@@ -182,18 +204,40 @@ export default {
         padding: 0;
       }
 
-      button {
-        width: 100%;
-        background-color: rgba(32, 32, 32, 0.644);
-        color: white;
-        font-size: 20px;
-      }
-
       & > * {
         padding: 5px;
         box-sizing: border-box;
         display: block;
         width: 100%;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      position: relative;
+      cursor: pointer;
+      gap: 20px;
+
+      i {
+        position: relative;
+        top: 50%;
+        font-size: 30px;
+        color: rgba(255, 0, 0, 0.7);
+        span {
+          color: black;
+          font-size: 17px;
+        }
+
+        &:active {
+          color: rgba(255, 0, 0, 1);
+        }
+      }
+      button {
+        flex: 0 1 50%;
+        background-color: rgba(32, 32, 32, 0.644);
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
       }
     }
   }

@@ -5,15 +5,17 @@
     </div>
     <div class="header__titles" :class="slideActive ? 'full' : ' short'">
       <div class="logo">
-        <h1><router-link to="/">Aseya</router-link></h1>
+        <h1>
+          <router-link to="/">Aseya</router-link>
+        </h1>
       </div>
       <div class="search">
-        <select name="Category" id="">
-          <option class="option" value="">category</option>
-          <option class="option" value="">clothing</option>
-          <option class="option" value="">clothing</option>
+        <select name="Category" id>
+          <option class="option" value>category</option>
+          <option class="option" value>clothing</option>
+          <option class="option" value>clothing</option>
         </select>
-        <input type="text" />
+        <input type="text" placeholder="search for item" />
         <i class="fas fa-search"></i>
       </div>
       <div class="account">
@@ -21,10 +23,10 @@
           <i class="fas fa-user"></i>
         </router-link>
         <router-link to="/my-favorites">
-          <i class="far fa-heart"> (0)</i>
+          <i class="far fa-heart">(0)</i>
         </router-link>
         <router-link to="/my-cart">
-          <i class="fas fa-shopping-cart"> (0)</i>
+          <i class="fas fa-shopping-cart">(0)</i>
         </router-link>
       </div>
     </div>
@@ -86,6 +88,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media (max-width: 766px) {
+  .search {
+    display: none;
+  }
+  .account {
+    display: none;
+  }
+  .header__promo {
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
 .short {
   // height: 50px;
   animation: navTransitx 0.3s ease-in forwards;
@@ -116,7 +132,7 @@ export default {
     justify-content: space-between;
     position: relative;
     // height: 80px;
-    background-color: #eeeeee;
+    background-color: #ffffff;
 
     .logo {
       position: relative;
@@ -177,12 +193,17 @@ export default {
         }
       }
 
+      ::placeholder {
+        color: rgba(0, 0, 0, 0.541);
+      }
+
       input {
+        position: relative;
         background-color: rgba(221, 221, 221, 0.144);
         color: rgb(86, 1, 143);
         border: none;
         margin: 0;
-        padding: 0;
+        padding: 0 10px;
         border: none;
         outline: none;
         width: 201px;
@@ -196,20 +217,32 @@ export default {
       }
 
       .fa-search {
-        border: solid 1px black;
+        // border: solid 1px black;
         border: none;
         color: rgb(20, 87, 169);
         margin: 0;
         width: 40px;
         padding: 0;
         position: relative;
+        // background-color: rgb(156, 31, 31);
         // top: 12px;
         // left: 10px;
+        &:hover {
+          color: rgb(169, 20, 132);
+          cursor: pointer;
+        }
+        &:active {
+          color: rgb(102, 9, 79);
+          cursor: pointer;
+        }
       }
     }
     //
     .account {
       position: relative;
+
+      height: 100%;
+      // background-color: rgb(34, 167, 7);
 
       a {
         text-decoration: none;
@@ -217,11 +250,15 @@ export default {
       }
 
       & > * {
-        position: relative;
-        top: 40%;
-        transform: translateY(-50%);
-        font-size: 20px;
-        margin: 0;
+        i {
+          position: relative;
+          box-sizing: border-box;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 20px;
+          margin: 0;
+          // background-color: rgb(212, 71, 71);
+        }
       }
 
       .fa-user {
@@ -248,6 +285,7 @@ export default {
     justify-content: center;
     flex-wrap: wrap;
     padding: 4px 0px;
+    margin-bottom: 20px;
 
     li {
       // float: left;
