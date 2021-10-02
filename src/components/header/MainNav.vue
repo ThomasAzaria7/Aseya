@@ -185,13 +185,13 @@ export default {
         padding: 0;
         border: none;
         outline: none;
-        width: 200px;
+        width: 201px;
         &:focus {
           animation: inputTransit 0.5s ease-in-out forwards;
         }
         &:not(:focus) {
           // animation: name duration timing-function delay iteration-count direction fill-mode;
-          animation: inputTransitx 3s ease-in-out  forwards;
+          animation: inputTransitx 3s ease-in-out forwards;
         }
       }
 
