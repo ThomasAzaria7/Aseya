@@ -10,6 +10,19 @@
   </div>
 </template>
 
+<script>
+export default {
+  created() {
+    // const myItems = {
+    //   name: "clothing",
+    //   price: "50",
+    // };
+    // this.$cookies.set("username", "hi", "7d");
+  },
+  methods: {},
+};
+</script>
+
 <style lang="scss" scoped>
 .cartContainer {
   padding: 3% 10%;
@@ -22,6 +35,7 @@
   justify-content: space-between;
   align-content: center;
   text-align: center;
+
   h2 {
     background-color: rgba(253, 255, 127, 0.37);
     padding: 5px;
