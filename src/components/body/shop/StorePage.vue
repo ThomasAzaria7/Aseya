@@ -1,7 +1,7 @@
 <template>
   <div class="shopContainer">
     <div class="shopContainer__itemBox" v-for="item in data" :key="item.code">
-      <router-link :to="'/store/'+ item.code">
+      <router-link :to="'/store/' + item.code">
         <div class="imageBox">
           <img :src="item.imgLink" alt />
         </div>
@@ -19,7 +19,7 @@ import data from "./data.js";
 export default {
   data() {
     return {
-      data: data
+      data: data,
     };
   },
   methods: {
@@ -28,34 +28,32 @@ export default {
     created() {
       console.log("hi");
       // console.log(data);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .shopContainer {
-  padding: 2% 10%;
-  display: flex;
-  // top: 10px;
   position: relative;
-  // flex-direction: row;
-  flex-wrap: wrap;
+  padding: 4% 10%;
   box-sizing: border-box;
   z-index: 0;
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
   // gap: 10px 0;
   // height: 400px;
 
   &__itemBox {
     border: 1px solid rgba(0, 0, 0, 0.192);
-    // flex: 0 0 25%;
-    margin: 5px;
+    flex: 1 0 25%;
     box-sizing: border-box;
     padding: 5px;
 
     .imageBox {
+      margin: 5px;
       height: 300px;
 
       img {

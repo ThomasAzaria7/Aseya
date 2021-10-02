@@ -9,9 +9,9 @@
       </div>
       <div class="search">
         <select name="Category" id="">
-          <option value="">category</option>
-          <option value="">clothing</option>
-          <option value="">clothing</option>
+          <option class="option" value="">category</option>
+          <option class="option" value="">clothing</option>
+          <option class="option" value="">clothing</option>
         </select>
         <input type="text" />
         <i class="fas fa-search"></i>
@@ -36,7 +36,7 @@
         <router-link to="/store">store</router-link>
       </li>
       <li>
-        <a >sale</a>
+        <a>sale</a>
       </li>
       <li>
         <a>contact</a>
@@ -144,34 +144,67 @@ export default {
     .search {
       position: relative;
       box-sizing: border-box;
+      height: 30px;
+      border: solid 2px rgba(0, 0, 0, 0.1);
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 10px 10px;
 
       & > * {
-        padding: 5px 10px;
-        margin: 0 2px;
         position: relative;
+        box-sizing: border-box;
+        height: 100%;
         top: 50%;
         transform: translateY(-50%);
-        box-sizing: border-box;
       }
 
       select {
-        border: solid 1px rgba(0, 0, 0, 0.514);
+        border: none;
+        margin: 0;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        padding: 0 10px;
+        text-transform: capitalize;
+
+        .option {
+          color: rgb(86, 57, 90);
+          background-color: none;
+        }
+        & * > {
+          margin: 10px;
+          background-color: rgba(255, 255, 255, 0.349);
+        }
       }
 
       input {
-        border: solid 1px black;
-        box-sizing: border-box;
-
-        // animation: inputTransit 1s ease-in-out reverse;
-
+        background-color: rgba(221, 221, 221, 0.144);
+        color: rgb(86, 1, 143);
+        border: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+        outline: none;
         width: 200px;
         &:focus {
           animation: inputTransit 0.5s ease-in-out forwards;
+        }
+        &:not(:focus) {
+          // animation: name duration timing-function delay iteration-count direction fill-mode;
+          animation: inputTransitx 3s ease-in-out  forwards;
         }
       }
 
       .fa-search {
         border: solid 1px black;
+        border: none;
+        color: rgb(20, 87, 169);
+        margin: 0;
+        width: 40px;
+        padding: 0;
+        position: relative;
+        // top: 12px;
+        // left: 10px;
       }
     }
     //
@@ -208,16 +241,20 @@ export default {
     margin: 0;
     // height: 100px;
     position: fixed;
-    width: 100%;
+    width: 100vw;
+    box-sizing: border-box;
 
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    padding: 4px 0px;
 
     li {
       // float: left;
-      padding: 5px 2px;
+      // background-color: yellow;
       a {
         // background-color: rgba(230, 230, 230, 0.404);
+        text-align: center;
         color: white;
         padding: 5px 20px;
         text-decoration: none;
@@ -244,10 +281,19 @@ export default {
 
   @keyframes inputTransit {
     0% {
-      width: 200px;
+      width: 250px;
     }
     100% {
-      width: 400px;
+      width: 300px;
+    }
+  }
+
+  @keyframes inputTransitx {
+    0% {
+      width: 300px;
+    }
+    100% {
+      width: 250px;
     }
   }
 
