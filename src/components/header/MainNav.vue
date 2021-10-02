@@ -36,7 +36,7 @@
         <router-link to="/store">store</router-link>
       </li>
       <li>
-        <a >sale</a>
+        <a>sale</a>
       </li>
       <li>
         <a>contact</a>
@@ -58,11 +58,11 @@
 export default {
   data() {
     return {
-      slideActive: false,
+      slideActive: false
     };
   },
 
-  created: function () {
+  created: function() {
     window.addEventListener("scroll", this.handleScroll);
   },
 
@@ -77,11 +77,11 @@ export default {
 
       if (num === 0) {
         this.slideActive = true;
-      } else if (num > 100) {
+      } else if (num > 10) {
         this.slideActive = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
