@@ -4,30 +4,38 @@
       <h2>My Cart</h2>
       <div class="cartItems">
         <ul v-for="item in shopCartItems" :key="item.code">
-          <li><img :src="item.imgLink" alt="" /></li>
+          <li>
+            <img :src="item.imgLink" alt />
+          </li>
           <li>{{ item.name }}</li>
           <div class="price">
-            <li><input type="number" value="1" /></li>
+            <li>
+              <input type="number" value="1" />
+            </li>
             <li>$ {{ item.price }}</li>
           </div>
           <li>
-            <i
-              @click="removeItemFromCart(item.code)"
-              class="far fa-times-circle"
-            ></i>
+            <i @click="removeItemFromCart(item.code)" class="far fa-times-circle"></i>
           </li>
         </ul>
       </div>
     </div>
     <div class="cartContainer__payments">
       <h2>Order Summary</h2>
+      <app-payment></app-payment>
     </div>
   </div>
 </template>
 
 <script>
 // import Cookies from "js-cookie";
+
+import AppPayment from "./AppPayment.vue";
+
 export default {
+  components: {
+    AppPayment
+  },
   data() {
     return {
       shopCartItems: [{}]
@@ -68,20 +76,19 @@ export default {
 
 <style lang="scss" scoped>
 .cartContainer {
-  padding: 2% 10%;
-  top: 25px;
-  gap: 20px;
   position: relative;
-  box-sizing: border-box;
+  height: 80vh;
+  padding: 4% 10%;
+  // top: 25px;
+  box-sizing: content-box;
   display: flex;
   justify-content: space-between;
   align-content: center;
+  gap: 20px;
   text-align: center;
   margin-bottom: 50px;
   background-color: #eeeeee;
   margin: 0;
-  height: 80vh;
-  box-sizing: border-box;
   h2 {
     background-color: rgba(253, 255, 127, 0.37);
     padding: 5px;
