@@ -70,7 +70,9 @@
 
         <div class="buttons">
           <button type="submit">Add to card</button>
-          <i class="fas fa-heart"><span>fav</span></i>
+          <i class="fas fa-heart">
+            <span>fav</span>
+          </i>
         </div>
       </form>
     </div>
@@ -132,18 +134,20 @@ export default {
 <style lang="scss" scoped>
 .previewContainer {
   position: relative;
-  top: 50px;
+  // top: 60px;
+  background-color: #eeeeee;
   box-sizing: border-box;
-  padding: 2% 10%;
-  display: flex;
-  margin-bottom: 50px;
+  padding: 5% 10%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 
   &__view {
     flex: 0 0 40%;
     .itemImgageBox {
       height: 500px;
-      border: 1px solid rgba(0, 0, 0, 0.247);
-      box-shadow: 2px 2px 0.6rem rgba(0, 0, 0, 0.336);
+
+      // border: 1px solid rgba(0, 0, 0, 0.247);
+      // box-shadow: 2px 2px 0.6rem rgba(0, 0, 0, 0.336);
 
       img {
         height: 100%;
@@ -163,12 +167,11 @@ export default {
         height: 60px;
         width: 60px;
         border: 1px solid rgba(0, 0, 0, 0.37);
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     }
     .itemDescrption {
@@ -181,22 +184,27 @@ export default {
     }
   }
   &__selectors {
-    h2 {
-      margin: 0;
-    }
+    // background-color: aquamarine;
     width: 100%;
     // flex: 0 0 50%;
     padding: 0 10%;
+    box-sizing: border-box;
+    h2 {
+      margin: 0;
+    }
     .formControl {
       width: 100%;
       margin: 10px 0;
+      box-sizing: border-box;
 
       select {
-        width: 100%;
+        // width: 100%;
+        box-sizing: border-box;
       }
 
       input {
         width: 10%;
+        box-sizing: border-box;
       }
 
       label {
@@ -240,6 +248,33 @@ export default {
         cursor: pointer;
       }
     }
+  }
+}
+
+@media (max-width: 500px) {
+  .previewContainer {
+    padding: 2% 0;
+    // display: flex;
+    &__selectors {
+      // flex: 0 1 40%;
+      // background-color: aqua;
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+      }
+
+      input {
+        // width: 40px;
+        box-sizing: border-box;
+      }
+    }
+  }
+
+  .formControl {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
   }
 }
 </style>

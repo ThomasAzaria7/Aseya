@@ -46,7 +46,7 @@ export default {
     // Cookies.set("name", { name: "thomas" });
     const storeageData = localStorage.getItem("cartItems");
     let cartItems = JSON.parse(storeageData);
-    console.log(cartItems);
+    // console.log(cartItems);
     this.shopCartItems = cartItems;
   },
   watch: {},
@@ -54,7 +54,7 @@ export default {
     checkCart() {
       const storeageData = localStorage.getItem("cartItems");
       let cartItems = JSON.parse(storeageData);
-      console.log(cartItems);
+      // console.log(cartItems);
       this.shopCartItems = cartItems;
     },
     removeItemFromCart(key) {
@@ -74,16 +74,21 @@ export default {
 };
 </script>
 
+
+
 <style lang="scss" scoped>
+// @import "./";
+
 .cartContainer {
   position: relative;
   height: 80vh;
   padding: 4% 10%;
   // top: 25px;
   box-sizing: content-box;
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
+  display: grid;
+  // justify-content: space-between;
+  // align-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   text-align: center;
   margin-bottom: 50px;
@@ -133,6 +138,19 @@ export default {
     background-color: rgba(217, 219, 219, 0.308);
     flex: 0 1 40%;
     box-sizing: border-box;
+  }
+}
+
+@media (max-width: 500px) {
+  .cartContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 2%;
+    height: 100%;
+
+    &__items {
+      height: 100vh;
+    }
   }
 }
 </style>

@@ -26,41 +26,62 @@
           <i class="far fa-heart">(0)</i>
         </router-link>
         <router-link to="/my-cart">
-          <i class="fas fa-shopping-cart">(0)</i>
+          <i class="fas fa-shopping-cart"></i>
+          <span style="margin-left:5px;">{{ cartTotal}}</span>
+        </router-link>
+
+        <router-link to>
+          <i @click="toggleNav" class="fas fa-bars"></i>
         </router-link>
       </div>
     </div>
-    <ul class="header__nav" v-if="slideActive">
+
+    <!-- v-if="slideActive" -->
+    <ul v-if="slideActive" class="header__nav">
       <li>
-        <router-link to="/">home</router-link>
+        <router-link to="/">Best Sellers</router-link>
       </li>
       <li>
-        <router-link to="/store">store</router-link>
+        <router-link to="/store">New Releases</router-link>
       </li>
       <li>
-        <a>sale</a>
+        <a>Fashion</a>
       </li>
       <li>
-        <a>contact</a>
+        <a>Books</a>
       </li>
       <li>
-        <a>find us</a>
+        <a>Electronics</a>
       </li>
       <li>
         <a>sell with us</a>
       </li>
       <li>
-        <a>market</a>
+        <a>New Arriavals</a>
+      </li>
+      <li>
+        <a>Discount Sale</a>
+      </li>
+      <li>
+        <a>limited Offer</a>
       </li>
     </ul>
   </div>
+
+  <mobile-nav :toggle-menu="showMenu" @close="toggleNav"></mobile-nav>
 </template>
 
 <script>
+import MobileNav from "./MobileNav";
+
 export default {
+  components: {
+    MobileNav
+  },
   data() {
     return {
-      slideActive: false
+      slideActive: true,
+      showMenu: false
     };
   },
 
@@ -68,15 +89,25 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
 
-  computed: {},
+  computed: {
+    cartTotal() {
+      const storeageData = localStorage.getItem("cartItems");
+      let cartItems = JSON.parse(storeageData);
+      return cartItems.length;
+    }
+  },
   methods: {
     toggleSlide() {
       this.slideActive = !this.slideActive;
     },
+
+    toggleNav() {
+      this.showMenu = !this.showMenu;
+      console.log(this.showMenu);
+    },
     handleScroll() {
       let num = window.scrollY;
-      // console.log("scrollYposition", num);
-
+      // // console.log("scrollYposition", num);
       if (num === 0) {
         this.slideActive = true;
       } else if (num > 10) {
@@ -88,20 +119,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media (max-width: 766px) {
-  .search {
-    display: none;
-  }
-  .account {
-    display: none;
-  }
-  .header__promo {
-    p {
-      font-size: 12px;
-    }
-  }
-}
-
 .short {
   // height: 50px;
   animation: navTransitx 0.3s ease-in forwards;
@@ -115,6 +132,9 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 2px 2px 0.5rem rgba(0, 0, 0, 0.486);
+
   &__promo {
     margin: 0;
     p {
@@ -132,7 +152,7 @@ export default {
     justify-content: space-between;
     position: relative;
     // height: 80px;
-    background-color: #ffffff;
+    // background-color: #cfcfcf;
 
     .logo {
       position: relative;
@@ -240,25 +260,23 @@ export default {
     //
     .account {
       position: relative;
-
       height: 100%;
       // background-color: rgb(34, 167, 7);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      i {
+        font-size: 20px;
+      }
 
       a {
         text-decoration: none;
         color: inherit;
       }
 
-      & > * {
-        i {
-          position: relative;
-          box-sizing: border-box;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 20px;
-          margin: 0;
-          // background-color: rgb(212, 71, 71);
-        }
+      .fa-bars {
+        display: none;
       }
 
       .fa-user {
@@ -274,7 +292,7 @@ export default {
 
   &__nav {
     list-style-type: none;
-    background-color: rgba(41, 41, 41, 0.811);
+    background-color: rgba(207, 207, 207, 0.811);
     margin: 0;
     // height: 100px;
     position: fixed;
@@ -282,9 +300,9 @@ export default {
     box-sizing: border-box;
 
     display: flex;
-    justify-content: center;
+    justify-content: first baseline;
     flex-wrap: wrap;
-    padding: 4px 0px;
+    padding: 4px 10%;
     margin-bottom: 20px;
 
     li {
@@ -293,15 +311,15 @@ export default {
       a {
         // background-color: rgba(230, 230, 230, 0.404);
         text-align: center;
-        color: white;
-        padding: 5px 20px;
+        color: rgb(3, 3, 3);
         text-decoration: none;
         cursor: pointer;
         text-transform: capitalize;
+        padding: 5px 20px 5px 0;
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.157);
-          color: rgb(255, 255, 255);
+          // background-color: rgba(255, 255, 255, 0.157);
+          color: rgb(62, 26, 119);
         }
       }
     }
@@ -315,6 +333,111 @@ export default {
   }
   .v-enter-from {
     height: 80px;
+  }
+
+  //
+
+  //mobile phone
+
+  @media (max-width: 500px) {
+    .fa-bars {
+      position: relative;
+      margin-left: 10px;
+    }
+    .header {
+      &__titles {
+        padding: 0 5%;
+      }
+
+      &__nav {
+        display: none;
+      }
+
+      &__account {
+        display: flex;
+        align-items: center;
+
+        .fa-shopping-cart {
+          margin: 10px;
+        }
+      }
+    }
+    .account {
+      margin: 5px;
+      .fa-user,
+      .fa-heart {
+        display: none;
+      }
+      .fa-bars {
+        display: inline;
+        // background-color: red;
+      }
+
+      &__promo {
+        p {
+          font-size: 10px;
+        }
+      }
+
+      ul {
+        // display: none;
+        color: green;
+      }
+    }
+    .search {
+      display: none;
+    }
+  }
+
+  // tablet
+  @media (min-width: 502px) and (max-width: 768px) {
+    .fa-bars {
+      position: relative;
+      margin-left: 10px;
+    }
+    .header {
+      &__titles {
+        padding: 0 5%;
+      }
+
+      &__nav {
+        display: none;
+      }
+
+      &__account {
+        display: flex;
+        align-items: center;
+
+        .fa-shopping-cart {
+          margin: 10px;
+        }
+      }
+    }
+    .account {
+      margin: 5px;
+      .fa-user,
+      .fa-heart {
+        display: none;
+      }
+      .fa-bars {
+        display: inline;
+        // background-color: red;
+      }
+
+      &__promo {
+        p {
+          font-size: 10px;
+        }
+      }
+
+      ul {
+        // display: none;
+        color: green;
+      }
+    }
+    .search {
+      display: none;
+    }
   }
 
   @keyframes inputTransit {

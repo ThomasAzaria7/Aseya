@@ -1,7 +1,6 @@
 <template>
   <div>
     <main-nav></main-nav>
-
     <div class="routerContainer">
       <router-view></router-view>
       <main-footer></main-footer>
@@ -11,10 +10,21 @@
 
 <script>
 import MainFooter from "./components/footer/MainFooter.vue";
+
 export default {
   components: {
-    MainFooter,
+    MainFooter
   },
+  data() {
+    return {
+      hide: false
+    };
+  },
+  methods: {
+    toggleData() {
+      this.hide = !this.hide;
+    }
+  }
 };
 </script>
 
@@ -32,11 +42,12 @@ export default {
 // }
 // p{
 //   font-family: 'Roboto', sans-serif;
-  * {
-    font-family: "Roboto", sans-serif;
-  }
+* {
+  font-family: "Roboto", sans-serif;
+}
 // }
 .routerContainer {
   overflow: hidden;
+  // padding-top: 50px;
 }
 </style>
