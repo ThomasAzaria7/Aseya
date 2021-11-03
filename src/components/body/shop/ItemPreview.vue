@@ -70,11 +70,13 @@
 
         <div class="buttons">
           <button type="submit">Add to card</button>
-          <i class="fas fa-heart">
-            <span>fav</span>
-          </i>
         </div>
       </form>
+      <br />
+
+      <i @click="addToFavList" class="fas fa-heart">
+        <span>fav</span>
+      </i>
     </div>
   </div>
 </template>
@@ -106,26 +108,25 @@ export default {
     }
   },
   methods: {
+    addToFavList() {
+      const auth = this.$store.getters["UserState/getAuthState"];
+      const userUID = auth.uid;
+      const userData = {
+        item: this.getItemData,
+        uid: userUID
+      };
+      this.$store.dispatch("UserState/putToFav", userData);
+      console.log("clickws");
+    },
     addItemToCart() {
       // value = favCart|| shopCart
-
-      console.log(this.getItemData);
-
-      const storeageData = localStorage.getItem("cartItems");
-      let myCartItems = JSON.parse(storeageData);
-      if (!myCartItems) {
-        myCartItems = [this.getItemData];
-      } else {
-        myCartItems.unshift(this.getItemData);
-      }
-
-      const cartItems = JSON.stringify(myCartItems);
-
-      localStorage.setItem("cartItems", cartItems);
-
-      //
-      // dispatch action to update total
-      //
+      const auth = this.$store.getters["UserState/getAuthState"];
+      const userUID = auth.uid;
+      const userData = {
+        item: this.getItemData,
+        uid: userUID
+      };
+      this.$store.dispatch("UserState/putToCart", userData);
     }
   }
 };
@@ -191,6 +192,10 @@ export default {
     box-sizing: border-box;
     h2 {
       margin: 0;
+    }
+
+    .fa-heart {
+      font-size: 30px;
     }
     .formControl {
       width: 100%;

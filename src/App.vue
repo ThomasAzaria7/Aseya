@@ -4,21 +4,56 @@
     <div class="routerContainer">
       <router-view></router-view>
       <main-footer></main-footer>
+      <!-- <div>{{getAuthData}}</div> -->
     </div>
   </div>
 </template>
 
 <script>
 import MainFooter from "./components/footer/MainFooter.vue";
-
+// import { db } from "./database/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 export default {
   components: {
     MainFooter
   },
   data() {
     return {
-      hide: false
+      hide: false,
+      userData: {}
     };
+  },
+  // beforeCreate() {
+  //
+  // },
+  computed: {
+    getAuthData() {
+      return this.$store.getters["UserState/getAuthState"];
+    }
+  },
+  beforeMount() {},
+  mounted() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        this.$store.dispatch("UserState/authStatus", user);
+        this.$store.dispatch("UserState/getFavItems", user.uid);
+        this.$store.dispatch("UserState/getCartItems", user.uid);
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+
+    // this.userData = {
+    //   item: this.getItemData,
+    //   uid: userUID
+    // };
+
+    // console.log(db);
+
+    this.$store.dispatch("items/addProductToStore");
   },
   methods: {
     toggleData() {

@@ -1,9 +1,10 @@
 import { createStore } from "vuex";
-import shopItemsModule from "./modules/shopitems/index.js";
-
+import ShopItemsModule from "./modules/shopitems/ShopItemsindexModule.js";
+import UserStateModule from "./modules/UserState/UserStateIndexModule";
 const store = createStore({
   modules: {
-    items: shopItemsModule
+    items: ShopItemsModule,
+    UserState: UserStateModule
   },
   state() {
     return {};

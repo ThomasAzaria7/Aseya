@@ -38,7 +38,10 @@
       </ul>
     </div>
     <div class="shopContainer__itemBox">
-      <div class="items" v-for="item in data" :key="item.code">
+      <!-- <button @click="sendData">senData</button>
+      <button @click="myData">getdata</button>-->
+      <!--  -->
+      <div class="items" v-for="item in getdata" :key="item.code">
         <router-link :to="'/store/' + item.code">
           <div class="imageBox">
             <img :src="item.imgLink" alt />
@@ -58,11 +61,30 @@ import data from "./data.js";
 export default {
   data() {
     return {
-      data: data
+      data: [{}]
     };
   },
+  mounted() {
+    // this.data = this.$store.getters["items/shopItems"];
+  },
+  computed: {
+    getdata() {
+      return this.$store.getters["items/getItems"];
+      // return null;
+    }
+  },
   methods: {
-    myData() {},
+    myData() {
+      const dataX = this.$store.getters["items/getSelectedItem"];
+      console.log(dataX);
+      const x = this.$store.getters["items/getItems"];
+      console.log(x);
+
+      // console.log();
+    },
+    sendData() {
+      this.$store.dispatch("items/addProductToStore", data);
+    },
     created() {
       console.log("hi");
       // console.log(data);
@@ -100,6 +122,10 @@ export default {
         // background-color: aqua;
         a {
           text-decoration: none;
+
+          &:hover {
+            color: green;
+          }
         }
       }
     }
@@ -113,11 +139,13 @@ export default {
     .items {
       border: 1px solid rgba(0, 0, 0, 0.192);
       padding: 5px;
+      background-color: #fff;
     }
 
     .imageBox {
       margin: 5px;
       height: 300px;
+      box-shadow: 2px 2px 0.5rem rgba(0, 0, 0, 0.432);
 
       img {
         height: 100%;

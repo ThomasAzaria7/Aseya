@@ -1,14 +1,17 @@
 export default {
-	getItems(state) {
-		// console.log(state.shopItems[0]);
-		return state.shopItems;
-	},
+  getItems(state) {
+    // console.log(state.shopItems[0]);
+    console.log(state);
+    return state.shopItems;
+  },
 
-	getSelectedItem(state) {
-		return state.selectedItem[0];
-	},
+  getSelectedItem(state) {
+    console.log(state.selectedItem);
 
-	getdata(state) {
-		return state.coaches;
-	},
+    return state.selectedItem[0];
+  },
+
+  getCartTotal(state) {
+    return state.cartPriceTotal;
+  }
 };

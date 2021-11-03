@@ -6,7 +6,7 @@
     <div class="header__titles" :class="slideActive ? 'full' : ' short'">
       <div class="logo">
         <h1>
-          <router-link to="/">Aseya</router-link>
+          <router-link to="/">Aseyea</router-link>
         </h1>
       </div>
       <div class="search">
@@ -23,7 +23,9 @@
           <i class="fas fa-user"></i>
         </router-link>
         <router-link to="/my-favorites">
-          <i class="far fa-heart">(0)</i>
+          <i class="far fa-heart">
+            <span style="margin-left:2px; font-size:16px;">{{ favTotal }}</span>
+          </i>
         </router-link>
         <router-link to="/my-cart">
           <i class="fas fa-shopping-cart"></i>
@@ -90,10 +92,13 @@ export default {
   },
 
   computed: {
+    favTotal() {
+      return this.$store.getters["UserState/getfavTotal"];
+    },
     cartTotal() {
-      const storeageData = localStorage.getItem("cartItems");
-      let cartItems = JSON.parse(storeageData);
-      return cartItems.length;
+      // const storeageData = localStorage.getItem("cartItems");
+      // let cartItems = JSON.parse(storeageData);
+      return this.$store.getters["UserState/getCartTotal"];
     }
   },
   methods: {
@@ -166,6 +171,9 @@ export default {
         text-transform: uppercase;
         margin: 0;
         padding: 5px 0px;
+        // border: 2px solid rgba(0, 0, 0, 0.37);
+        // padding: 2px 10px;
+        // box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.445);
 
         a {
           text-decoration: none;

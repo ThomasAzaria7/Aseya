@@ -1,5 +1,6 @@
 <template>
   <div>
+    <br />
     <div id="paypal-button-container-P-2ND439943W547634LMF5V2HA"></div>
     <button @click="subscribe">subscribe</button>
   </div>

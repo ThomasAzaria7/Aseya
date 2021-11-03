@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>app payment works</p>
+    <!-- <p>app payment works</p> -->
 
     <button @click="getAccessToken">checkout</button>
 

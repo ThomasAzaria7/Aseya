@@ -22,6 +22,10 @@
     </div>
     <div class="cartContainer__payments">
       <h2>Order Summary</h2>
+      <br />
+      <div>
+        <h3>$ {{getTotalPrice}}</h3>
+      </div>
       <app-payment></app-payment>
     </div>
   </div>
@@ -38,37 +42,49 @@ export default {
   },
   data() {
     return {
-      shopCartItems: [{}]
+      // shopCartItems: [{}]
+      cartTotalPrice: 0
     };
   },
   created() {
-    //
-    // Cookies.set("name", { name: "thomas" });
-    const storeageData = localStorage.getItem("cartItems");
-    let cartItems = JSON.parse(storeageData);
-    // console.log(cartItems);
-    this.shopCartItems = cartItems;
+    // this.shopCartItems = cartItems;
   },
   watch: {},
+  computed: {
+    shopCartItems() {
+      return this.$store.getters["UserState/refreshCart"]; // get cart items from database
+    },
+
+    getTotalPrice() {
+      return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
+    },
+
+    getFavTotal() {
+      return this.$$store.getters["UserState/getfavTotal"]; // get total number of items in fav list
+    }
+    // getUser() {
+    //   // return this.$store.getters["UserState/getAuthState"];
+    // }
+  },
+
   methods: {
     checkCart() {
-      const storeageData = localStorage.getItem("cartItems");
-      let cartItems = JSON.parse(storeageData);
-      // console.log(cartItems);
-      this.shopCartItems = cartItems;
+      // const storeageData = localStorage.getItem("cartItems");
+      // let cartItems = JSON.parse(storeageData);
+      // // console.log(cartItems);
+      // this.shopCartItems = cartItems;
     },
-    removeItemFromCart(key) {
-      const result = this.shopCartItems.filter(x => {
-        return x.code !== key;
-      });
-      // console.log(key);
-
-      // console.log(this.shopCartItems);
-      // console.log(result);
-      //
-      const cartItems = JSON.stringify(result);
-      localStorage.setItem("cartItems", cartItems);
-      this.checkCart();
+    removeItemFromCart() {
+      // const result = this.shopCartItems.filter(x => {
+      //   return x.code !== key;
+      // });
+      // // console.log(key);
+      // // console.log(this.shopCartItems);
+      // // console.log(result);
+      // //
+      // const cartItems = JSON.stringify(result);
+      // localStorage.setItem("cartItems", cartItems);
+      // this.checkCart();
     }
   }
 };
