@@ -16,7 +16,7 @@
           <button @click="addToCart(item.code)">add to cart</button>
         </li>
         <li>
-          <i @click="removeItemFromCart(item.code)" class="far fa-times-circle"></i>
+          <i @click="removeItemFromFav(item.code)" class="far fa-times-circle"></i>
         </li>
       </ul>
     </div>
@@ -35,6 +35,21 @@ export default {
     }
   },
   methods: {
+    removeItemFromFav(itemCode) {
+      const auth = this.$store.getters["UserState/getAuthState"];
+      console.log(auth.uid);
+
+      console.log(itemCode);
+
+      console.log(this.shopFavItems);
+
+      const userData = {
+        uid: auth.uid,
+        itemId: itemCode
+      };
+
+      this.$store.dispatch("UserState/deleteFavItem", userData);
+    },
     addToCart(id) {
       let selectedItem = this.shopFavItems.filter(x => {
         console.log(x.code, "id is", id);
@@ -65,6 +80,7 @@ export default {
   // height: 100vh;
   padding: 4% 10%;
   background-color: #eeeeee;
+  min-height: 100vh;
 
   .favItems {
     ul {

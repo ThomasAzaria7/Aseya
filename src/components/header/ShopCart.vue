@@ -60,21 +60,30 @@ export default {
     },
 
     getFavTotal() {
-      return this.$$store.getters["UserState/getfavTotal"]; // get total number of items in fav list
+      return this.$store.getters["UserState/getfavTotal"]; // get total number of items in fav list
     }
+
     // getUser() {
     //   // return this.$store.getters["UserState/getAuthState"];
     // }
   },
 
   methods: {
-    checkCart() {
-      // const storeageData = localStorage.getItem("cartItems");
-      // let cartItems = JSON.parse(storeageData);
-      // // console.log(cartItems);
-      // this.shopCartItems = cartItems;
-    },
-    removeItemFromCart() {
+    checkCart() {},
+    removeItemFromCart(itemCode) {
+      const auth = this.$store.getters["UserState/getAuthState"];
+      console.log(auth.uid);
+
+      console.log(itemCode);
+
+      console.log(this.shopCartItems);
+
+      const userData = {
+        uid: auth.uid,
+        itemId: itemCode
+      };
+
+      this.$store.dispatch("UserState/deleteCartItem", userData);
       // const result = this.shopCartItems.filter(x => {
       //   return x.code !== key;
       // });

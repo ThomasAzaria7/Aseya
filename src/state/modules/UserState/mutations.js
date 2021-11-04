@@ -146,42 +146,42 @@ export default {
   */
 
   async putItemInCart(state, userData) {
-    console.log(state, userData);
+    // console.log(state, userData);
 
     const docRef = doc(db, "users", userData.uid); // refrence to user location on database based on individual user UID;
 
     const docSnap = await getDoc(docRef);
     const retrievedCartItems = docSnap.data().myCart;
-    console.log(retrievedCartItems);
+    // console.log(retrievedCartItems);
 
     let myItems = retrievedCartItems;
     myItems.unshift(userData.item);
 
-    // myItems.forEach(x => {
-    //   console.log(x);
-    // });
+    let check = retrievedCartItems.filter(x => x.code === userData.item.code);
 
-    try {
-      // contact firebase to update itemscart  // myCart // object
-      const result = await updateDoc(docRef, {
-        myCart: myItems
-      });
+    console.log("cart itessssss", check);
 
-      console.log("Document written with ID: ", result);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+    if (check.length === 1) {
+      try {
+        console.log("hi");
+        // contact firebase to update itemscart  // myCart // object
+        const result = await updateDoc(docRef, {
+          myCart: myItems
+        });
+
+        console.log("Document written with ID: ", result);
+        // state.cartTotal = myItems.length;
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    } else {
+      console.log("else");
+      state.error = "product already in cart";
     }
 
     //
-
-    state.cartTotal = myItems.length;
-
-    //
-    // if(){
-    // }else{
-    // }
-    // const docSnap = getDoc(docRef);
   },
+
   async putItemInFav(state, userData) {
     console.log(state, userData);
 
@@ -215,6 +215,7 @@ export default {
     console.log(docSnap.data().myCart);
     //
     let retreieveCartItems = [];
+    //
 
     await onSnapshot(docRef, doc => {
       retreieveCartItems = doc.data().myCart;
@@ -240,7 +241,37 @@ export default {
 
       // console.log("Current data: ", );
     });
-  }
+  },
 
-  //
+  //deleting items from user cart and favourite
+  async removeItemFromCart(state, userData) {
+    console.log(state, userData.uid);
+    const docRef = doc(db, "users", userData.uid);
+    const docSnap = await getDoc(docRef); // retrieve user data from database
+    let retrievedCartItems = docSnap.data().myCart;
+
+    const updateItems = retrievedCartItems.filter(
+      x => x.code !== userData.itemId
+    );
+
+    await updateDoc(docRef, {
+      myCart: updateItems
+    });
+    console.log(updateItems); //
+  },
+  async removeItemFromFav(state, userData) {
+    console.log(state, userData.uid);
+    const docRef = doc(db, "users", userData.uid);
+    const docSnap = await getDoc(docRef); // retrieve user data from database
+    let retrievedFavItems = docSnap.data().myFavList;
+
+    const updateItems = retrievedFavItems.filter(
+      x => x.code !== userData.itemId
+    );
+
+    await updateDoc(docRef, {
+      myFavList: updateItems
+    });
+    console.log(updateItems); //
+  }
 };

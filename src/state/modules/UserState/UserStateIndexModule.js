@@ -11,7 +11,8 @@ export default {
       cartItems: [],
       favItems: [],
       authenticated: null,
-      auth: null
+      auth: null,
+      error: null
     };
   },
   mutations,

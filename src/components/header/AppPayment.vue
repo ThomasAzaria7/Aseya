@@ -4,6 +4,8 @@
 
     <button @click="getAccessToken">checkout</button>
 
+    <button @click="getItemObject">get final items</button>
+
     <div id="paypal-button-container"></div>
   </div>
 </template>
@@ -18,10 +20,29 @@ export default {
       mydata: {}
     };
   },
+  computed: {
+    shopCartItems() {
+      return this.$store.getters["UserState/refreshCart"]; // get cart items from database
+    },
+    getTotalPrice() {
+      return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
+    }
+  },
   mounted() {
-    const token = localStorage.getItem("accessToken");
-    // let token = JSON.parse(storeageData);
-    console.log(window.paypal);
+    let SavedToken = localStorage.getItem("accessToken");
+    let myToken = JSON.parse(SavedToken);
+    // console.log(window.paypal);
+    let myItems = null;
+    let mydata = null;
+    setTimeout(() => {
+      myItems = this.getItemObject();
+      mydata = JSON.stringify({
+        token: myToken,
+        items: myItems
+      });
+
+      console.log(myToken, myItems.items);
+    }, 3000);
 
     window.paypal
       .Buttons({
@@ -32,7 +53,8 @@ export default {
               "Content-Type": "application/json"
               // 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: token
+            // body: newData
+            body: mydata
           })
             .then(function(res) {
               //   console.log(data);
@@ -50,7 +72,7 @@ export default {
             "http://localhost:3000/my-server/capture-order/" + data.orderID,
             {
               method: "POST",
-              body: token
+              body: myToken
               // body: JSON.stringify({
               //   orderID: data.orderID
               // })
@@ -69,21 +91,53 @@ export default {
       .render("#paypal-button-container");
   },
   methods: {
-    //checkout func
-    // checkout() {
-    //   fetch("https://api-m.sandbox.paypal.com/v1/oauth2/token", {
-    //     method: "POST",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Accept-Language": "en_US",
-    //       " AZVIfee2000TmoBTn2WMKHLIkHDr9aLdfnVsOWy89wpbPbE6hbs4e6TChAal84biHKA1OK1vqzEcqk_J":
-    //         "EDMMFmEvJn7CypNd4HpqgjjAMBb31THGhKSXC5UIBxRRrMWnnxV4FD_GedIKAW4YjhRtappFG9IZH7CV",
-    //       " grant_type": "client_credentials"
-    //     }
-    //   })
-    //     .then(val => console.log(val))
-    //     .catch(err => console.log(err));
-    // }
+    getItemObject() {
+      let paypalItems = null;
+      console.log(paypalItems);
+      console.log(this.cartTotal);
+      for (let i = 0; i < this.shopCartItems.length; i++) {
+        if (!paypalItems) {
+          console.log("here");
+
+          paypalItems = [
+            {
+              name: this.shopCartItems[i].name,
+              // "second Product Name" /* Shows within upper-right dropdown during payment approval */,
+              description: this.shopCartItems[i].description,
+              // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
+              unit_amount: {
+                currency_code: "USD",
+                value: this.shopCartItems[i].price
+              },
+              quantity: 1
+            }
+          ];
+        } else {
+          console.log("theresss");
+
+          paypalItems.push({
+            name: this.shopCartItems[i].name,
+            // "second Product Name" /* Shows within upper-right dropdown during payment approval */,
+            description: this.shopCartItems[i].description,
+            // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
+            unit_amount: {
+              currency_code: "USD",
+              value: this.shopCartItems[i].price
+            },
+            quantity: 1
+          });
+        }
+      }
+      //
+
+      let checkout = {
+        items: paypalItems,
+        cartTotalPrice: this.getTotalPrice
+      };
+      console.log("final checkout object", checkout);
+      return checkout;
+      //
+    },
 
     getAccessToken() {
       return fetch("http://localhost:3000/my-server/token/", {

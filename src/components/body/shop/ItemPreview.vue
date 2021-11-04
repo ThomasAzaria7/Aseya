@@ -70,6 +70,9 @@
 
         <div class="buttons">
           <button type="submit">Add to card</button>
+          <h4
+            v-if="checkIfItemExists"
+          >this item exists in cart do you want to change Quantity instead</h4>
         </div>
       </form>
       <br />
@@ -94,17 +97,19 @@ export default {
     // console.log(this.items);
     // console.log(this.$store.getters["items/getItems"][0]);
     // console.log(this.$store.getters["items/getdata"]);
-
-    console.log();
+  },
+  mounted() {
     this.itemCode = this.$route.params;
-    this.$store.dispatch("items/getSelectedProduct", this.itemCode);
+    setTimeout(() => {
+      this.$store.dispatch("items/getSelectedProduct", this.itemCode);
+    }, 2000);
   },
   computed: {
     getItemData() {
-      // console.log(this.items);
-      // console.log(this.$store.getters["items/getItems"]);
-      // console.log(this.$store.getters["items/getSelectedItem"]);
       return this.$store.getters["items/getSelectedItem"];
+    },
+    checkIfItemExists() {
+      return this.$store.getters["UserState/itemExists"]; // get total number of items in fav list
     }
   },
   methods: {

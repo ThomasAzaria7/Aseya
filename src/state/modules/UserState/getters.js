@@ -26,6 +26,10 @@ export default {
     return state.favItems;
   },
 
+  itemExists(state) {
+    return state.error;
+  },
+
   getProfileInfo() {
     // const docRef = doc(db, "users", userId);
     // const docSnap = getDoc(docRef);

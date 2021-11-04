@@ -21,6 +21,13 @@ export default {
     context.commit("getFavItemsFromDB", payload);
   },
 
+  deleteCartItem(context, payload) {
+    context.commit("removeItemFromCart", payload);
+  },
+  deleteFavItem(context, payload) {
+    context.commit("removeItemFromFav", payload);
+  },
+
   // refreshFav(context, payload) {
   //   context.commit("getFavItemsFromDB", payload);
   // },
