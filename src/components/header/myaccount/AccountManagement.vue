@@ -55,9 +55,9 @@
           <router-link @click="showCategory('buy_history')" to>Purchase history</router-link>
         </li>
         <div v-if="subCategoryActive === 'buy_history' " class="subCategory">
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
+          <router-link style="color:black" to="/my-account/BuyerRecipt">BuyerRecipt</router-link>
+          <router-link style="color:black" to="/my-account/SellerRecipt">SellerRecipts</router-link>
+          <!--  <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link> -->
         </div>
         <li>
           <router-link @click="showCategory('sell_history')" to>sell history</router-link>
@@ -107,7 +107,12 @@ export default {
       subCategoryActive: ""
     };
   },
-  mounted() {},
+  mounted() {
+    setTimeout(() => {
+      this.getsellerRecipt();
+      this.getBuyerRecipt();
+    }, 3000);
+  },
   computed: {
     authState() {
       const auth = this.$store.getters["UserState/getAuthState"];
@@ -133,6 +138,16 @@ export default {
           console.log(data);
           return data.id;
         });
+    },
+
+    getsellerRecipt() {
+      const uid = this.authState.uid;
+      this.$store.dispatch("UserState/retrieveSellerRecipts", uid);
+    },
+
+    getBuyerRecipt() {
+      const uid = this.authState.uid;
+      this.$store.dispatch("UserState/retrieveBuyerRecipts", uid);
     },
 
     sendPayouts() {
@@ -162,11 +177,12 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 50px;
-  height: 100vh;
+  // height: 100vh;
   background-color: #eeeeee;
 
   &__view {
     background-color: white;
+    min-height: 100vh;
     padding: 0 50px;
     margin: 0;
     flex: 1 1 75%;

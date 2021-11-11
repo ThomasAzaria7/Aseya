@@ -61,5 +61,22 @@ export default {
     //     }
     //   });
     // }, 3000);
+  },
+
+  SendSellerRecipt(context, payload) {
+    context.commit("makeSellersRecipts", payload);
+  },
+  SendBuyerRecipt(context, payload) {
+    context.commit("makeBuyerRecipts", payload);
+  },
+  // get recipts for seller
+
+  retrieveSellerRecipts(context, payload) {
+    context.commit("soldItemRecipts", payload);
+    console.log("hi");
+  },
+  retrieveBuyerRecipts(context, payload) {
+    context.commit("boughtItemRecipts", payload);
+    console.log("hi");
   }
 };

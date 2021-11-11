@@ -14,11 +14,11 @@ export default {
       return (state.shopItems = docSnap.data().storeProducts);
     } else {
       try {
-        const docRef = await setDoc(docRef, {
+        const docSnap = await setDoc(docRef, {
           storeProducts
         });
-        console.log("Document written with ID: ", docRef);
-        return (state.shopItems = storeProducts);
+        console.log("Document written with ID: ", docSnap);
+        // return (state.shopItems = storeProducts);
       } catch (e) {
         console.error("Error adding document: ", e);
       }

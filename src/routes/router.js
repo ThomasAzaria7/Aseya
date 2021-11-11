@@ -10,6 +10,9 @@ import MerchantPolicy from "../components/header/myaccount/AccountDetails/Mercha
 import BankStatement from "../components/header/myaccount/AccountDetails/BankStatement";
 import UserAuthentication from "../components/header/myaccount/users/UserAuthentication";
 import UserProfile from "../components/header/myaccount/users/UserProfile";
+import SellerRecipt from "../components/header/myaccount/users/SellerRecipts";
+import BuyerRecipt from "../components/header/myaccount/users/BuyerRecipt";
+
 const routes = [
   { path: "", component: HomePage },
   { path: "/store", component: StorePage },
@@ -28,7 +31,11 @@ const routes = [
       { path: "/my-account/policy", component: MerchantPolicy },
       { path: "/my-account/Statemnt", component: BankStatement },
       { path: "/my-account/authentication", component: UserAuthentication },
-      { path: "/my-account/profile", component: UserProfile }
+
+      { path: "/my-account/profile", component: UserProfile },
+
+      { path: "/my-account/SellerRecipt", component: SellerRecipt },
+      { path: "/my-account/BuyerRecipt", component: BuyerRecipt }
     ]
   }
 ];

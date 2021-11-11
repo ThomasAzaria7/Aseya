@@ -49,22 +49,22 @@ export default {
             /// user exists
 
             console.log("Document data:", data.data());
+            console.log("No such document!");
           } else {
             // run if no user profile found in database
             // doc.data() will be undefined in this case
             // create new user
             try {
               // contact firebase to add user using
-              const docRef = setDoc(docRef, {
+              const docSnap = setDoc(docRef, {
                 displayName: user.displayName,
                 email: user.email,
                 message: payload // usepayload to get dcoument name information
               });
-              console.log("Document written with ID: ", docRef);
+              console.log("Document written with ID: ", docSnap);
             } catch (e) {
               console.error("Error adding document: ", e);
             }
-            console.log("No such document!");
           } //end of else
         });
 
@@ -273,5 +273,140 @@ export default {
       myFavList: updateItems
     });
     console.log(updateItems); //
+  },
+
+  async makeBuyerRecipts(state, payload) {
+    // console.log(payload);
+
+    // const items = payload.reciptData.body.purchase_units[0].items;
+    const items = payload.reciptData.body;
+    const uid = payload.uid;
+    console.log(items);
+
+    // console.log(items, uid);
+
+    const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    let data = [{}];
+    const docSnap = await getDoc(docRef); // retrieve user data from database
+    data = docSnap.data().buyHistory;
+
+    console.log(data);
+    // console.log(items);
+
+    let itemRecipt = data;
+
+    if (!data) {
+      itemRecipt = [items];
+      console.log("here");
+    } else {
+      itemRecipt.push(items);
+      console.log("unchifthing", itemRecipt);
+    }
+
+    await updateDoc(docRef, {
+      buyHistory: itemRecipt
+      // message: payload // usepayload to get dcoument name information
+    });
+
+    state.buyerRecipts = itemRecipt;
+  },
+
+  /**
+     // sellerRecipt
+     
+   **/
+
+  async makeSellersRecipts(_, reciptData) {
+    console.log(reciptData);
+    const items = reciptData.body.purchase_units[0].items;
+    console.log(items);
+
+    //
+    const reciptId = reciptData.body.id;
+    // const date = reciptData.body.create_time;
+    const status = reciptData.body.status;
+    const payerDetails = reciptData.body.payer;
+    const links = reciptData.body.links;
+
+    let reciptInfo = {
+      reciptId: reciptId,
+      // created: date,
+      status: status,
+      payer: payerDetails,
+      link: links,
+      items: [{}]
+    };
+
+    //
+
+    let users = [];
+
+    for (let i = 0; i < items.length; i++) {
+      let uid = items[i].sku;
+
+      let userExists = users.includes(uid);
+      let userItems;
+
+      console.log(userExists);
+      if (!userExists) {
+        const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+        const docSnap = await getDoc(docRef); // retrieve user data from database
+        let myHistory = docSnap.data().sellHistory;
+        console.log(myHistory);
+
+        const reciptExist = myHistory.some(x => x.reciptId === reciptId);
+
+        // console.log(reciptExist);
+        // console.log("recipt exists", reciptExist);
+
+        users.push(uid);
+        userItems = items.filter(x => x.sku == uid);
+        reciptInfo.items = userItems; // assign items specific to user to recipt data object body
+
+        let myRecipt = myHistory;
+
+        if (!reciptExist) {
+          console.log("heeellllllloooooooo");
+          // myRecipt = [reciptInfo];
+          myRecipt.push(reciptInfo);
+        } else {
+          console.log("skip");
+        }
+
+        await updateDoc(docRef, {
+          sellHistory: myRecipt
+        });
+      }
+    } //for
+  }, //
+
+  /**
+   * get seller recipts
+   */
+
+  async soldItemRecipts(state, uid) {
+    console.log(state);
+    const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    const docSnap = await getDoc(docRef); // retrieve user data from database
+    const myRecipt = docSnap.data().sellHistory;
+
+    console.log(myRecipt);
+
+    state.sellerRecipts = myRecipt;
+
+    // this.;
+  },
+
+  async boughtItemRecipts(state, uid) {
+    console.log(state);
+    const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    const docSnap = await getDoc(docRef); // retrieve user data from database
+    const myRecipt = docSnap.data().buyHistory;
+
+    console.log(myRecipt);
+
+    state.buyerRecipts = myRecipt;
+
+    // this.;
   }
 };

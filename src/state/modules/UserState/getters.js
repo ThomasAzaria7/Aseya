@@ -37,5 +37,16 @@ export default {
     //   if (data.exists()) {
     //   }
     // });
+  },
+
+  /**
+   * get recipts
+   */
+
+  getSellerRecipt(state) {
+    return state.sellerRecipts;
+  },
+  getBuyerRecipt(state) {
+    return state.buyerRecipts;
   }
 };

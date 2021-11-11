@@ -12,7 +12,9 @@ export default {
       favItems: [],
       authenticated: null,
       auth: null,
-      error: null
+      error: null,
+      sellerRecipts: null,
+      buyerRecipts: null
     };
   },
   mutations,

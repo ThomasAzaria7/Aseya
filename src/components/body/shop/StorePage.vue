@@ -40,7 +40,7 @@
     <div class="shopContainer__itemBox">
       <!-- <button @click="sendData">senData</button>
       <button @click="myData">getdata</button>-->
-      <!--  -->
+
       <div class="items" v-for="item in getdata" :key="item.code">
         <router-link :to="'/store/' + item.code">
           <div class="imageBox">
