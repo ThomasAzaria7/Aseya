@@ -2,13 +2,13 @@
   <div>
     <!-- <p>app payment works</p> -->
 
-    <button @click="getAccessToken">access token</button>
+    <!-- <button @click="getAccessToken">access token</button> -->
 
     <!-- <button @click="getItemObject">get final items</button> -->
 
     <!-- <button @click="testRecipt">test recipt</button> -->
 
-    <!-- <button @click="sellerRecipts">manage button recipt</button> -->
+    <button @click="sellerRecipts">manage button recipt</button>
 
     <div id="paypal-button-container"></div>
   </div>
@@ -37,8 +37,10 @@ export default {
     }
   },
   mounted() {
+    this.getAccessToken();
     let SavedToken = localStorage.getItem("accessToken");
     let myToken = JSON.parse(SavedToken);
+
     // console.log(window.paypal);
 
     let myItems = null;
@@ -133,21 +135,29 @@ export default {
       .render("#paypal-button-container");
   },
   methods: {
-    sellerRecipts(id) {
+    sellerRecipts() {
       // 5SJ92192WU205192X
       // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
-      return fetch("http://localhost:3000/my-server/product/" + id, {
-        method: "Get"
-      })
-        .then(x => x.json())
-        .then(reciptData => {
-          console.log(reciptData);
-          // console.log(uid);
+      return (
+        fetch(
+          "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
+          {
+            method: "Get"
+          }
+        )
+          // return fetch("http://localhost:3000/my-server/product/" + id, {
+          //       method: "Get"
+          //     })
+          .then(x => x.json())
+          .then(reciptData => {
+            console.log(reciptData);
+            // console.log(uid);
 
-          const data = reciptData;
-          console.log(data);
-          this.$store.dispatch("UserState/SendSellerRecipt", data);
-        });
+            const data = reciptData;
+            console.log(data);
+            this.$store.dispatch("UserState/SendSellerRecipt", data);
+          })
+      );
     },
     testRecipt(itemId) {
       const orderId = itemId;
@@ -192,6 +202,9 @@ export default {
               description: this.shopCartItems[i].description,
               sku: this.shopCartItems[i].sellerID,
               // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
+              item_details: {
+                code: "1234"
+              },
               unit_amount: {
                 currency_code: "USD",
                 value: this.shopCartItems[i].price
@@ -206,6 +219,9 @@ export default {
             name: this.shopCartItems[i].name, // "second Product Name" /* Shows within upper-right dropdown during payment approval */,
             description: this.shopCartItems[i].description, // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
             sku: this.shopCartItems[i].sellerID,
+            item_details: {
+              code: "1234"
+            },
             unit_amount: {
               currency_code: "USD",
               value: this.shopCartItems[i].price
@@ -237,10 +253,19 @@ export default {
           return res.json();
         })
         .then(data => {
-          // console.log(data);
-          // console.log(data.id.access_token);
-          this.accessToken = data.id.access_token;
+          console.log(data);
 
+          // setting cookie
+          let name = "myCOOkie";
+          const value = 12344;
+
+          var date = new Date();
+          date.setTime(date.getTime() + 30 * 1000);
+          var expires = "; expires=" + date.toGMTString();
+
+          document.cookie = name + "=" + value + expires + "; path=/";
+          // console.log(data.id.access_token);
+          this.accessToken = data.tokenBody.access_token;
           const mydata = JSON.stringify({ token: this.accessToken });
           localStorage.setItem("accessToken", mydata);
           // console.log("hi");

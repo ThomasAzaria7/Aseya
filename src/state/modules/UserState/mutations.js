@@ -26,6 +26,9 @@ export default {
   userAuthenticated(state, payload) {
     // console.log(state, payload);
 
+    if (payload === "google") {
+      console.log(payload);
+    }
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then(result => {
@@ -49,7 +52,6 @@ export default {
             /// user exists
 
             console.log("Document data:", data.data());
-            console.log("No such document!");
           } else {
             // run if no user profile found in database
             // doc.data() will be undefined in this case
@@ -59,8 +61,30 @@ export default {
               const docSnap = setDoc(docRef, {
                 displayName: user.displayName,
                 email: user.email,
-                message: payload // usepayload to get dcoument name information
+                address: "",
+                phoneNumber: "",
+                photoUrl: "",
+
+                payments: {
+                  paypal_merchantId: "",
+                  payPal_email: "",
+                  payout_balance: 0
+                },
+
+                accountStatus: {
+                  accountType: ["private", "business"],
+                  subscriptionPlan: ["basic", "premium", "enterprise"]
+                },
+                // sellHistory: {
+                // },
+                // buyHistory: {
+                // },
+                mySellProductList: [],
+                myFavList: [],
+                myCart: [],
+                provider: payload // usepayload to get dcoument name information
               });
+
               console.log("Document written with ID: ", docSnap);
             } catch (e) {
               console.error("Error adding document: ", e);
@@ -101,10 +125,6 @@ export default {
     console.log(userId);
 
     let userSchema = {
-      //   name: "",
-      //   lastname: "",
-      //   displayName: "",
-      //   emails: "",
       address: "",
       phoneNumber: "",
       photoUrl: "",
@@ -119,12 +139,8 @@ export default {
         accountType: ["private", "business"],
         subscriptionPlan: ["basic", "premium", "enterprise"]
       },
-      sellHistory: {
-        recipts: []
-      },
-      buyHistory: {
-        recipts: []
-      },
+      // sellHistory: [],
+      // buyHistory: [],
       mySellProductList: [{}],
       myFavList: [{}],
       myCart: [{}]
@@ -334,7 +350,10 @@ export default {
       status: status,
       payer: payerDetails,
       link: links,
-      items: [{}]
+      items: [{}],
+      total: 0,
+      PaypalFee: 0,
+      finalvalue: 0
     };
 
     //
@@ -342,7 +361,7 @@ export default {
     let users = [];
 
     for (let i = 0; i < items.length; i++) {
-      let uid = items[i].sku;
+      let uid = items[i].sku; // uid of sellers
 
       let userExists = users.includes(uid);
       let userItems;
@@ -351,31 +370,69 @@ export default {
       if (!userExists) {
         const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
         const docSnap = await getDoc(docRef); // retrieve user data from database
-        let myHistory = docSnap.data().sellHistory;
-        console.log(myHistory);
+        let myHistory = docSnap.data().sellHistory; // get recipt data from DB
+        // console.log(myHistory);
 
-        const reciptExist = myHistory.some(x => x.reciptId === reciptId);
+        let reciptExist;
 
         // console.log(reciptExist);
         // console.log("recipt exists", reciptExist);
 
-        users.push(uid);
-        userItems = items.filter(x => x.sku == uid);
+        users.push(uid); //adding all users
+
+        userItems = items.filter(x => x.sku == uid); // find all items belonging to the user that have the same uid
+        console.log(userItems);
+
+        // loop through all items belonging to a single seller. and calculate the total of their sold items,
+        let value = 0;
+        for (let i = 0; i < userItems.length; i++) {
+          value += parseFloat(userItems[i].unit_amount.value);
+          userItems.total = value;
+          console.log(value);
+        }
         reciptInfo.items = userItems; // assign items specific to user to recipt data object body
 
-        let myRecipt = myHistory;
+        let myRecipt = [];
+        // check database return array
+        if (myHistory) {
+          reciptExist = myHistory.some(x => x.reciptId === reciptId); // check if recipt exist in database
+          myRecipt = myHistory;
+        }
 
+        // send recipt to seller via email
+        const dataY = JSON.stringify(reciptInfo);
+
+        fetch("http://localhost:3000/my-server/send-recipt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: dataY
+        })
+          .then(x => console.log(x))
+          .catch(err => console.log(err));
+        //
+
+        // if recipt does NOT exists push current recipt on to the database/ otherwise skip do not save,
         if (!reciptExist) {
           console.log("heeellllllloooooooo");
           // myRecipt = [reciptInfo];
           myRecipt.push(reciptInfo);
+
+          //
         } else {
+          // skip adding current recipts
           console.log("skip");
         }
 
         await updateDoc(docRef, {
           sellHistory: myRecipt
         });
+
+        //
+
+        //
       }
     } //for
   }, //

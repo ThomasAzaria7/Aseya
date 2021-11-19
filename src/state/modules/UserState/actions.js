@@ -28,15 +28,15 @@ export default {
     context.commit("removeItemFromFav", payload);
   },
 
-  // refreshFav(context, payload) {
-  //   context.commit("getFavItemsFromDB", payload);
-  // },
+  //
 
   //
   authStatus(context, payload) {
     context.commit("authenticatedStatus", payload);
     console.log("refresh");
   },
+  //
+
   signUpUser(context, payload) {
     context.commit("userAuthenticated", payload);
     console.log(context, payload);

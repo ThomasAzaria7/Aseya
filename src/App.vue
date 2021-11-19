@@ -11,11 +11,13 @@
 
 <script>
 import MainFooter from "./components/footer/MainFooter.vue";
+// import PictureSlide from './components/body/slideShow/PictureSlide'
 // import { db } from "./database/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 export default {
   components: {
     MainFooter
+    // PictureSlide
   },
   data() {
     return {

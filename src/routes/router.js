@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../components/body/HomePage.vue";
+import HomePage from "../components/body/homePage/HomePage.vue";
 import StorePage from "../components/body/shop/StorePage";
 import ShopCart from "../components/header/ShopCart";
 import UserFav from "../components/header/UserFav";

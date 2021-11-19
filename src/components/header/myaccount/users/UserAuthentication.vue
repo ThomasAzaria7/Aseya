@@ -21,8 +21,8 @@
         <hr />
 
         <div class="alternativeSignIn">
-          <i @click="siginIn" class="fab fa-google"></i>
-          <i class="fab fa-facebook"></i>
+          <i @click="siginIn('google')" class="fab fa-google"></i>
+          <i @click="siginIn('facebook')" class="fab fa-facebook"></i>
         </div>
       </form>
     </div>
@@ -44,8 +44,8 @@ export default {
     console.log();
   },
   methods: {
-    siginIn() {
-      this.$store.dispatch("UserState/signUpUser", "hi");
+    siginIn(provider) {
+      this.$store.dispatch("UserState/signUpUser", provider);
     }
   }
 };
