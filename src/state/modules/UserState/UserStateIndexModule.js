@@ -3,21 +3,22 @@ import getters from "./getters";
 import actions from "./actions";
 
 export default {
-  namespaced: true,
-  state() {
-    return {
-      favTotal: 0,
-      cartTotal: 0,
-      cartItems: [],
-      favItems: [],
-      authenticated: null,
-      auth: null,
-      error: null,
-      sellerRecipts: null,
-      buyerRecipts: null
-    };
-  },
-  mutations,
-  getters,
-  actions
+	namespaced: true,
+	state() {
+		return {
+			favTotal: 0,
+			cartTotal: 0,
+			cartItems: [],
+			favItems: [],
+			authenticated: null,
+			auth: null,
+			error: null,
+			sellerRecipts: null,
+			buyerRecipts: null,
+			payToken: null,
+		};
+	},
+	mutations,
+	getters,
+	actions,
 };

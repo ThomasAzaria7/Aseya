@@ -16,13 +16,13 @@ import MainFooter from "./components/footer/MainFooter.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 export default {
   components: {
-    MainFooter
+    MainFooter,
     // PictureSlide
   },
   data() {
     return {
       hide: false,
-      userData: {}
+      userData: {},
     };
   },
   // beforeCreate() {
@@ -31,12 +31,13 @@ export default {
   computed: {
     getAuthData() {
       return this.$store.getters["UserState/getAuthState"];
-    }
+    },
   },
   beforeMount() {},
   mounted() {
+    this.$store.dispatch("UserState/callForToken");
     const auth = getAuth();
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         this.$store.dispatch("UserState/authStatus", user);
@@ -57,11 +58,12 @@ export default {
 
     this.$store.dispatch("items/addProductToStore");
   },
+
   methods: {
     toggleData() {
       this.hide = !this.hide;
-    }
-  }
+    },
+  },
 };
 </script>
 

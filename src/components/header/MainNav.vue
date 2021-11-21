@@ -24,12 +24,14 @@
         </router-link>
         <router-link to="/my-favorites">
           <i class="far fa-heart">
-            <span style="margin-left:2px; font-size:16px;">{{ favTotal }}</span>
+            <span style="margin-left: 2px; font-size: 16px">{{
+              favTotal
+            }}</span>
           </i>
         </router-link>
         <router-link to="/my-cart">
           <i class="fas fa-shopping-cart"></i>
-          <span style="margin-left:5px;">{{ cartTotal}}</span>
+          <span style="margin-left: 5px">{{ cartTotal }}</span>
         </router-link>
 
         <router-link to>
@@ -78,16 +80,16 @@ import MobileNav from "./MobileNav";
 
 export default {
   components: {
-    MobileNav
+    MobileNav,
   },
   data() {
     return {
       slideActive: true,
-      showMenu: false
+      showMenu: false,
     };
   },
 
-  created: function() {
+  created: function () {
     window.addEventListener("scroll", this.handleScroll);
   },
 
@@ -99,7 +101,7 @@ export default {
       // const storeageData = localStorage.getItem("cartItems");
       // let cartItems = JSON.parse(storeageData);
       return this.$store.getters["UserState/getCartTotal"];
-    }
+    },
   },
   methods: {
     toggleSlide() {
@@ -108,7 +110,7 @@ export default {
 
     toggleNav() {
       this.showMenu = !this.showMenu;
-      console.log(this.showMenu);
+      // console.log(this.showMenu);
     },
     handleScroll() {
       let num = window.scrollY;
@@ -118,8 +120,8 @@ export default {
       } else if (num > 10) {
         this.slideActive = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -149,6 +151,7 @@ export default {
       color: white;
       padding: 2px 0;
       letter-spacing: 5px;
+      font-size: 10px;
     }
   }
   &__titles {

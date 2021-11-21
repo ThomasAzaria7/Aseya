@@ -8,7 +8,11 @@
 
     <!-- <button @click="testRecipt">test recipt</button> -->
 
-    <button @click="sellerRecipts">manage button recipt</button>
+    <!-- <button @click="sellerRecipts">manage button recipt</button> -->
+
+    <!-- <h2>
+      {{ getToken }}
+    </h2> -->
 
     <div id="paypal-button-container"></div>
   </div>
@@ -21,7 +25,7 @@ export default {
   data() {
     return {
       accessToken: "",
-      mydata: {}
+      mydata: {},
     };
   },
   computed: {
@@ -34,14 +38,16 @@ export default {
 
     getUser() {
       return this.$store.getters["UserState/getAuthState"]; //  get total cart item priice
-    }
+    },
+    getToken() {
+      return this.$store.getters["UserState/getMyToken"];
+    },
   },
   mounted() {
-    this.getAccessToken();
-    let SavedToken = localStorage.getItem("accessToken");
-    let myToken = JSON.parse(SavedToken);
-
     // console.log(window.paypal);
+
+    this.$store.dispatch("UserState/retreiveToken", "myToken");
+    const mytoken = JSON.parse(this.getToken);
 
     let myItems = null;
     let mydata = null;
@@ -50,89 +56,88 @@ export default {
     setTimeout(() => {
       myItems = this.getItemObject();
       mydata = JSON.stringify({
-        token: myToken,
-        items: myItems
+        token: mytoken,
+        items: myItems,
       });
       uid = this.getUser;
 
       console.log(uid);
       // console.log(myToken, myItems.items);
+
+      window.paypal
+        .Buttons({
+          createOrder: function () {
+            return fetch(
+              "https://aseyea.herokuapp.com/my-server/create-order",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: mydata,
+              }
+            )
+              .then(function (res) {
+                return res.json();
+              })
+              .then(function (data) {
+                return data.id;
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          },
+          onApprove: (data) => {
+            return fetch(
+              "https://aseyea.herokuapp.com/my-server/capture-order/" +
+                data.orderID,
+              {
+                method: "POST",
+                body: this.getToken,
+              }
+            )
+              .then((res) => {
+                return res.json();
+              })
+              .then((details) => {
+                console.log();
+                const OnSuccess = JSON.parse(details.status);
+                console.log(OnSuccess);
+
+                const itemId = OnSuccess.id;
+
+                // this.testRecipt(itemId);
+                return fetch(
+                  "https://aseyea.herokuapp.com/my-server/product/" + itemId,
+                  {
+                    method: "Get",
+                  }
+                )
+                  .then((x) => x.json())
+                  .then((reciptData) => {
+                    console.log(reciptData);
+                    console.log(uid);
+                    const orderId = reciptData.body.id;
+                    this.sellerRecipts(orderId);
+
+                    const buyerDetail = {
+                      reciptData: reciptData,
+                      uid: uid.uid,
+                    };
+
+                    console.log(buyerDetail);
+
+                    this.$store.dispatch(
+                      "UserState/SendBuyerRecipt",
+                      buyerDetail
+                    ); // buyer recipt
+                  });
+              })
+              .catch((err) => console.log(err));
+          },
+        })
+        .render("#paypal-button-container");
     }, 3000);
-
-    window.paypal
-      .Buttons({
-        createOrder: function() {
-          return fetch("http://localhost:3000/my-server/create-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            // body: newData
-            body: mydata
-          })
-            .then(function(res) {
-              //   console.log(data);
-              // console.log(actions);
-
-              return res.json();
-            })
-            .then(function(data) {
-              //   console.log(data);
-              return data.id;
-            });
-        },
-        onApprove: data => {
-          return fetch(
-            "http://localhost:3000/my-server/capture-order/" + data.orderID,
-            {
-              method: "POST",
-              body: myToken
-              // body: JSON.stringify({
-              //   orderID: data.orderID
-              // })
-            }
-          )
-            .then(res => {
-              return res.json();
-            })
-            .then(details => {
-              console.log();
-              const OnSuccess = JSON.parse(details.status);
-              console.log(OnSuccess);
-
-              const itemId = OnSuccess.id;
-
-              // this.testRecipt(itemId);
-              return fetch(
-                "http://localhost:3000/my-server/product/" + itemId,
-                {
-                  method: "Get"
-                }
-              )
-                .then(x => x.json())
-                .then(reciptData => {
-                  console.log(reciptData);
-                  console.log(uid);
-                  const orderId = reciptData.body.id;
-                  this.sellerRecipts(orderId);
-
-                  const buyerDetail = {
-                    reciptData: reciptData,
-                    uid: uid.uid
-                  };
-
-                  console.log(buyerDetail);
-
-                  this.$store.dispatch(
-                    "UserState/SendBuyerRecipt",
-                    buyerDetail
-                  ); // buyer recipt
-                });
-            });
-        }
-      })
-      .render("#paypal-button-container");
   },
   methods: {
     sellerRecipts() {
@@ -140,16 +145,17 @@ export default {
       // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
       return (
         fetch(
-          "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
+          "https://aseyea.herokuapp.com/my-server/product/" +
+            "5E787487BL240014A",
           {
-            method: "Get"
+            method: "Get",
           }
         )
           // return fetch("http://localhost:3000/my-server/product/" + id, {
           //       method: "Get"
           //     })
-          .then(x => x.json())
-          .then(reciptData => {
+          .then((x) => x.json())
+          .then((reciptData) => {
             console.log(reciptData);
             // console.log(uid);
 
@@ -166,12 +172,15 @@ export default {
       // console.log(this.getUser.uid);
       const uid = this.getUser.uid;
 
-      return fetch("http://localhost:3000/my-server/product/" + orderId, {
-        method: "GET"
-        // body: ""
-      })
-        .then(x => x.json())
-        .then(reciptData => {
+      return fetch(
+        "https://aseyea.herokuapp.com/my-server/product/" + orderId,
+        {
+          method: "GET",
+          // body: ""
+        }
+      )
+        .then((x) => x.json())
+        .then((reciptData) => {
           // console.log(reciptData);
 
           // actionCalls to distribute the recipts
@@ -180,7 +189,7 @@ export default {
 
           const buyerDetail = {
             reciptData: reciptData,
-            uid: uid
+            uid: uid,
           };
 
           this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipt
@@ -203,14 +212,14 @@ export default {
               sku: this.shopCartItems[i].sellerID,
               // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
               item_details: {
-                code: "1234"
+                code: "1234",
               },
               unit_amount: {
                 currency_code: "USD",
-                value: this.shopCartItems[i].price
+                value: this.shopCartItems[i].price,
               },
-              quantity: 1
-            }
+              quantity: 1,
+            },
           ];
         } else {
           // console.log("theresss");
@@ -220,13 +229,13 @@ export default {
             description: this.shopCartItems[i].description, // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
             sku: this.shopCartItems[i].sellerID,
             item_details: {
-              code: "1234"
+              code: "1234",
             },
             unit_amount: {
               currency_code: "USD",
-              value: this.shopCartItems[i].price
+              value: this.shopCartItems[i].price,
             },
-            quantity: 1
+            quantity: 1,
           });
         }
       }
@@ -234,7 +243,7 @@ export default {
 
       let checkout = {
         items: paypalItems,
-        cartTotalPrice: this.getTotalPrice
+        cartTotalPrice: this.getTotalPrice,
       };
       // console.log("final checkout object", checkout);
       return checkout;
@@ -242,36 +251,9 @@ export default {
     },
 
     getAccessToken() {
-      return fetch("http://localhost:3000/my-server/token/", {
-        method: "POST"
-      })
-        .then(function(res) {
-          if (!res.ok) {
-            alert("Something went wrong");
-          }
-
-          return res.json();
-        })
-        .then(data => {
-          console.log(data);
-
-          // setting cookie
-          let name = "myCOOkie";
-          const value = 12344;
-
-          var date = new Date();
-          date.setTime(date.getTime() + 30 * 1000);
-          var expires = "; expires=" + date.toGMTString();
-
-          document.cookie = name + "=" + value + expires + "; path=/";
-          // console.log(data.id.access_token);
-          this.accessToken = data.tokenBody.access_token;
-          const mydata = JSON.stringify({ token: this.accessToken });
-          localStorage.setItem("accessToken", mydata);
-          // console.log("hi");
-        });
-    }
-  }
+      this.$store.dispatch("UserState/retreiveToken", "myToken");
+    },
+  },
 };
 </script>
 

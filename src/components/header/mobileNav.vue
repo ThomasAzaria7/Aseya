@@ -1,23 +1,23 @@
 <template>
-  <div v-if="cal && show " class="sideNav">
+  <div v-if="cal && show" class="sideNav">
     <ul class="sideNav__nav">
       <li>
-        <router-link @click="close" to="store">store</router-link>
+        <router-link @click="close()" to="/">Home</router-link>
       </li>
       <li>
-        <router-link to="store">store</router-link>
+        <router-link @click="close()" to="/store">BestSellers</router-link>
       </li>
       <li>
-        <router-link to="store">store</router-link>
+        <router-link @click="close" to="/store">store</router-link>
       </li>
       <li>
-        <router-link to="store">store</router-link>
+        <router-link @click="close" to="/store">store</router-link>
       </li>
       <li>
-        <router-link to="store">store</router-link>
+        <router-link @click="close" to="/store">store</router-link>
       </li>
       <li>
-        <router-link to="store">
+        <router-link @click="close" to="/my-account/authentication">
           <i class="far fa-user-circle"></i>
         </router-link>
       </li>
@@ -32,14 +32,14 @@ export default {
   emits: ["close"],
   data() {
     return {
-      show: true
+      show: true,
     };
   },
 
   computed: {
     cal() {
       return this.toggleMenu;
-    }
+    },
   },
 
   created() {
@@ -54,8 +54,8 @@ export default {
   methods: {
     close() {
       this.$emit("close");
-    }
-  }
+    },
+  },
 };
 </script>
 

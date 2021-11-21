@@ -124,6 +124,11 @@ export default {
     padding: 5px;
     margin: 0;
   }
+  h3{
+    background-color: white;
+    display: inline-block;
+    padding: 10px 30px;
+  }
   &__items {
     background-color: rgba(240, 240, 240, 0.726);
     flex: 0 1 60%;
