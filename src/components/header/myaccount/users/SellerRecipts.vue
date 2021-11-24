@@ -106,6 +106,7 @@ export default {
       }
     }
   }
+  
   .claim {
     background-color: rgb(27, 219, 21);
     padding: 10px;

@@ -10,9 +10,7 @@
 
     <!-- <button @click="sellerRecipts">manage button recipt</button> -->
 
-    <!-- <h2>
-      {{ getToken }}
-    </h2> -->
+    <!-- <h2>{{ getToken }}</h2> -->
 
     <div id="paypal-button-container"></div>
   </div>
@@ -25,7 +23,7 @@ export default {
   data() {
     return {
       accessToken: "",
-      mydata: {},
+      mydata: {}
     };
   },
   computed: {
@@ -41,7 +39,7 @@ export default {
     },
     getToken() {
       return this.$store.getters["UserState/getMyToken"];
-    },
+    }
   },
   mounted() {
     // console.log(window.paypal);
@@ -57,7 +55,7 @@ export default {
       myItems = this.getItemObject();
       mydata = JSON.stringify({
         token: mytoken,
-        items: myItems,
+        items: myItems
       });
       uid = this.getUser;
 
@@ -66,55 +64,54 @@ export default {
 
       window.paypal
         .Buttons({
-          createOrder: function () {
+          createOrder: function() {
             return fetch(
               "https://aseyea.herokuapp.com/my-server/create-order",
               {
                 method: "POST",
                 headers: {
-                  "Content-Type": "application/json",
+                  "Content-Type": "application/json"
                 },
-                body: mydata,
+                body: mydata
               }
             )
-              .then(function (res) {
+              .then(function(res) {
                 return res.json();
               })
-              .then(function (data) {
+              .then(function(data) {
                 return data.id;
               })
-              .catch((err) => {
+              .catch(err => {
                 console.log(err);
               });
           },
-          onApprove: (data) => {
+          onApprove: data => {
             return fetch(
               "https://aseyea.herokuapp.com/my-server/capture-order/" +
                 data.orderID,
               {
                 method: "POST",
-                body: this.getToken,
+                body: this.getToken
               }
             )
-              .then((res) => {
+              .then(res => {
                 return res.json();
               })
-              .then((details) => {
+              .then(details => {
                 console.log();
                 const OnSuccess = JSON.parse(details.status);
                 console.log(OnSuccess);
 
                 const itemId = OnSuccess.id;
-
                 // this.testRecipt(itemId);
                 return fetch(
                   "https://aseyea.herokuapp.com/my-server/product/" + itemId,
                   {
-                    method: "Get",
+                    method: "Get"
                   }
                 )
-                  .then((x) => x.json())
-                  .then((reciptData) => {
+                  .then(x => x.json())
+                  .then(reciptData => {
                     console.log(reciptData);
                     console.log(uid);
                     const orderId = reciptData.body.id;
@@ -122,7 +119,7 @@ export default {
 
                     const buyerDetail = {
                       reciptData: reciptData,
-                      uid: uid.uid,
+                      uid: uid.uid
                     };
 
                     console.log(buyerDetail);
@@ -133,8 +130,8 @@ export default {
                     ); // buyer recipt
                   });
               })
-              .catch((err) => console.log(err));
-          },
+              .catch(err => console.log(err));
+          }
         })
         .render("#paypal-button-container");
     }, 3000);
@@ -148,14 +145,14 @@ export default {
           "https://aseyea.herokuapp.com/my-server/product/" +
             "5E787487BL240014A",
           {
-            method: "Get",
+            method: "Get"
           }
         )
           // return fetch("http://localhost:3000/my-server/product/" + id, {
           //       method: "Get"
           //     })
-          .then((x) => x.json())
-          .then((reciptData) => {
+          .then(x => x.json())
+          .then(reciptData => {
             console.log(reciptData);
             // console.log(uid);
 
@@ -175,12 +172,12 @@ export default {
       return fetch(
         "https://aseyea.herokuapp.com/my-server/product/" + orderId,
         {
-          method: "GET",
+          method: "GET"
           // body: ""
         }
       )
-        .then((x) => x.json())
-        .then((reciptData) => {
+        .then(x => x.json())
+        .then(reciptData => {
           // console.log(reciptData);
 
           // actionCalls to distribute the recipts
@@ -189,7 +186,7 @@ export default {
 
           const buyerDetail = {
             reciptData: reciptData,
-            uid: uid,
+            uid: uid
           };
 
           this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipt
@@ -212,14 +209,14 @@ export default {
               sku: this.shopCartItems[i].sellerID,
               // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
               item_details: {
-                code: "1234",
+                code: "1234"
               },
               unit_amount: {
                 currency_code: "USD",
-                value: this.shopCartItems[i].price,
+                value: this.shopCartItems[i].price
               },
-              quantity: 1,
-            },
+              quantity: 1
+            }
           ];
         } else {
           // console.log("theresss");
@@ -229,13 +226,13 @@ export default {
             description: this.shopCartItems[i].description, // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
             sku: this.shopCartItems[i].sellerID,
             item_details: {
-              code: "1234",
+              code: "1234"
             },
             unit_amount: {
               currency_code: "USD",
-              value: this.shopCartItems[i].price,
+              value: this.shopCartItems[i].price
             },
-            quantity: 1,
+            quantity: 1
           });
         }
       }
@@ -243,17 +240,17 @@ export default {
 
       let checkout = {
         items: paypalItems,
-        cartTotalPrice: this.getTotalPrice,
+        cartTotalPrice: this.getTotalPrice
       };
       // console.log("final checkout object", checkout);
       return checkout;
       //
-    },
+    }
 
-    getAccessToken() {
-      this.$store.dispatch("UserState/retreiveToken", "myToken");
-    },
-  },
+    // getAccessToken() {
+    //   this.$store.dispatch("UserState/retreiveToken", "myToken");
+    // }
+  }
 };
 </script>
 
