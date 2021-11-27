@@ -8,7 +8,7 @@
         <router-link @click="close()" to="/store">BestSellers</router-link>
       </li>
       <li>
-        <router-link @click="close" to="/store">store</router-link>
+        <router-link @click="close" to="/clothing">Clothing</router-link>
       </li>
       <li>
         <router-link @click="close" to="/store">store</router-link>

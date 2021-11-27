@@ -11,22 +11,24 @@
       </div>
       <div class="search">
         <select name="Category" id>
-          <option class="option" value>category</option>
+          <option class="option" value>all</option>
           <option class="option" value>clothing</option>
-          <option class="option" value>clothing</option>
+          <option class="option" value>electronics</option>
         </select>
         <input type="text" placeholder="search for item" />
         <i class="fas fa-search"></i>
       </div>
       <div class="account">
-        <router-link to="/my-account">
+        <router-link to="/my-account/authentication">
           <i class="fas fa-user"></i>
         </router-link>
         <router-link to="/my-favorites">
           <i class="far fa-heart">
-            <span style="margin-left: 2px; font-size: 16px">{{
+            <span style="margin-left: 2px; font-size: 16px">
+              {{
               favTotal
-            }}</span>
+              }}
+            </span>
           </i>
         </router-link>
         <router-link to="/my-cart">
@@ -49,7 +51,7 @@
         <router-link to="/store">New Releases</router-link>
       </li>
       <li>
-        <a>Fashion</a>
+        <router-link to="clothing">Clothing</router-link>
       </li>
       <li>
         <a>Books</a>
@@ -80,16 +82,16 @@ import MobileNav from "./MobileNav";
 
 export default {
   components: {
-    MobileNav,
+    MobileNav
   },
   data() {
     return {
       slideActive: true,
-      showMenu: false,
+      showMenu: false
     };
   },
 
-  created: function () {
+  created: function() {
     window.addEventListener("scroll", this.handleScroll);
   },
 
@@ -101,7 +103,7 @@ export default {
       // const storeageData = localStorage.getItem("cartItems");
       // let cartItems = JSON.parse(storeageData);
       return this.$store.getters["UserState/getCartTotal"];
-    },
+    }
   },
   methods: {
     toggleSlide() {
@@ -120,8 +122,8 @@ export default {
       } else if (num > 10) {
         this.slideActive = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

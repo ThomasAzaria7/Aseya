@@ -12,10 +12,17 @@ import UserAuthentication from "../components/header/myaccount/users/UserAuthent
 import UserProfile from "../components/header/myaccount/users/UserProfile";
 import SellerRecipt from "../components/header/myaccount/users/SellerRecipts";
 import BuyerRecipt from "../components/header/myaccount/users/BuyerRecipt";
+import ClothingPage from "../components/body/clothing/ClothingPage.vue";
+import WomansClothing from "../components/body/clothing/WomanClothing";
 
 const routes = [
   { path: "", component: HomePage },
   { path: "/store", component: StorePage },
+  {
+    path: "/clothing",
+    component: ClothingPage,
+    children: [{ path: "/woman", component: WomansClothing }]
+  },
   { path: "/store/:id", component: ItemPreview },
   { path: "/my-cart", component: ShopCart },
   { path: "/my-favorites", component: UserFav },
