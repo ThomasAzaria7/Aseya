@@ -32,14 +32,14 @@ export default {
   emits: ["close"],
   data() {
     return {
-      show: true
+      show: true,
     };
   },
 
   computed: {
     cal() {
       return this.toggleMenu;
-    }
+    },
   },
 
   created() {
@@ -54,8 +54,8 @@ export default {
   methods: {
     close() {
       this.$emit("close");
-    }
-  }
+    },
+  },
 };
 </script>
 

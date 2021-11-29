@@ -1,8 +1,16 @@
 <template>
   <div>
     <br />
-    <div id="paypal-button-container-P-2ND439943W547634LMF5V2HA"></div>
-    <button @click="subscribe">subscribe</button>
+    <div id="paypal-subscription-button-container"></div>
+    <button @click="createProduct">subscribe</button>
+    <br />
+    <br />
+    <button @click="createPlan">create Plan</button>
+
+    <p>
+      {{ getToken }}
+    </p>
+    <!-- <button@click="">createPlan</button> -->
   </div>
 </template>
 
@@ -21,46 +29,100 @@ export default {
           shape: "rect",
           color: "silver",
           layout: "vertical",
-          label: "subscribe"
+          label: "subscribe",
         },
-        createSubscription: function(__, actions) {
+        createSubscription: function (__, actions) {
           return actions.subscription.create({
             /* Creates the subscription */
-            plan_id: "P-2ND439943W547634LMF5V2HA"
+            plan_id: "P-2ND439943W547634LMF5V2HA",
           });
         },
-        onApprove: function(data) {
+        onApprove: function (data) {
           alert(data.subscriptionID); // You can add optional success message for the subscriber here
-        }
+        },
       })
-      .render("#paypal-button-container-P-2ND439943W547634LMF5V2HA"); // Renders the PayPal button
+      .render("#paypal-subscription-button-container"); // Renders the PayPal button
+  },
+  computed: {
+    getToken() {
+      return this.$store.getters["UserState/getMyToken"];
+    },
   },
   methods: {
-    subscribe() {
-      // fetch("http://localhost:3000/subscription/createSubscriptionProduct", {
-      //   method: "POST",
-      //   mode: "cors",
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   }
-      // }).then(val => {
-      //   console.log(val);
-      // });
-
-      return fetch("http://localhost:3000/my-server/createSubscribeProduct", {
-        method: "POST"
-      })
-        .then(function(res) {
-          //   console.log(data);
+    createProduct() {
+      // console.log(this.getToken);
+      const accessToken = this.getToken;
+      // console.log(accessToken);
+      return fetch(
+        "http://localhost:3000/my-server/create-subscription-product",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: accessToken,
+        }
+      )
+        .then(function (res) {
+          // console.log(data);
           // console.log(actions);
-
           return res.json();
         })
-        .then(function(data) {
-          //   console.log(data);
+        .then(function (data) {
+          console.log(data);
           return data.id;
         });
-    }
-  }
+    },
+    createPlan() {
+      // console.log(this.getToken);
+      const accessToken = this.getToken;
+      // console.log(accessToken);
+      return fetch(
+        "http://localhost:3000/my-server/create-subscription-Plans",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: accessToken,
+        }
+      )
+        .then(function (res) {
+          // console.log(data);
+          // console.log(actions);
+          return res.json();
+        })
+        .then(function (data) {
+          console.log(data);
+          return data.id;
+        });
+    },
+    //
+    subscribe() {
+      // console.log(this.getToken);
+      const accessToken = this.getToken;
+      // console.log(accessToken);
+      return fetch(
+        "http://localhost:3000/my-server/create-subscription-product",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: accessToken,
+        }
+      )
+        .then(function (res) {
+          // console.log(data);
+          // console.log(actions);
+          return res.json();
+        })
+        .then(function (data) {
+          console.log(data);
+          return data.id;
+        });
+    },
+    //
+  },
 };
 </script>
