@@ -2,12 +2,10 @@
   <div>
     <div class="backdrop"></div>
     <div class="genderCategory">
-      <div>
-        <h2>
-          <router-link to="woman">Womans</router-link>
-        </h2>
+      <div @click="toggle('woman')">
+        <h2>Womans</h2>
       </div>
-      <div>
+      <div @click="toggle('men')">
         <h2>Mens</h2>
       </div>
     </div>
@@ -15,25 +13,39 @@
 </template>
 
 <script>
-export default {};
+export default {
+  emits: ["navigate"],
+  data() {
+    return {};
+  },
+
+  methods: {
+    toggle(val) {
+      this.$emit("navigate", val);
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-.backdrop {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-image: url("https://images.pexels.com/photos/1082529/pexels-photo-1082529.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-}
 .genderCategory {
   display: flex;
   position: relative;
   padding: 10%;
   background-size: cover;
   gap: 10px;
-
+  background-image: url("https://images.pexels.com/photos/1082529/pexels-photo-1082529.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.671);
+    backdrop-filter: blur(2px);
+  }
   div {
     height: 300px;
     background-color: black;
@@ -44,7 +56,8 @@ export default {};
     display: flex;
     // justify-content: center;
     align-items: center;
-    box-shadow: 5px 5px 1rem rgba(0, 0, 0, 0.411);
+    box-shadow: 2px 2px 0.6rem rgba(255, 255, 255, 0.411);
+    cursor: pointer;
     text-decoration: none;
 
     h2 {

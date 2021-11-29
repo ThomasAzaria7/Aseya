@@ -1,31 +1,29 @@
 <template>
   <div>
     <br />
-    <h1>womans ></h1>
+    <br />
+    <h1>mens ></h1>
     <ul>
       <li>
-        <a href>coats and jackets</a>
+        <a href>shirts</a>
       </li>
       <li>
-        <a href>dresses</a>
+        <a href>shirts</a>
       </li>
       <li>
-        <a href>tops</a>
+        <a href>shirts</a>
       </li>
       <li>
-        <a href>skirts</a>
+        <a href>shirts</a>
       </li>
       <li>
-        <a href>jumpsuit and play suit</a>
+        <a href>shirts</a>
       </li>
       <li>
-        <a href>jeans</a>
+        <a href>shirts</a>
       </li>
       <li>
-        <a href>formal</a>
-      </li>
-      <li>
-        <a href>swimwear</a>
+        <a href>shirts</a>
       </li>
     </ul>
   </div>
@@ -46,17 +44,16 @@ div {
 
   ul {
     background: rgb(245, 243, 243);
-    width: 200px;
+    width: 150px;
     margin: 0;
     list-style-type: none;
     padding: 0;
 
     li {
-      padding: 5px 2%;
+      padding: 10px 2%;
       // background-color: aqua;
       a {
         text-decoration: none;
-        font-family: sans-serif;
 
         &:hover {
           color: green;

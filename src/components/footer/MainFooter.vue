@@ -1,68 +1,152 @@
 <template>
   <div class="footerContainer">
-    <div class="footerContainer__stayConnnected">
-      <h4>Stay connected</h4>
-      <i class="fab fa-facebook-square"></i>
-      <i class="fab fa-instagram-square"></i>
-    </div>
-    <div class="footerContainer__subscribe">
-      <h4>be our friend</h4>
-      <form>
-        <input type="text" placeholder="name" class="formControl" />
-        <input type="email" placeholder="email address" class="formControl" />
-        <button class="formControl">Subscribe Now</button>
-      </form>
-    </div>
+    <ul>
+      <div class="navContainer col-1">
+        <li class="title">let us help you</li>
+        <li>
+          <a href>your account</a>
+        </li>
+        <li>
+          <a href>your orders</a>
+        </li>
+        <li>
+          <a href>policies</a>
+        </li>
+        <li>
+          <a href>return and replacement</a>
+        </li>
+        <li>
+          <a href>help center</a>
+        </li>
+        <li>
+          <a href>contact</a>
+        </li>
+      </div>
+      <div class="navContainer col-2">
+        <li class="title">Get to know us</li>
 
-    <div class="footerContainer__assistance">
-      <h4>need some assitance?</h4>
-      <p>ASEYAmail@gmail.com</p>
+        <li>
+          <a href>sell with us</a>
+        </li>
+        <li>
+          <a href>selling Infomation</a>
+        </li>
+        <li>
+          <a href>pricing</a>
+        </li>
+        <li>
+          <a href>billing</a>
+        </li>
+        <li>
+          <a href>fees</a>
+        </li>
+        <li>
+          <a href>reach us</a>
+        </li>
+      </div>
+      <div class="navContainer col-3">
+        <li class="title">sell with us</li>
+
+        <li>
+          <a href>terms and condition</a>
+        </li>
+        <li>
+          <a href>marketing and promotion</a>
+        </li>
+        <li>
+          <a href>payouts and subscription</a>
+        </li>
+        <div class="footerContainer__assistance">
+          <p>need some assitance?</p>
+          <p class="email">aseyeamarket@gmail.com</p>
+        </div>
+      </div>
+      <div class="navContainer footerContainer__subscribe">
+        <!-- <h>be our friend</h4> -->
+        <li class="title subscribe">stay connected</li>
+        <form>
+          <input type="text" placeholder="name" class="formControl" />
+          <input type="email" placeholder="email address" class="formControl" />
+          <button class="formControl">Subscribe Now</button>
+        </form>
+      </div>
+    </ul>
+
+    <hr />
+
+    <div class="subFooter">
+      <div class="subFooter__social">
+        <p>Follow Us on Social</p>
+        <i class="fab fa-facebook-square"></i>
+        <i class="fab fa-instagram-square"></i>
+      </div>
+
+      <!-- <div>
+        <p>copyright 2021</p>
+      </div>-->
+      <!--  -->
+      <div class="subFooter__paypal">
+        <p>SSL Encrypted - Securely shop with paypal and Master Cards</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/888/888920.png" alt />
+      </div>
     </div>
-    <!-- <ul>
-      <li><a>contact</a></li>
-      <li><a>contact</a></li>
-      <li><a>contact</a></li>
-      <li><a>contact</a></li>
-      <li><a>contact</a></li>
-    </ul> -->
   </div>
 </template>
 
 <style lang="scss" scoped>
 .footerContainer {
   background-color: #4d4d4d;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  // display: flex;
   height: 300px;
-  padding: 0 10%;
-  display: flex;
-  justify-content: space-around;
+  padding: 20px 10%;
+  // display: flex;
+  // justify-content: space-around;
 
-  h4 {
-    color: rgba(255, 255, 255, 0.8);
-    text-align: center;
-    text-transform: capitalize;
+  .subFooter {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+
+    &__paypal {
+      height: 50px;
+      margin: 15px;
+      display: flex;
+      p {
+        width: 300px;
+        margin: 0;
+        color: rgba(187, 187, 187, 0.705);
+        font-family: cursive;
+        font-size: 14px;
+      }
+      img {
+        height: 100%;
+      }
+    }
+    &__social {
+      p {
+        // margin: 4px;
+        color: #949494;
+        font-size: 14px;
+      }
+      i {
+        font-size: 30px;
+        margin-right: 5px;
+      }
+    }
   }
 
-  &__stayConnnected {
-    i {
-      font-size: 40px;
-      margin: 5px;
-    }
-    .fa-facebook-square {
-      color: blue;
-      background-color: rgba(255, 255, 255, 0.829);
-    }
-    .fa-instagram-square {
-      color: white;
-      background-color: rgb(141, 15, 114);
-      padding: 0;
-    }
-  }
   &__subscribe {
     // background-color: white;
+
+    position: absolute;
+    right: 20%;
     flex: 0 1 25%;
     .formControl {
       display: block;
-      width: 100%;
+      width: 150%;
       padding: 5px 10px;
       border: none;
       margin: 5px 0;
@@ -80,20 +164,52 @@
   &__assistance {
     p {
       color: rgb(207, 207, 207);
+      margin-bottom: 0;
+    }
+    .email {
+      color: rgb(175, 175, 175);
+      margin-top: 0;
     }
   }
 }
 
 ul {
   list-style-type: none;
+  // margin: 0;
+  // justify-content: center;
+  display: flex;
   margin: 0;
+  padding: 10px 0;
+  // grid-template-columns: repeat(3, min-width(1frame));
+  .navContainer {
+    flex: 0 1 15vw;
+
+    .title {
+      color: rgb(235, 235, 235);
+      margin-bottom: 5px;
+    }
+    .subscribe {
+      float: right;
+    }
+  }
 
   li {
-    float: left;
+    // float: left;
 
     a {
       padding: 10px 20px;
-      color: rgb(255, 255, 255);
+      padding-left: 0;
+      color: rgb(189, 189, 189);
+      text-decoration: none;
+      font-weight: 100;
+      font-size: 14px;
+      margin-left: 5px;
+
+      &:hover {
+        color: rgb(63, 202, 202);
+        border-bottom: solid 1px rgb(189, 189, 189);
+        padding: 0;
+      }
     }
   }
 }

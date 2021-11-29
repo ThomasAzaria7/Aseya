@@ -124,7 +124,7 @@ export default {
     padding: 5px;
     margin: 0;
   }
-  h3{
+  h3 {
     background-color: white;
     display: inline-block;
     padding: 10px 30px;
@@ -168,6 +168,8 @@ export default {
     background-color: rgba(217, 219, 219, 0.308);
     flex: 0 1 40%;
     box-sizing: border-box;
+    overflow: auto;
+    overflow-x: hidden;
   }
 }
 

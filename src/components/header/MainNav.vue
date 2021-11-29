@@ -51,7 +51,7 @@
         <router-link to="/store">New Releases</router-link>
       </li>
       <li>
-        <router-link to="clothing">Clothing</router-link>
+        <router-link to="/clothing">Clothing</router-link>
       </li>
       <li>
         <a>Books</a>
