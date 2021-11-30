@@ -31,65 +31,123 @@
     <div v-if="authState" class="accountContainer__nav">
       <ul>
         <li>
-          <router-link @click="showCategory('account')" to="/my-account/authentication">account</router-link>
+          <router-link
+            @click="showCategory('account')"
+            to="/my-account/authentication"
+            >account</router-link
+          >
         </li>
-        <div v-if="subCategoryActive === 'account' " class="subCategory">
-          <router-link style="color:black" to="/my-account/profile">Profile</router-link>
-          <router-link style="color:black" to="/my-account/authentication">authentication</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
+        <div v-if="subCategoryActive === 'account'" class="subCategory">
+          <router-link style="color: black" to="/my-account/profile"
+            >Profile</router-link
+          >
+          <router-link style="color: black" to="/my-account/authentication"
+            >authentication</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
         </div>
         <!-- <li>
           <router-link></router-link>
         </li>-->
         <li>
-          <router-link @click="showCategory('bank')" to="/my-account/Statemnt">Bank StatMent</router-link>
+          <router-link @click="showCategory('bank')" to="/my-account/Statemnt"
+            >Bank StatMent</router-link
+          >
         </li>
 
         <div v-if="subCategoryActive === 'bank'" class="subCategory">
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
         </div>
 
         <li>
-          <router-link @click="showCategory('buy_history')" to>Purchase history</router-link>
+          <router-link @click="showCategory('buy_history')" to
+            >Purchase history</router-link
+          >
         </li>
-        <div v-if="subCategoryActive === 'buy_history' " class="subCategory">
-          <router-link style="color:black" to="/my-account/BuyerRecipt">BuyerRecipt</router-link>
-          <router-link style="color:black" to="/my-account/SellerRecipt">SellerRecipts</router-link>
+        <div v-if="subCategoryActive === 'buy_history'" class="subCategory">
+          <router-link style="color: black" to="/my-account/BuyerRecipt"
+            >BuyerRecipt</router-link
+          >
+          <router-link style="color: black" to="/my-account/SellerRecipt"
+            >SellerRecipts</router-link
+          >
           <!--  <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link> -->
         </div>
         <li>
-          <router-link @click="showCategory('sell_history')" to>sell history</router-link>
+          <router-link @click="showCategory('sell_history')" to
+            >sell history</router-link
+          >
         </li>
-        <div v-if="subCategoryActive === 'sell_history' " class="subCategory">
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
+        <div v-if="subCategoryActive === 'sell_history'" class="subCategory">
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
         </div>
         <li>
-          <router-link @click="showCategory('stock')" to>Stock management</router-link>
+          <router-link @click="showCategory('stock')" to
+            >Stock management</router-link
+          >
         </li>
-        <div v-if="subCategoryActive === 'stock' " class="subCategory">
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
+        <div v-if="subCategoryActive === 'stock'" class="subCategory">
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
         </div>
         <li>
-          <router-link @click="showCategory('plan')" to="/my-account/subscription">subscription</router-link>
+          <router-link
+            @click="showCategory('plan')"
+            to="/my-account/subscription"
+            >subscription</router-link
+          >
         </li>
-        <div v-if="subCategoryActive === 'plan' " class="subCategory">
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
+        <div v-if="subCategoryActive === 'plan'" class="subCategory">
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
         </div>
         <li>
-          <router-link @click="showCategory('policy')" to="/my-account/policy">policy & privacy</router-link>
+          <router-link @click="showCategory('policy')" to="/my-account/policy"
+            >policy & privacy</router-link
+          >
         </li>
-        <div v-if="subCategoryActive === 'policy' " class="subCategory">
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
-          <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link>
+        <div v-if="subCategoryActive === 'policy'" class="subCategory">
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
+          <router-link style="color: black" to="/my-account/profile"
+            >CreateProfile</router-link
+          >
         </div>
       </ul>
     </div>
@@ -104,7 +162,7 @@ export default {
   },
   data() {
     return {
-      subCategoryActive: ""
+      subCategoryActive: "",
     };
   },
   mounted() {
@@ -118,7 +176,7 @@ export default {
       const auth = this.$store.getters["UserState/getAuthState"];
       console.log(auth);
       return auth;
-    }
+    },
   },
   methods: {
     showCategory(val) {
@@ -126,15 +184,15 @@ export default {
     },
     getProductList() {
       return fetch("http://localhost:3000/my-server/product", {
-        method: "GET"
+        method: "GET",
       })
-        .then(function(res) {
+        .then(function (res) {
           //   console.log(data);
           console.log(res);
 
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           return data.id;
         });
@@ -154,21 +212,21 @@ export default {
       return fetch("http://localhost:3000/my-server/pay-clients", {
         method: "POST",
         headers: {
-          "content-type": "application/json"
-        }
+          "content-type": "application/json",
+        },
       })
-        .then(function(res) {
+        .then(function (res) {
           //   console.log(data);
           console.log(res);
 
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           return data.id;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">
@@ -191,7 +249,7 @@ export default {
   }
 
   &__nav {
-    flex: 0 0 25%;
+    flex: 1 1 25%;
     height: 100%;
 
     ul {
