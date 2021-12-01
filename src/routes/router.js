@@ -15,7 +15,8 @@ import BuyerRecipt from "../components/header/myaccount/users/BuyerRecipt";
 import ClothingPage from "../components/body/clothing/ClothingPage.vue";
 import WomanClothing from "../components/body/clothing/WomanClothing";
 import MenClothing from "../components/body/clothing/MenClothing";
-
+import CreateProduct from "../components/header/myaccount/AccountDetails/CreateProduct";
+import ManageProducts from "../components/header/myaccount/AccountDetails/ManageProduct";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -45,6 +46,9 @@ const router = createRouter({
         { path: "/my-account/Statemnt", component: BankStatement },
         { path: "/my-account/authentication", component: UserAuthentication },
 
+        { path: "/my-account/profile", component: UserProfile },
+        { path: "/my-account/create_product", component: CreateProduct },
+        { path: "/my-account/manage_products", component: ManageProducts },
         { path: "/my-account/profile", component: UserProfile },
 
         { path: "/my-account/SellerRecipt", component: SellerRecipt },

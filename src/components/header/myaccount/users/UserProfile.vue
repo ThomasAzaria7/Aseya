@@ -9,7 +9,7 @@
         <div class="formControl"></div>
         <div class="formControl"></div>
         <br />
-        <button type="submit">Save</button>
+        <!-- <button type="submit">Save</button> -->
       </form>
     </div>
     <div class="updateProfile"></div>

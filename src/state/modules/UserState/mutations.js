@@ -1,7 +1,8 @@
 import {
   signInWithPopup,
   GoogleAuthProvider,
-  getAuth
+  getAuth,
+  signOut
   // onAuthStateChanged
 } from "firebase/auth";
 import { db } from "../../../database/database";
@@ -23,6 +24,10 @@ const auth = getAuth();
 // }, 3000);
 
 export default {
+  logout(state) {
+    signOut(auth);
+    state.auth = null;
+  },
   userAuthenticated(state, payload) {
     // console.log(state, payload);
 

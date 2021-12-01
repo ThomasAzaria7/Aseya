@@ -1,10 +1,11 @@
 <template>
   <div class="authenticationCoantainer">
-    <div class="signUp"></div>
+    <!-- <div class="signUp"></div> -->
     <div class="signIn">
       <form @submit.prevent="siginIn">
         <div>
-          <h1>SignIn to ASEYEA</h1>
+          <h1 style="text-align:center">ASEYEA</h1>
+          <br />
         </div>
         <div class="formControl">
           <input type="text" placeholder="email address" />
@@ -14,7 +15,6 @@
         </div>
         <div class="formControl">
           <button type="submit">sign In</button>
-          <p>Register</p>
         </div>
         <br />
         <p>alternative signin with gmail and facebooks</p>
@@ -53,10 +53,22 @@ export default {
 
 <style lang="scss" scoped>
 .authenticationCoantainer {
-  margin: 0% 10%;
+  background-image: url("https://images.pexels.com/photos/10188248/pexels-photo-10188248.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  // margin: 0% 10%;
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
   // background-color: rgb(240, 240, 240);
-  padding: 5% 2%;
-  height: 500px;
+  padding: 0% 30%;
+  height: 600px;
   form {
     width: 100%;
   }
@@ -92,7 +104,14 @@ export default {
   .signUp {
   }
 
-  .signin {
+  .signIn {
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    // border-radius: 5px;
+    // z-index: 2;
   }
 }
 </style>
