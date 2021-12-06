@@ -415,7 +415,7 @@ export default {
         // first loop prepare seller infor and data to be emailed.
         console.log(sellerEmail);
 
-        fetch("http://localhost:3000/my-server/send-recipt", {
+        fetch("https://aseyea.herokuapp.com/my-server/send-recipt", {
           // this is inside of a loop,
           method: "POST",
           headers: {
@@ -479,7 +479,7 @@ export default {
    */
 
   updateToken(state) {
-    return fetch("http://localhost:3000/my-server/token", {
+    return fetch("https://aseyea.herokuapp.com/my-server/token", {
       method: "POST"
     })
       .then(function(res) {

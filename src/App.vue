@@ -2,7 +2,11 @@
   <div>
     <main-nav></main-nav>
     <div class="routerContainer">
-      <router-view></router-view>
+      <router-view v-slot="{Component}">
+        <transition name="route" mode="out-in">
+          <component :is="Component"></component>
+        </transition>
+      </router-view>
       <main-footer></main-footer>
       <!-- <div>{{getAuthData}}</div> -->
     </div>
@@ -89,5 +93,23 @@ export default {
 .routerContainer {
   overflow: hidden;
   // padding-top: 50px;
+}
+
+.route-enter-from {
+  opacity: 0;
+  scale: 0.5;
+  transform: translateX(50px);
+}
+.route-enter-active {
+  transition: all 0.2s ease-in-out;
+}
+.route-leave-to {
+  opacity: 1;
+  scale: 1;
+  transform: translateX(-50px);
+}
+
+.route-leave-active {
+  transition: all 0.2s ease-out;
 }
 </style>

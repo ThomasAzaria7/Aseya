@@ -185,9 +185,9 @@ export default {
       display: flex;
       .subCategory {
         background-color: rgba(255, 255, 255, 0.315);
-        background-image: url("https://images.pexels.com/photos/3208282/pexels-photo-3208282.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+        // background-image: url("https://images.pexels.com/photos/3208282/pexels-photo-3208282.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
         // height: 100px;
-        clip-path: polygon(0 0, 100% 0%, 100% 100%, 0 50%);
+        // clip-path: polygon(0 0, 100% 0%, 100% 100%, 0 50%);
         padding: 10px;
         box-sizing: border-box;
         text-align: right;

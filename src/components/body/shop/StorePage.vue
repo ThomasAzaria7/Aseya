@@ -3,37 +3,37 @@
     <div class="shopContainer__menu">
       <ul>
         <li>
-          <a href>Family & Lifestyle</a>
+          <a>Family & Lifestyle</a>
         </li>
         <li>
-          <a href>Health, Fitness & Nutrition</a>
+          <a>Health, Fitness & Nutrition</a>
         </li>
         <li>
-          <a href>Crafts, Hobbies & Home</a>
+          <a>Crafts, Hobbies & Home</a>
         </li>
         <li>
-          <a href>Cookbooks, Food & Wine</a>
+          <a>Cookbooks, Food & Wine</a>
         </li>
         <li>
-          <a href>Clothing, Shoes & Accessories</a>
+          <a>Clothing, Shoes & Accessories</a>
         </li>
         <li>
-          <a href>Home Improvement</a>
+          <a>Home Improvement</a>
         </li>
         <li>
-          <a href>Health, Fitness & Nutrition</a>
+          <a>Health, Fitness & Nutrition</a>
         </li>
         <li>
-          <a href>Crafts, Hobbies & Home</a>
+          <a>Crafts, Hobbies & Home</a>
         </li>
         <li>
-          <a href>Cookbooks, Food & Wine</a>
+          <a>Cookbooks, Food & Wine</a>
         </li>
         <li>
-          <a href>Clothing, Shoes & Accessories</a>
+          <a>Clothing, Shoes & Accessories</a>
         </li>
         <li>
-          <a href>Home Improvement</a>
+          <a>Home Improvement</a>
         </li>
       </ul>
     </div>
@@ -122,6 +122,7 @@ export default {
         // background-color: aqua;
         a {
           text-decoration: none;
+          color: purple;
 
           &:hover {
             color: green;

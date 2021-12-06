@@ -2,6 +2,14 @@
   <div class="header">
     <div class="header__promo">
       <p>Free Shipping for orders over $50 | Aus. wide</p>
+      <div class="currencySelector">
+        <select name id>
+          <option value>USD</option>
+          <option selected value>AUD</option>
+          <option value>NZD</option>
+          <option value>CAD</option>
+        </select>
+      </div>
     </div>
     <div class="header__titles" :class="slideActive ? 'full' : ' short'">
       <div class="logo">
@@ -146,14 +154,26 @@ export default {
 
   &__promo {
     margin: 0;
+    background-color: rgba(137, 43, 226, 0.582);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    .currencySelector {
+      position: relative;
+      // right: 50px;
+      float: right;
+      margin-left: 20px;
+      option {
+        font-size: 12px;
+      }
+    }
     p {
       margin: 0;
       text-align: center;
-      background-color: rgba(137, 43, 226, 0.582);
       color: white;
       padding: 2px 0;
       letter-spacing: 5px;
-      font-size: 10px;
+      font-size: 12px;
     }
   }
   &__titles {

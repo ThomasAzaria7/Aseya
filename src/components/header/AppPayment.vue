@@ -65,13 +65,16 @@ export default {
       window.paypal
         .Buttons({
           createOrder: function() {
-            return fetch("http://localhost:3000/my-server/create-order", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: mydata
-            })
+            return fetch(
+              "https://aseyea.herokuapp.com/my-server/create-order",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: mydata
+              }
+            )
               .then(function(res) {
                 return res.json();
               })
@@ -84,7 +87,8 @@ export default {
           },
           onApprove: data => {
             return fetch(
-              "http://localhost:3000/my-server/capture-order/" + data.orderID,
+              "https://aseyea.herokuapp.com/my-server/capture-order/" +
+                data.orderID,
               {
                 method: "POST",
                 body: this.getToken
@@ -101,7 +105,7 @@ export default {
                 const itemId = OnSuccess.id;
                 // this.testRecipt(itemId);
                 return fetch(
-                  "http://localhost:3000/my-server/product/" + itemId,
+                  "https://aseyea.herokuapp.com/my-server/product/" + itemId,
                   {
                     method: "Get"
                   }
@@ -135,16 +139,16 @@ export default {
   methods: {
     sellerRecipts(id) {
       // 5SJ92192WU205192X
-      // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
+      // "https://aseyea.herokuapp.com/my-server/product/5E787487BL240014A"  // for testing
       return (
         // fetch(
-        //   "http://localhost:3000/my-server/product/" +
+        //   "https://aseyea.herokuapp.com/my-server/product/" +
         //     "5E787487BL240014A",
         //   {
         //     method: "Get"
         //   }
         // )
-        fetch("http://localhost:3000/my-server/product/" + id, {
+        fetch("https://aseyea.herokuapp.com/my-server/product/" + id, {
           method: "Get"
         })
           .then(x => x.json())
@@ -164,10 +168,13 @@ export default {
       // console.log(this.getUser.uid);
       const uid = this.getUser.uid;
 
-      return fetch("http://localhost:3000/my-server/product/" + orderId, {
-        method: "GET"
-        // body: ""
-      })
+      return fetch(
+        "https://aseyea.herokuapp.com/my-server/product/" + orderId,
+        {
+          method: "GET"
+          // body: ""
+        }
+      )
         .then(x => x.json())
         .then(reciptData => {
           // console.log(reciptData);

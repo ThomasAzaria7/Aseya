@@ -25,7 +25,7 @@
       </div>
       <div class="items itemsCard">
         <i class="far fa-calendar-check"></i>
-        <p>Quick day dispatch</p>
+        <p>same day dispatch</p>
       </div>
     </div>
     <!-- <h2>online store</h2> -->
@@ -187,7 +187,7 @@ export default {
       }
       p {
         text-align: center;
-        font-weight: 200;
+        font-weight: 300;
         margin: 0;
       }
       //
@@ -211,7 +211,7 @@ export default {
 
   .items {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    width: 150px;
+    width: 120px;
     height: 100%;
     gap: 10px;
     position: relative;
@@ -219,11 +219,14 @@ export default {
 
     i {
       font-size: 30px;
+      margin-left: 50%;
+      transform: translateX(-50%);
     }
     p {
       color: rgb(82, 19, 0);
       font-size: 14px;
-      font-weight: 100;
+      font-weight: 400;
+      text-align: center;
 
       // text-align: center;
     }

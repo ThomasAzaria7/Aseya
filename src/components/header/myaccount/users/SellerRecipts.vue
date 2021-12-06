@@ -1,24 +1,31 @@
 <template>
   <div>
     <div class="reciptContainer" v-for="recipt in getRecipts" :key="recipt.reciptId">
-      <ul class="recipts">
-        <li>
-          <h4>
-            recipt number :
-            <samp></samp>
-            {{recipt.reciptId}}
-          </h4>
-        </li>
-        <li>{{recipt.status}}</li>
-        <h4>buyer info</h4>
-        <li>{{recipt.payer}}</li>
-        <h4>items Sold</h4>
-        <li class="items" v-for="item in recipt.items" :key="item.name">
-          <a>{{item.name}}</a>
-          <a>${{item.unit_amount.value}}</a>
-          <a>quantity : {{item.quantity}}</a>
-        </li>
-      </ul>
+      <div class="reciptContainer__claimed">
+        <h2>already clamied</h2>
+      </div>
+
+      <div class="reciptContainer__outStanding">
+        <ul class="recipts">
+          <li>
+            <h4>
+              recipt number :
+              <samp></samp>
+              {{recipt.reciptId}}
+            </h4>
+          </li>
+          <li>{{recipt.status}}</li>
+          <h4>buyer info</h4>
+          <li>{{recipt.payer}}</li>
+          <h4>items Sold</h4>
+          <li class="items" v-for="item in recipt.items" :key="item.name">
+            <a>{{item.name}}</a>
+            <a>${{item.unit_amount.value}}</a>
+            <a>quantity : {{item.quantity}}</a>
+          </li>
+        </ul>
+      </div>
+
       <div>
         <div class="claim">
           <h4>available for claim</h4>
@@ -89,7 +96,6 @@ export default {
 .reciptContainer {
   //   min-height: 100vh;
   box-sizing: border-box;
-
   display: flex;
   gap: 10px;
   .recipts {
@@ -106,12 +112,12 @@ export default {
       }
     }
   }
-  
+
   .claim {
     background-color: rgb(27, 219, 21);
     padding: 10px;
     box-sizing: border-box;
-    flex: 0 0 20%;
+    flex: 0 0 25%;
     margin: 20px 0;
   }
 }
