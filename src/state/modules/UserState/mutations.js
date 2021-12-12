@@ -227,6 +227,12 @@ export default {
     state.favTotal = favItems.length;
   },
 
+  //  clear error of items already exist in cart
+
+  clearCartError(state) {
+    state.error = null;
+  },
+
   //
 
   async getCartItemsFromDB(state, uid) {
@@ -320,7 +326,7 @@ export default {
       itemRecipt = [items];
       console.log("here");
     } else {
-      itemRecipt.push(items);
+      itemRecipt.unshift(items);
       console.log("unchifthing", itemRecipt);
     }
 
@@ -415,7 +421,7 @@ export default {
         // first loop prepare seller infor and data to be emailed.
         console.log(sellerEmail);
 
-        fetch("https://aseyea.herokuapp.com/my-server/send-recipt", {
+        fetch("http://localhost:3000/my-server/send-recipt", {
           // this is inside of a loop,
           method: "POST",
           headers: {
@@ -479,7 +485,7 @@ export default {
    */
 
   updateToken(state) {
-    return fetch("https://aseyea.herokuapp.com/my-server/token", {
+    return fetch("http://localhost:3000/my-server/token", {
       method: "POST"
     })
       .then(function(res) {

@@ -49,7 +49,8 @@
         </router-link>
         <div class="textDescription">
           <h2>{{ item.name }}</h2>
-          <p>${{ item.price }}</p>
+
+          <p>${{ item.exchangePrice }} {{currency.type}}</p>
         </div>
       </div>
     </div>
@@ -71,6 +72,10 @@ export default {
     getdata() {
       return this.$store.getters["items/getItems"];
       // return null;
+    },
+    currency(currencySelected) {
+      console.log(currencySelected);
+      return this.$store.getters["items/getCurrencyValue"];
     }
   },
   methods: {

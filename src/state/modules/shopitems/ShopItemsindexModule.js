@@ -11,7 +11,8 @@ export default {
       cartItemsNumber: 0,
       cartPriceTotal: 0,
       selectedItem: "Jello",
-      shopItems: [{}]
+      shopItems: [{}],
+      currency: { type: "USD", value: 1 }
     };
   },
 

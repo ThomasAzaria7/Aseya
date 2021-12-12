@@ -1,12 +1,20 @@
 <template>
   <div class="accountContainer">
-    <h2>
-      <span v-if="authState">
-        Welcome: {{authState.displayName}}
-        <i @click="logout" class="fas fa-sign-out-alt"></i>
-      </span>
-      <span v-else>you are not logged in</span>
-    </h2>
+    <div class="accountContainer__header">
+      <div v-if="authState" class="storeImage">
+        <img :src="authState.photoURL" alt />
+      </div>
+      <div class="storeDetail">
+        <h2 v-if="authState">store name</h2>
+        <h4>
+          <span v-if="authState">
+            Welcome: {{authState.displayName}}
+            <i @click="logout" class="fas fa-sign-out-alt"></i>
+          </span>
+          <span style="padding:20px" v-else>Please login or register</span>
+        </h4>
+      </div>
+    </div>
 
     <div v-if="authState" class="accountContainer__nav">
       <ul>
@@ -27,7 +35,7 @@
         <li>
           <router-link
             @click="showCategory('stock')"
-            to="/my-account/create_product"
+            to="/my-account/manage_products"
           >Stock management</router-link>
         </li>
 
@@ -67,11 +75,11 @@
           <router-link style="color: black" to="/my-account/profile">CreateProfile</router-link>
           <router-link style="color: black" to="/my-account/profile">CreateProfile</router-link>
         </div>-->
-        <div v-if="subCategoryActive === 'policy'" class="subCategory">
+        <!-- <div v-if="subCategoryActive === 'policy'" class="subCategory">
           <router-link style="color: black" to="/my-account/profile">CreateProfile</router-link>
           <router-link style="color: black" to="/my-account/profile">CreateProfile</router-link>
           <router-link style="color: black" to="/my-account/profile">CreateProfile</router-link>
-        </div>
+        </div>-->
       </div>
     </div>
     <div class="accountContainer__view">
@@ -160,17 +168,53 @@ export default {
 </script>
 <style lang="scss">
 .accountContainer {
-  padding: 3% 10%;
+  padding: 0% 0%;
   // display: flex;
   // display: flex;
   flex-direction: column-reverse;
   background-color: #eeeeee;
 
-  h2 {
-    margin: 2px;
-    text-align: right;
+  &__header {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    align-items: center;
+    height: 40vh;
+    .storeImage {
+      padding: 20px;
+      border: solid 2px rgba(0, 0, 0, 0.486);
+      border-radius: 50%;
+      z-index: 2;
+      background-color: white;
+      img {
+        border-radius: 50%;
+      }
+    }
+
+    .storeDetail {
+      z-index: 1;
+
+      position: relative;
+      left: -30px;
+      padding: 20px 50px;
+      border: solid 2px rgba(0, 0, 0, 0.137);
+      border-left: 0;
+      border-radius: 0 5% 5% 0;
+
+      h2 {
+        margin: 2px;
+        text-transform: uppercase;
+        // text-align: right;
+      }
+      h4 {
+        margin: 0;
+      }
+    }
   }
+
   &__view {
+    padding: 0 10%;
+    background-color: #fafafa;
     // background-color: white;
     min-height: 80vh;
     // padding: 0 50px;
@@ -181,14 +225,15 @@ export default {
   }
 
   &__nav {
+    padding: 0 10%;
+    background-color: rgb(255, 255, 255);
     .dropDown {
       display: flex;
       .subCategory {
-        background-color: rgba(255, 255, 255, 0.315);
         // background-image: url("https://images.pexels.com/photos/3208282/pexels-photo-3208282.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
         // height: 100px;
         // clip-path: polygon(0 0, 100% 0%, 100% 100%, 0 50%);
-        padding: 10px;
+        // padding: 10px;
         box-sizing: border-box;
         text-align: right;
         flex: 1 0 25%;
@@ -196,7 +241,7 @@ export default {
         flex-direction: column;
         a {
           font-size: 15px;
-          background-color: rgba(161, 161, 161, 0.226);
+          // background-color: rgba(161, 161, 161, 0.226);
           text-decoration: none;
           padding: 4px 10px;
           // margin: 5px;
@@ -206,7 +251,6 @@ export default {
 
     ul {
       list-style-type: none;
-      background-color: rgb(255, 255, 255);
       margin: 0;
       padding: 0;
       box-sizing: border-box;

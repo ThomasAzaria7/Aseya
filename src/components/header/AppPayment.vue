@@ -27,6 +27,9 @@ export default {
     };
   },
   computed: {
+    getCurrency() {
+      return this.$store.getters["items/getCurrencyValue"];
+    },
     shopCartItems() {
       return this.$store.getters["UserState/refreshCart"]; // get cart items from database
     },
@@ -65,16 +68,13 @@ export default {
       window.paypal
         .Buttons({
           createOrder: function() {
-            return fetch(
-              "https://aseyea.herokuapp.com/my-server/create-order",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: mydata
-              }
-            )
+            return fetch("http://localhost:3000/my-server/create-order", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: mydata
+            })
               .then(function(res) {
                 return res.json();
               })
@@ -87,8 +87,7 @@ export default {
           },
           onApprove: data => {
             return fetch(
-              "https://aseyea.herokuapp.com/my-server/capture-order/" +
-                data.orderID,
+              "http://localhost:3000/my-server/capture-order/" + data.orderID,
               {
                 method: "POST",
                 body: this.getToken
@@ -105,7 +104,7 @@ export default {
                 const itemId = OnSuccess.id;
                 // this.testRecipt(itemId);
                 return fetch(
-                  "https://aseyea.herokuapp.com/my-server/product/" + itemId,
+                  "http://localhost:3000/my-server/product/" + itemId,
                   {
                     method: "Get"
                   }
@@ -139,16 +138,16 @@ export default {
   methods: {
     sellerRecipts(id) {
       // 5SJ92192WU205192X
-      // "https://aseyea.herokuapp.com/my-server/product/5E787487BL240014A"  // for testing
+      // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
       return (
         // fetch(
-        //   "https://aseyea.herokuapp.com/my-server/product/" +
+        //   "http://localhost:3000/my-server/product/" +
         //     "5E787487BL240014A",
         //   {
         //     method: "Get"
         //   }
         // )
-        fetch("https://aseyea.herokuapp.com/my-server/product/" + id, {
+        fetch("http://localhost:3000/my-server/product/" + id, {
           method: "Get"
         })
           .then(x => x.json())
@@ -168,13 +167,10 @@ export default {
       // console.log(this.getUser.uid);
       const uid = this.getUser.uid;
 
-      return fetch(
-        "https://aseyea.herokuapp.com/my-server/product/" + orderId,
-        {
-          method: "GET"
-          // body: ""
-        }
-      )
+      return fetch("http://localhost:3000/my-server/product/" + orderId, {
+        method: "GET"
+        // body: ""
+      })
         .then(x => x.json())
         .then(reciptData => {
           // console.log(reciptData);
@@ -195,6 +191,8 @@ export default {
     getItemObject() {
       let paypalItems = null;
       // console.log(paypalItems);
+      console.log(this.shopCartItems);
+
       // console.log(this.cartTotal);
       for (let i = 0; i < this.shopCartItems.length; i++) {
         if (!paypalItems) {
@@ -211,10 +209,10 @@ export default {
                 code: "1234"
               },
               unit_amount: {
-                currency_code: "USD",
-                value: this.shopCartItems[i].price
+                currency_code: this.getCurrency.type,
+                value: this.shopCartItems[i].exchangePrice
               },
-              quantity: 1
+              quantity: this.shopCartItems[i].quantity
             }
           ];
         } else {
@@ -228,18 +226,22 @@ export default {
               code: "1234"
             },
             unit_amount: {
-              currency_code: "USD",
-              value: this.shopCartItems[i].price
+              currency_code: this.getCurrency.type,
+              value: this.shopCartItems[i].exchangePrice
             },
-            quantity: 1
+            quantity: this.shopCartItems[i].quantity
           });
         }
       }
       //
 
+      // console.log(typeof this.getTotalPrice);
+      console.log("cuurency type", this.getCurrency.type);
+
       let checkout = {
         items: paypalItems,
-        cartTotalPrice: this.getTotalPrice
+        cartTotalPrice: this.getTotalPrice,
+        currency: this.getCurrency.type
       };
       // console.log("final checkout object", checkout);
       return checkout;

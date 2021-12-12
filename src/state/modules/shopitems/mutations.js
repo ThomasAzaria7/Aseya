@@ -3,6 +3,43 @@ import { setDoc, doc, getDoc } from "firebase/firestore";
 //
 
 export default {
+  async newCurrency(state, payload) {
+    console.log(state, payload);
+    const docRef = doc(db, "Products", "items");
+    const docSnap = await getDoc(docRef);
+
+    console.log(docSnap.data().storeProducts);
+
+    let storeProducts = docSnap.data().storeProducts;
+
+    fetch("https://api.exchangerate.host/latest?base=USD", {
+      headers: {
+        "content-type": "application/json"
+      },
+      method: "GET"
+    })
+      .then(x => x.json())
+      .then(currency => {
+        console.log(currency.rates[payload]);
+
+        const rate = currency.rates[payload];
+
+        (state.currency.type = payload),
+          (state.currency.value = currency.rates.payload);
+
+        for (let i = 0; i < storeProducts.length; i++) {
+          storeProducts[i].exchangePrice = (
+            storeProducts[i].price * rate
+          ).toFixed(2);
+        }
+
+        state.shopItems = storeProducts;
+
+        setDoc(docRef, {
+          storeProducts
+        });
+      });
+  },
   async addingItem(state, storeProducts) {
     // state
 

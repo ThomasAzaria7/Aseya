@@ -53,9 +53,10 @@ export default {
 
 <style lang="scss" scoped>
 .authenticationCoantainer {
-  background-image: url("https://images.pexels.com/photos/10188248/pexels-photo-10188248.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  // background-image: url("https://images.pexels.com/photos/10188248/pexels-photo-10188248.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
   // margin: 0% 10%;
   position: relative;
+  left: 0;
 
   &::before {
     position: absolute;
@@ -64,10 +65,10 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    // background-color: rgba(0, 0, 0, 0.5);
   }
   // background-color: rgb(240, 240, 240);
-  padding: 0% 30%;
+  padding: 2% 30%;
   height: 600px;
   form {
     width: 100%;

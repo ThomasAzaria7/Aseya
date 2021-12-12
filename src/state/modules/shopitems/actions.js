@@ -14,5 +14,9 @@ export default {
   updateStoreProduct(context, payload) {
     context.commit("updatingItem", payload);
     console.log("action triggered");
+  },
+
+  updateCurrency(context, payload) {
+    context.commit("newCurrency", payload);
   }
 };

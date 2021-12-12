@@ -3,11 +3,11 @@
     <div class="header__promo">
       <p>Free Shipping for orders over $50 | Aus. wide</p>
       <div class="currencySelector">
-        <select name id>
-          <option value>USD</option>
-          <option selected value>AUD</option>
-          <option value>NZD</option>
-          <option value>CAD</option>
+        <select v-model="currency">
+          <option value="USD">USD</option>
+          <option selected value="AUD">AUD</option>
+          <option value="NZD">NZD</option>
+          <option value="CAD">CAD</option>
         </select>
       </div>
     </div>
@@ -95,8 +95,15 @@ export default {
   data() {
     return {
       slideActive: true,
-      showMenu: false
+      showMenu: false,
+      currency: "USD"
     };
+  },
+  watch: {
+    currency(currencySelected) {
+      console.log(currencySelected);
+      this.$store.dispatch("items/updateCurrency", currencySelected);
+    }
   },
 
   created: function() {
@@ -104,6 +111,11 @@ export default {
   },
 
   computed: {
+    selectedCurrency() {
+      return console.log(this.currency);
+
+      // return this.currency;
+    },
     favTotal() {
       return this.$store.getters["UserState/getfavTotal"];
     },
@@ -114,6 +126,8 @@ export default {
     }
   },
   methods: {
+    // updateSiteCurrency(currencySelected) {
+    // },
     toggleSlide() {
       this.slideActive = !this.slideActive;
     },
@@ -148,7 +162,7 @@ export default {
 .header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 5;
   background-color: rgb(255, 255, 255);
   box-shadow: 2px 2px 0.5rem rgba(0, 0, 0, 0.486);
 

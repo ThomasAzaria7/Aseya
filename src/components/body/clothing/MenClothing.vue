@@ -2,6 +2,8 @@
   <div>
     <br />
     <br />
+
+    <button @click="getCurrency">test currency</button>
     <h1>mens ></h1>
     <ul>
       <li>
@@ -29,7 +31,23 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    getCurrency() {
+      fetch("https://api.exchangerate.host/latest?base=USD", {
+        headers: {
+          "content-type": "application/json"
+        },
+        method: "GET"
+      })
+        .then(x => x.json())
+        .then(y => console.log(y.rates.AUD));
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

@@ -10,9 +10,10 @@
           <li>{{ item.name }}</li>
           <div class="price">
             <li>
-              <input type="number" value="1" />
+              Qty: {{item.quantity}}
+              <!-- <input type="number"  v-model="" /> -->
             </li>
-            <li>$ {{ item.price }}</li>
+            <li>$ {{ item.cost }}</li>
           </div>
           <li>
             <i @click="removeItemFromCart(item.code)" class="far fa-times-circle"></i>

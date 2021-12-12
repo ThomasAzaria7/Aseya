@@ -3,6 +3,9 @@
 // import { db } from "../../../database/database";
 
 export default {
+  clearCartExistError(context) {
+    context.commit("clearCartError");
+  },
   //
 
   putToCart(context, payload) {
