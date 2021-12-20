@@ -12,6 +12,8 @@
 
     <!-- <h2>{{ getToken }}</h2> -->
 
+    <button @click="buyerRecipts() ">buyer recipt testing</button>
+
     <div id="paypal-button-container"></div>
   </div>
 </template>
@@ -62,7 +64,7 @@ export default {
       });
       uid = this.getUser;
 
-      console.log(uid);
+      // console.log(uid);
       // console.log(myToken, myItems.items);
 
       window.paypal
@@ -115,18 +117,7 @@ export default {
                     console.log(uid);
                     const orderId = reciptData.body.id;
                     this.sellerRecipts(orderId);
-
-                    const buyerDetail = {
-                      reciptData: reciptData,
-                      uid: uid.uid
-                    };
-
-                    console.log(buyerDetail);
-
-                    this.$store.dispatch(
-                      "UserState/SendBuyerRecipt",
-                      buyerDetail
-                    ); // buyer recipt
+                    this.buyerRecipts(orderId);
                   });
               })
               .catch(err => console.log(err));
@@ -136,6 +127,38 @@ export default {
     }, 3000);
   },
   methods: {
+    buyerRecipts() {
+      // console.log(buyerDetail);
+      const uid = this.getUser;
+
+      // 5SJ92192WU205192X
+      // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
+      return (
+        fetch(
+          "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
+          {
+            method: "Get"
+          }
+        )
+          // fetch("http://localhost:3000/my-server/product/" + id, {
+          //   method: "Get"
+          // })
+          .then(x => x.json())
+          .then(reciptData => {
+            // console.log(reciptData);
+            // console.log(uid);
+            const buyerDetail = {
+              reciptData: reciptData,
+              uid: uid.uid
+            };
+
+            this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipts
+
+            // this.$store.dispatch("UserState/SendSellerRecipt", data);
+          })
+      );
+    },
+    //
     sellerRecipts(id) {
       // 5SJ92192WU205192X
       // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
@@ -152,52 +175,34 @@ export default {
         })
           .then(x => x.json())
           .then(reciptData => {
-            console.log(reciptData);
-            // console.log(uid);
             const data = reciptData;
-            console.log(data);
             this.$store.dispatch("UserState/SendSellerRecipt", data);
           })
       );
     },
     testRecipt(itemId) {
       const orderId = itemId;
-      // console.log(orderId);
-      // const buyerUid =
-      // console.log(this.getUser.uid);
       const uid = this.getUser.uid;
-
       return fetch("http://localhost:3000/my-server/product/" + orderId, {
         method: "GET"
         // body: ""
       })
         .then(x => x.json())
         .then(reciptData => {
-          // console.log(reciptData);
-
-          // actionCalls to distribute the recipts
-          // send buyer an email and sellers and email
-          // save all data on database in mutation
-
           const buyerDetail = {
             reciptData: reciptData,
             uid: uid
           };
 
           this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipt
-          // this.$store.dispatch("UserState/SendSellerRecipt", reciptData);
         });
     },
     getItemObject() {
       let paypalItems = null;
-      // console.log(paypalItems);
-      console.log(this.shopCartItems);
+      // console.log(this.shopCartItems);
 
-      // console.log(this.cartTotal);
       for (let i = 0; i < this.shopCartItems.length; i++) {
         if (!paypalItems) {
-          // console.log("here");
-
           paypalItems = [
             {
               name: this.shopCartItems[i].name,
@@ -247,10 +252,6 @@ export default {
       return checkout;
       //
     }
-
-    // getAccessToken() {
-    //   this.$store.dispatch("UserState/retreiveToken", "myToken");
-    // }
   }
 };
 </script>

@@ -303,37 +303,43 @@ export default {
   },
 
   async makeBuyerRecipts(state, payload) {
-    // console.log(payload);
-
-    // const items = payload.reciptData.body.purchase_units[0].items;
     const items = payload.reciptData.body;
     const uid = payload.uid;
-    console.log(items);
-
-    // console.log(items, uid);
 
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
     let data = [{}];
     const docSnap = await getDoc(docRef); // retrieve user data from database
     data = docSnap.data().buyHistory;
 
-    console.log(data);
-    // console.log(items);
-
     let itemRecipt = data;
-
     if (!data) {
       itemRecipt = [items];
-      console.log("here");
     } else {
       itemRecipt.unshift(items);
-      console.log("unchifthing", itemRecipt);
     }
+
+    //
+    let mailData = {
+      recipt_data: items,
+      current_SEller_email: "sellerEmail"
+    };
+    const dataY = JSON.stringify(mailData);
+    fetch("http://localhost:3000/my-server/buyer-recipt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: dataY
+    })
+      .then(x => console.log(x))
+      .catch(err => console.log(err));
+    //
 
     await updateDoc(docRef, {
       buyHistory: itemRecipt
-      // message: payload // usepayload to get dcoument name information
     });
+
+    //
 
     state.buyerRecipts = itemRecipt;
   },
@@ -344,9 +350,9 @@ export default {
    **/
 
   async makeSellersRecipts(_, reciptData) {
-    console.log(reciptData);
+    // console.log(reciptData);
     const items = reciptData.body.purchase_units[0].items;
-    console.log(items);
+    // console.log(items);
 
     //
     const reciptId = reciptData.body.id;
@@ -377,7 +383,7 @@ export default {
       let userExists = users.includes(uid);
       let userItems;
 
-      console.log(userExists);
+      // console.log(userExists);
       if (!userExists) {
         const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
         const docSnap = await getDoc(docRef); // retrieve user data from database
@@ -392,14 +398,14 @@ export default {
         users.push(uid); //adding all users
 
         userItems = items.filter(x => x.sku == uid); // find all items belonging to the user that have the same uid
-        console.log(userItems);
+        // console.log(userItems);
 
         // loop through all items belonging to a single seller. and calculate the total of their sold items,
         let value = 0;
         for (let i = 0; i < userItems.length; i++) {
           value += parseFloat(userItems[i].unit_amount.value);
           userItems.total = value;
-          console.log(value);
+          // console.log(value);
         }
         reciptInfo.items = userItems; // assign items specific to user to recipt data object body
 
@@ -419,9 +425,9 @@ export default {
         const dataY = JSON.stringify(mailData);
 
         // first loop prepare seller infor and data to be emailed.
-        console.log(sellerEmail);
+        // console.log(sellerEmail);
 
-        fetch("http://localhost:3000/my-server/send-recipt", {
+        await fetch("http://localhost:3000//my-server/send-recipt", {
           // this is inside of a loop,
           method: "POST",
           headers: {
@@ -436,7 +442,7 @@ export default {
 
         // if recipt does NOT exists push current recipt on to the database/ otherwise skip do not save,
         if (!reciptExist) {
-          console.log("heeellllllloooooooo");
+          // console.log("heeellllllloooooooo");
           // myRecipt = [reciptInfo];
           myRecipt.push(reciptInfo);
 
@@ -464,19 +470,29 @@ export default {
   async soldItemRecipts(state, uid) {
     console.log(state);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
-    const docSnap = await getDoc(docRef); // retrieve user data from database
-    const myRecipt = docSnap.data().sellHistory;
+    let myRecipt;
+    await onSnapshot(docRef, doc => {
+      // myHistory = doc.data().sellHistory;
+      myRecipt = doc.data().sellHistory;
+      // console.log("Current data: ", );
+      state.sellerRecipts = myRecipt;
+    });
+
+    // const docSnap = await getDoc(docRef); // retrieve user data from database
     // console.log(myRecipt);
-    state.sellerRecipts = myRecipt;
   },
 
   async boughtItemRecipts(state, uid) {
     console.log(state);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
-    const docSnap = await getDoc(docRef); // retrieve user data from database
-    const myRecipt = docSnap.data().buyHistory;
-    // console.log(myRecipt);
-    state.buyerRecipts = myRecipt;
+    // const docSnap = await getDoc(docRef); // retrieve user data from database
+    let myRecipt;
+    await onSnapshot(docRef, doc => {
+      // myHistory = doc.data().sellHistory;
+      myRecipt = doc.data().buyHistory;
+      // console.log("Current data: ", );
+      state.buyerRecipts = myRecipt;
+    });
     // this.;
   },
 
@@ -526,5 +542,69 @@ export default {
     }
     state.payToken = null;
     return "";
+  },
+  //
+
+  /* create communication between seller and buyer */
+
+  async sellerBuyerCommunication(state, data) {
+    console.log(data);
+
+    const uid = data.product.sku;
+    const reciptId = data.recipt_id;
+    const productCode = data.product.name;
+    const message = data.message;
+    let myMessages = {};
+
+    console.log(uid, reciptId);
+    const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    onSnapshot(docRef, doc => {
+      // myHistory = doc.data().sellHistory;
+      const recipts = doc.data().sellHistory; // get recipt arrays
+      console.log(recipts);
+
+      const myMesssageContainer = recipts.filter(x => x.reciptId === reciptId);
+
+      console.log(
+        myMesssageContainer[0].items.filter(x => x.name === productCode)
+      );
+
+      let itemIndex;
+
+      myMesssageContainer[0].items.filter((x, i) => {
+        if (x.name === productCode) {
+          itemIndex = i;
+        }
+      });
+
+      // messageContent = {
+      //   name: "",
+      //   date: "",
+      //   messageText: ""
+      // };
+
+      //
+
+      let products = {};
+
+      console.log(message);
+      console.log(itemIndex);
+
+      let selectedItemName = myMesssageContainer[0].items[itemIndex].name;
+
+      products[selectedItemName] = [{ message: "hi" }, { message: "helo" }];
+      console.log(products);
+
+      myMessages[reciptId] = products;
+      //
+
+      // console.log(inqueryItem);
+
+      // console.log("Current data: ", );
+    });
+    updateDoc(docRef, {
+      inbox: myMessages
+    });
+    console.log(myMessages);
   }
 };

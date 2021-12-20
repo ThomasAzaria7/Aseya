@@ -93,5 +93,9 @@ export default {
   },
   retreiveToken(context, payload) {
     context.commit("getToken", payload);
+  },
+
+  startCommunication(context, payload) {
+    context.commit("sellerBuyerCommunication", payload);
   }
 };

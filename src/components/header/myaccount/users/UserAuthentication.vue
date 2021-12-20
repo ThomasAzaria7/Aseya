@@ -1,6 +1,7 @@
 <template>
   <div class="authenticationCoantainer">
     <!-- <div class="signUp"></div> -->
+    <div class="notification"></div>
     <div class="signIn">
       <form @submit.prevent="siginIn">
         <div>
@@ -34,7 +35,11 @@
 // import { getFirestore } from "firebase/firestore";
 
 import { userSchema } from "../../../../dataSchema/UserProfileSchema.js";
+// import { UserNotify } from "../../../popups/RegisterNotification";
 export default {
+  components: {
+    // UserNotify
+  },
   data() {
     return {
       userData: userSchema

@@ -22,14 +22,10 @@
           <router-link @click="showCategory('account')" to="/my-account/authentication">account</router-link>
         </li>
         <li>
-          <router-link @click="showCategory('bank')" to="/my-account/Statemnt">Bank StatMent</router-link>
+          <router-link @click="showCategory('plan')" to="/my-account/subscription">subscription</router-link>
         </li>
-
         <li>
-          <router-link
-            @click="showCategory('buy_history')"
-            to="/my-account/BuyerRecipt"
-          >Purchase history</router-link>
+          <router-link @click="showCategory('bank')" to="/my-account/Statemnt">Bank StatMent</router-link>
         </li>
 
         <li>
@@ -40,7 +36,10 @@
         </li>
 
         <li>
-          <router-link @click="showCategory('plan')" to="/my-account/subscription">subscription</router-link>
+          <router-link
+            @click="showCategory('buy_history')"
+            to="/my-account/BuyerRecipt"
+          >Purchase history</router-link>
         </li>
 
         <li>
@@ -191,16 +190,18 @@ export default {
       }
     }
 
+    background-image: url("https://images.pexels.com/photos/1720324/pexels-photo-1720324.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    background-size: cover;
+
     .storeDetail {
       z-index: 1;
-
       position: relative;
       left: -30px;
       padding: 20px 50px;
       border: solid 2px rgba(0, 0, 0, 0.137);
       border-left: 0;
-      border-radius: 0 5% 5% 0;
-
+      // border-radius: 0 5% 5% 0;
+      background-color: #ffffffef;
       h2 {
         margin: 2px;
         text-transform: uppercase;
@@ -214,8 +215,7 @@ export default {
 
   &__view {
     padding: 0 10%;
-    background-color: #fafafa;
-    // background-color: white;
+    background-color: #fafafa8a;
     min-height: 80vh;
     // padding: 0 50px;
     margin: 0;
@@ -227,8 +227,16 @@ export default {
   &__nav {
     padding: 0 10%;
     background-color: rgb(255, 255, 255);
+    // background-image: url("https://images.pexels.com/photos/10482178/pexels-photo-10482178.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    position: relative;
+
+    background-size: cover;
+    background-position-y: 300px;
+    display: flex;
+    align-items: center;
     .dropDown {
       display: flex;
+      height: 120px;
       .subCategory {
         // background-image: url("https://images.pexels.com/photos/3208282/pexels-photo-3208282.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
         // height: 100px;
@@ -264,7 +272,7 @@ export default {
         text-align: center;
         padding: 10px 0;
         margin: 5px 0;
-        background-color: rgba(96, 6, 104, 0.363);
+        background-color: rgba(96, 6, 104, 0.563);
         flex: 1 1 25%;
 
         a {

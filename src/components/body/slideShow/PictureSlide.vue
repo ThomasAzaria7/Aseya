@@ -22,7 +22,7 @@ export default {
       slideObject: [
         {
           img:
-            "https://static.wixstatic.com/media/11062b_310e55b9b2c1408692560493e8049629~mv2.jpg/v1/crop/x_0,y_553,w_3000,h_894/fill/w_1213,h_361,al_c,q_85,usm_0.66_1.00_0.01/African-Textiles.webp",
+            "https://images.pexels.com/photos/3334778/pexels-photo-3334778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
           style: "left",
           text: "ASEYEA ONLINE MARKETPLACE",
           subtext: "onsale",
@@ -101,6 +101,16 @@ export default {
   opacity: 0;
   // transform: ;
   filter: blur(0px) grayscale(0);
+  background-color: black;
+  &::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.897);
+  }
 
   // transform: translateY(100vw);
 }
@@ -110,6 +120,17 @@ export default {
 .slider-leave-to {
   opacity: 0.5;
   filter: blur(0px) grayscale(0.5);
+
+  background-color: black;
+  &::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.815);
+  }
 
   // transform: translateY(-100vw);
 }
