@@ -14,6 +14,7 @@ export default {
 			auth: null,
 			error: null,
 			sellerRecipts: null,
+			sellerClaimedRecipt:null,
 			buyerRecipts: null,
 			payToken: null,
 		};

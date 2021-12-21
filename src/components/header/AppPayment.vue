@@ -8,11 +8,11 @@
 
     <!-- <button @click="testRecipt">test recipt</button> -->
 
-    <!-- <button @click="sellerRecipts">manage button recipt</button> -->
+    <button @click="sellerRecipts">test seller recipt</button>
 
     <!-- <h2>{{ getToken }}</h2> -->
 
-    <button @click="buyerRecipts() ">buyer recipt testing</button>
+    <!-- <button @click="buyerRecipts()">buyer recipt testing</button> -->
 
     <div id="paypal-button-container"></div>
   </div>
@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       accessToken: "",
-      mydata: {}
+      mydata: {},
     };
   },
   computed: {
@@ -44,7 +44,7 @@ export default {
     },
     getToken() {
       return this.$store.getters["UserState/getMyToken"];
-    }
+    },
   },
   mounted() {
     // console.log(window.paypal);
@@ -60,7 +60,7 @@ export default {
       myItems = this.getItemObject();
       mydata = JSON.stringify({
         token: mytoken,
-        items: myItems
+        items: myItems,
       });
       uid = this.getUser;
 
@@ -69,36 +69,36 @@ export default {
 
       window.paypal
         .Buttons({
-          createOrder: function() {
+          createOrder: function () {
             return fetch("http://localhost:3000/my-server/create-order", {
               method: "POST",
               headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
               },
-              body: mydata
+              body: mydata,
             })
-              .then(function(res) {
+              .then(function (res) {
                 return res.json();
               })
-              .then(function(data) {
+              .then(function (data) {
                 return data.id;
               })
-              .catch(err => {
+              .catch((err) => {
                 console.log(err);
               });
           },
-          onApprove: data => {
+          onApprove: (data) => {
             return fetch(
               "http://localhost:3000/my-server/capture-order/" + data.orderID,
               {
                 method: "POST",
-                body: this.getToken
+                body: this.getToken,
               }
             )
-              .then(res => {
+              .then((res) => {
                 return res.json();
               })
-              .then(details => {
+              .then((details) => {
                 console.log();
                 const OnSuccess = JSON.parse(details.status);
                 console.log(OnSuccess);
@@ -108,11 +108,11 @@ export default {
                 return fetch(
                   "http://localhost:3000/my-server/product/" + itemId,
                   {
-                    method: "Get"
+                    method: "Get",
                   }
                 )
-                  .then(x => x.json())
-                  .then(reciptData => {
+                  .then((x) => x.json())
+                  .then((reciptData) => {
                     console.log(reciptData);
                     console.log(uid);
                     const orderId = reciptData.body.id;
@@ -120,36 +120,36 @@ export default {
                     this.buyerRecipts(orderId);
                   });
               })
-              .catch(err => console.log(err));
-          }
+              .catch((err) => console.log(err));
+          },
         })
         .render("#paypal-button-container");
     }, 3000);
   },
   methods: {
-    buyerRecipts() {
+    buyerRecipts(id) {
       // console.log(buyerDetail);
       const uid = this.getUser;
 
       // 5SJ92192WU205192X
       // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
       return (
-        fetch(
-          "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
-          {
-            method: "Get"
-          }
-        )
-          // fetch("http://localhost:3000/my-server/product/" + id, {
-          //   method: "Get"
-          // })
-          .then(x => x.json())
-          .then(reciptData => {
+        // fetch(
+        //   "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
+        //   {
+        //     method: "Get",
+        //   }
+        // )
+        fetch("http://localhost:3000/my-server/product/" + id, {
+          method: "Get",
+        })
+          .then((x) => x.json())
+          .then((reciptData) => {
             // console.log(reciptData);
             // console.log(uid);
             const buyerDetail = {
               reciptData: reciptData,
-              uid: uid.uid
+              uid: uid.uid,
             };
 
             this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipts
@@ -163,18 +163,18 @@ export default {
       // 5SJ92192WU205192X
       // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
       return (
+        // for testing purposess
         // fetch(
-        //   "http://localhost:3000/my-server/product/" +
-        //     "5E787487BL240014A",
+        //   "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
         //   {
-        //     method: "Get"
+        //     method: "Get",
         //   }
         // )
         fetch("http://localhost:3000/my-server/product/" + id, {
-          method: "Get"
+          method: "Get",
         })
-          .then(x => x.json())
-          .then(reciptData => {
+          .then((x) => x.json())
+          .then((reciptData) => {
             const data = reciptData;
             this.$store.dispatch("UserState/SendSellerRecipt", data);
           })
@@ -184,14 +184,14 @@ export default {
       const orderId = itemId;
       const uid = this.getUser.uid;
       return fetch("http://localhost:3000/my-server/product/" + orderId, {
-        method: "GET"
+        method: "GET",
         // body: ""
       })
-        .then(x => x.json())
-        .then(reciptData => {
+        .then((x) => x.json())
+        .then((reciptData) => {
           const buyerDetail = {
             reciptData: reciptData,
-            uid: uid
+            uid: uid,
           };
 
           this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipt
@@ -211,14 +211,14 @@ export default {
               sku: this.shopCartItems[i].sellerID,
               // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
               item_details: {
-                code: "1234"
+                code: "1234",
               },
               unit_amount: {
                 currency_code: this.getCurrency.type,
-                value: this.shopCartItems[i].exchangePrice
+                value: this.shopCartItems[i].exchangePrice,
               },
-              quantity: this.shopCartItems[i].quantity
-            }
+              quantity: this.shopCartItems[i].quantity,
+            },
           ];
         } else {
           // console.log("theresss");
@@ -228,13 +228,13 @@ export default {
             description: this.shopCartItems[i].description, // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
             sku: this.shopCartItems[i].sellerID,
             item_details: {
-              code: "1234"
+              code: "1234",
             },
             unit_amount: {
               currency_code: this.getCurrency.type,
-              value: this.shopCartItems[i].exchangePrice
+              value: this.shopCartItems[i].exchangePrice,
             },
-            quantity: this.shopCartItems[i].quantity
+            quantity: this.shopCartItems[i].quantity,
           });
         }
       }
@@ -246,13 +246,13 @@ export default {
       let checkout = {
         items: paypalItems,
         cartTotalPrice: this.getTotalPrice,
-        currency: this.getCurrency.type
+        currency: this.getCurrency.type,
       };
       // console.log("final checkout object", checkout);
       return checkout;
       //
-    }
-  }
+    },
+  },
 };
 </script>
 

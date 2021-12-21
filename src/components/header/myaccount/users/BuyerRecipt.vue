@@ -13,30 +13,31 @@
     <div class="itemsContainer">
       <ul v-for="item in getRecipts" :key="item.id">
         <li>
-          <b>recipt id: {{item.id}}</b>
+          <b>recipt id: {{ item.id }}</b>
         </li>
-        <li>buyer Name: {{item.payer.name.given_name}}</li>
-        <li>{{item.update_time}}</li>
+        <li>buyer Name: {{ item.payer.name.given_name }}</li>
+        <li>{{ item.update_time }}</li>
         <br />
         <div class="details">
-          <h4 style="margin:0">items Bought</h4>
+          <h4 style="margin: 0">items Bought</h4>
           <br />
           <li
             class="purchasedItems"
             v-for="product in item.purchase_units[0].items"
             :key="product.name"
           >
-            {{product.name}}
-            [qty {{product.quantity}}]
-            ${{product.unit_amount.value}}
-            <button
-              @click="messageSeller(product,item.id)"
-            >message Seller</button>
+            {{ product.name }}
+            [qty {{ product.quantity }}] ${{ product.unit_amount.value }}
+            <button @click="messageSeller(product, item.id)">
+              message Seller
+            </button>
           </li>
           <br />
-          <li>TOTAL PURCHASE PRICE $ {{item.purchase_units[0].amount.value}}</li>
+          <li>
+            TOTAL PURCHASE PRICE $ {{ item.purchase_units[0].amount.value }}
+          </li>
           <br />
-          <li>{{item.status}}</li>
+          <li>{{ item.status }}</li>
         </div>
 
         <hr />
@@ -57,18 +58,18 @@ export default {
   computed: {
     getRecipts() {
       return this.$store.getters["UserState/getBuyerRecipt"];
-    }
+    },
   },
   methods: {
     messageSeller(product, id) {
       const data = {
         recipt_id: id,
         product: product,
-        message: "hello there i would like a refund"
+        message: "hello there i would like a refund",
       };
       this.$store.dispatch("UserState/startCommunication", data);
-    }
-  }
+    },
+  },
 };
 </script>
 
