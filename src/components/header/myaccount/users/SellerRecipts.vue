@@ -42,9 +42,8 @@
             <li>{{ recipt.payer.address }}</li>
             <h4>items Sold</h4>
             <li class="items" v-for="item in recipt.items" :key="item.name">
-              <a>{{ item.name }}</a>
+              <a>{{ item.name }} x{{ item.quantity }}</a>
               <a>${{ item.unit_amount.value }}</a>
-              <a>quantity : {{ item.quantity }}</a>
             </li>
           </div>
 
@@ -52,7 +51,7 @@
           <div class="recipts__claim">
             <form @submit.prevent="addTrackingInfo()">
               <label for="title">Add tracking Info</label>
-              <br />
+
               <select name="" id="">
                 <option value="select shipping method" selected disabled>
                   shipping method
@@ -65,12 +64,22 @@
               <input placeholder="tracking id" type="text" name="" id="" />
               <button>add</button>
             </form>
-
-            <h3>items total $ {{ recipt.total }}</h3>
-            <h3>transaction fee $ {{ recipt.PaypalFee }}</h3>
-            <h3>my Profit $ {{ recipt.total - recipt.PaypalFee }}</h3>
-
-            <button @click="popUp">claim NOw</button>
+            <br />
+            <div class="total">
+              <div>
+                <p>Items total</p>
+                <p>Transaction fee</p>
+                <hr />
+                <p>my Profit $</p>
+              </div>
+              <div>
+                <p>$ {{ recipt.total }}</p>
+                <p>$ {{ recipt.PaypalFee }}</p>
+                <hr />
+                <p>$ {{ (recipt.total - recipt.PaypalFee).toFixed(2) }}</p>
+              </div>
+            </div>
+            <button class="claimButton" @click="popUp">claim now</button>
 
             <p v-if="payout">payout successful</p>
             <br />
@@ -80,9 +89,8 @@
               <div class="textbox">
                 <div v-if="!success" class="check">
                   <p>
-                    Do You Want To Proceed with Withdrawal Payment ${{
-                      recipt.total - recipt.PaypalFee
-                    }}
+                    Do You Want To Proceed with Withdrawal Payment
+                    {{ (recipt.total - recipt.PaypalFee).toFixed(2) }}
                     AUD?
                   </p>
                   <button @click="clear">NO</button>
@@ -94,8 +102,6 @@
                     YES
                   </button>
                 </div>
-
-                P5327LY9WX87E
 
                 <div v-if="success">
                   <p>SUCCESS! you have Claimed Payment!</p>
@@ -140,10 +146,11 @@
 
           <div class="recipts__info">
             <h4>Buyer info</h4>
+      
 
-            <li>
+            <li style="text-transform: capitalize">
               {{
-                recipt.payer.name.given_name + "" + recipt.payer.name.surname
+                recipt.payer.name.given_name + " " + recipt.payer.name.surname
               }}
             </li>
             <li>{{ recipt.payer.payer_id }}</li>
@@ -151,61 +158,28 @@
             <li>{{ recipt.payer.address }}</li>
             <h4>items Sold</h4>
             <li class="items" v-for="item in recipt.items" :key="item.name">
-              <a>{{ item.name }}</a>
+              <a>{{ item.name }} x{{ item.quantity }}</a>
               <a>${{ item.unit_amount.value }}</a>
-              <a>quantity : {{ item.quantity }}</a>
             </li>
           </div>
 
           <!-- <li>{{ recipt.status }}</li> -->
           <div class="recipts__claim">
-            <form @submit.prevent="addTrackingInfo()">
-              <label for="title">Add tracking Info</label>
-              <br />
-              <select name="" id="">
-                <option value="select shipping method" selected disabled>
-                  shipping method
-                </option>
-                <option value="AusPost">AusPost</option>
-                <option value="AusPost">AusPost</option>
-                <option value="AusPost">AusPost</option>
-                <option value="AusPost">other</option>
-              </select>
-              <input placeholder="tracking id" type="text" name="" id="" />
-              <button>add</button>
-            </form>
-
-            <h3>items total $ {{ recipt.total }}</h3>
-            <h3>transaction fee $ {{ recipt.PaypalFee }}</h3>
-            <h3>my Profit $ {{ recipt.total - recipt.PaypalFee }}</h3>
-
-            <button @click="popUp">claim NOw</button>
-
-            <p v-if="payout">payout successful</p>
-            <br />
-            <br />
-
-            <div v-if="modal" class="modal">
-              <div class="textbox">
-                <div v-if="!success" class="check">
-                  <p>Do You Want To Proceed with Payment?</p>
-                  <button @click="clear">NO</button>
-                  <button
-                    @click="
-                      getPaid(recipt.total - recipt.PaypalFee, recipt.reciptId)
-                    "
-                  >
-                    YES
-                  </button>
-                </div>
-
-                <div v-if="success">
-                  <p>SUCCESS! you have Claimed Payment!</p>
-                  <button @click="clear">OK</button>
-                </div>
+            <br>
+            <div class="total">
+              <div>
+                <p>Items total</p>
+                <p>Transaction fee</p>
+                <hr />
+                <p>My Profit $</p>
+              </div>
+              <div>
+                <p>$ {{ recipt.total }}</p>
+                <p>$ {{ recipt.PaypalFee }}</p>
+                <hr />
+                <p>$ {{ (recipt.total - recipt.PaypalFee).toFixed(2) }}</p>
               </div>
             </div>
-            <!-- <button @click="getConfirmation()">get confirmation</button> -->
           </div>
         </ul>
       </div>
@@ -292,7 +266,7 @@ export default {
       const mytoken = this.$store.getters["UserState/getMyToken"];
       console.log(cost);
       const data = JSON.stringify({
-        payoutPrice: cost,
+        payoutPrice: cost.toFixed(2),
         authToken: mytoken,
       });
 
@@ -372,34 +346,40 @@ export default {
 
   .recipts {
     &__id {
-      background-color: rgba(184, 238, 238, 0.267);
+      background-color: rgba(242, 243, 176, 0.3);
       padding: 10px 30px;
     }
     &__info {
-      background-color: rgba(79, 255, 255, 0.205);
+      background-color: rgba(250, 249, 204, 0.253);
       padding: 10px 30px;
+
+      .items {
+        display: flex;
+        justify-content: space-between;
+      }
     }
     &__claim {
-      background-color: rgba(184, 238, 238, 0.267);
+      background-color: rgba(242, 243, 176, 0.3);
 
       padding: 10px 30px;
 
       form {
         label {
+          position: relative;
           font-size: 18px;
-          margin-bottom: 10px;
+          box-sizing: border-box;
           text-transform: uppercase;
         }
         select {
           width: 100%;
           padding: 5px;
-          margin-bottom: 2px;
+          margin: 5px 0;
         }
         input {
           width: 100%;
           padding: 5px;
           box-sizing: border-box;
-          margin-bottom: 2px;
+          margin-bottom: 5px;
         }
         button {
           width: 50%;
@@ -407,6 +387,22 @@ export default {
           position: relative;
           left: 50%;
         }
+      }
+      .total {
+        display: flex;
+        justify-content: space-around;
+        background-color: white;
+      }
+
+      .claimButton {
+        text-transform: capitalize;
+        font-size: 18px;
+        position: relative;
+        top: 10px;
+        width: 50%;
+        left: 50%;
+        padding: 10px 20px;
+        box-sizing: border-box;
       }
     }
   }
@@ -443,7 +439,8 @@ export default {
   //@at-root
   .reciptDetails {
     ul {
-      background-color: rgba(233, 212, 153, 0.342);
+      // background-color: rgba(233, 212, 153, 0.342);
+      border: solid 2px rgba(0, 0, 0, 0.096);
       list-style-type: none;
       padding: 20px;
       list-style-type: none;

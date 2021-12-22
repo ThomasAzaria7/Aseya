@@ -8,7 +8,7 @@
 
     <!-- <button @click="testRecipt">test recipt</button> -->
 
-    <button @click="sellerRecipts">test seller recipt</button>
+    <!-- <button @click="sellerRecipts">test seller recipt</button> -->
 
     <!-- <h2>{{ getToken }}</h2> -->
 

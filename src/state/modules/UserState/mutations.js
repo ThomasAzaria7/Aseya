@@ -390,7 +390,7 @@ export default {
 				const docSnap = await getDoc(docRef); // retrieve user data from database
 				let myHistory = docSnap.data().sellHistory.recent; // get recipt data from DB
 				// console.log(myHistory);
-
+				let completed = docSnap.data().sellHistory.completed; // get recipt data from DB			sellHistory: {recent: recent, completed: myRecipt},
 				let reciptExist;
 				users.push(uid); //adding all users
 				userItems = items.filter((x) => x.sku == uid); // find all items belonging to the user that have the same uid
@@ -411,6 +411,7 @@ export default {
 					total += parseFloat(itemPrice); // retireve all cost and assign total to variable total
 					totalFee += parseFloat(userItems[i].cardFee); // calculate total fee from each item in in one seller's recipt.
 					reciptInfo.total = total; // set total to recipt body total variable
+					reciptInfo.total.toFixed(2);
 					reciptInfo.PaypalFee = totalFee.toFixed(2); // set total calculated tranaction fee to recipt body fee variable
 					console.log(userItems[i].cardFee);
 					console.log(totalFee);
@@ -458,7 +459,7 @@ export default {
 				}
 
 				await updateDoc(docRef, {
-					sellHistory: {recent: myRecipt},
+					sellHistory: {recent: myRecipt, completed: completed},
 				});
 
 				//
@@ -498,7 +499,7 @@ export default {
 		const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
 		const docSnap = await getDoc(docRef); // retrieve user data from database
 		let recent = docSnap.data().sellHistory.recent; // get recipt data from DB
-		let completed = docSnap.data().sellHistory.completed; // get recipt data from DB
+		let completed = docSnap.data().sellHistory.completed; // get recipt data from DB			sellHistory: {recent: recent, completed: myRecipt},
 
 		//find item to move to completed
 		let index = null;
