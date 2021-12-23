@@ -53,7 +53,7 @@
     <!-- v-if="slideActive" -->
     <ul v-if="slideActive" class="header__nav">
       <li>
-        <router-link to="/">Best Sellers</router-link>
+        <router-link to="/">MarketPlace</router-link>
       </li>
       <li>
         <router-link to="/store">New Releases</router-link>
@@ -339,7 +339,7 @@ export default {
 
   &__nav {
     list-style-type: none;
-    background-color: rgba(207, 207, 207, 0.811);
+    background-color: rgba(211, 211, 211, 0.692);
     margin: 0;
     // height: 100px;
     position: fixed;
@@ -358,7 +358,7 @@ export default {
       a {
         // background-color: rgba(230, 230, 230, 0.404);
         text-align: center;
-        color: rgb(3, 3, 3);
+        color: rgb(97, 2, 187);
         text-decoration: none;
         cursor: pointer;
         text-transform: capitalize;
@@ -366,7 +366,7 @@ export default {
 
         &:hover {
           // background-color: rgba(255, 255, 255, 0.157);
-          color: rgb(62, 26, 119);
+          color: rgb(0, 0, 0);
         }
       }
     }

@@ -98,28 +98,21 @@ export default {
 //   opacity: 0;
 // }
 .slider-enter-from {
-  opacity: 0;
+  opacity: 0.7;
   // transform: ;
-  filter: blur(0px) grayscale(0);
-  background-color: black;
-  &::after {
-    position: absolute;
-    content: "";
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.897);
-  }
+  // filter: blur(0px) grayscale(0);
+  background: black;
+  transform: perspective(5em);
+  // transform: scale(0.7);
 
   // transform: translateY(100vw);
 }
 .slider-enter-active {
-  transition: all 2s ease-in;
+  transition: all 0.3s ease-in;
 }
 .slider-leave-to {
-  opacity: 0.5;
-  filter: blur(0px) grayscale(0.5);
+  opacity: 0.7;
+  filter: blur(5px) grayscale(1);
 
   background-color: black;
   &::after {
@@ -129,14 +122,14 @@ export default {
     bottom: 0;
     right: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.815);
+    background-color: rgba(0, 0, 0, 0.452);
   }
 
   // transform: translateY(-100vw);
 }
 
 .slider-leave-active {
-  transition: all 0.2s ease-out;
+  transition: all 0.5s ease-out;
 }
 
 .slideContainer {
