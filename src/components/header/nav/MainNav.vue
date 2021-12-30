@@ -23,8 +23,14 @@
           <option class="option" value>clothing</option>
           <option class="option" value>electronics</option>
         </select>
-        <input type="text" placeholder="search for item" />
-        <i class="fas fa-search"></i>
+        <div>
+          <input type="text" placeholder="search for item" v-model="searchQuery" />
+        </div>
+        <div>
+          <button @click="search" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
       </div>
       <div class="account">
         <router-link to="/my-account/authentication">
@@ -96,7 +102,8 @@ export default {
     return {
       slideActive: true,
       showMenu: false,
-      currency: "USD"
+      currency: "USD",
+      searchQuery: ""
     };
   },
   watch: {
@@ -128,6 +135,10 @@ export default {
   methods: {
     // updateSiteCurrency(currencySelected) {
     // },
+    search() {
+      this.$router.replace("/search-Result/" + this.searchQuery);
+      this.searchQuery = "";
+    },
     toggleSlide() {
       this.slideActive = !this.slideActive;
     },
@@ -195,8 +206,7 @@ export default {
     display: flex;
     justify-content: space-between;
     position: relative;
-    // height: 80px;
-    // background-color: #cfcfcf;
+    color: rgb(24, 3, 82);
 
     .logo {
       position: relative;
@@ -210,10 +220,6 @@ export default {
         text-transform: uppercase;
         margin: 0;
         padding: 5px 0px;
-        // border: 2px solid rgba(0, 0, 0, 0.37);
-        // padding: 2px 10px;
-        // box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.445);
-
         a {
           text-decoration: none;
           color: inherit;
@@ -225,20 +231,22 @@ export default {
 
     //
     .search {
+      display: flex;
       position: relative;
       box-sizing: border-box;
-      height: 30px;
+      height: 35px;
       border: solid 2px rgba(0, 0, 0, 0.1);
+      align-items: center;
+      border-radius: 5px 5px;
       top: 50%;
       transform: translateY(-50%);
-      border-radius: 10px 10px;
 
       & > * {
         position: relative;
         box-sizing: border-box;
-        height: 100%;
-        top: 50%;
-        transform: translateY(-50%);
+        // height: 100%;
+        // top: 50%;
+        // transform: translateY(-50%);
       }
 
       select {
@@ -255,7 +263,7 @@ export default {
           background-color: none;
         }
         & * > {
-          margin: 10px;
+          // margin: 10px;
           background-color: rgba(255, 255, 255, 0.349);
         }
       }
@@ -266,14 +274,15 @@ export default {
 
       input {
         position: relative;
-        background-color: rgba(221, 221, 221, 0.144);
+        // background-color: rgba(221, 221, 221, 0.144);
         color: rgb(86, 1, 143);
         border: none;
         margin: 0;
         padding: 0 10px;
         border: none;
         outline: none;
-        width: 201px;
+        font-size: 16px;
+
         &:focus {
           animation: inputTransit 0.5s ease-in-out forwards;
         }
@@ -281,6 +290,10 @@ export default {
           // animation: name duration timing-function delay iteration-count direction fill-mode;
           animation: inputTransitx 3s ease-in-out forwards;
         }
+      }
+
+      button {
+        // border: none;
       }
 
       .fa-search {
@@ -291,9 +304,8 @@ export default {
         width: 40px;
         padding: 0;
         position: relative;
-        // background-color: rgb(156, 31, 31);
-        // top: 12px;
-        // left: 10px;
+        // background-color: rgb(246, 250, 242);
+        padding: 4px;
         &:hover {
           color: rgb(169, 20, 132);
           cursor: pointer;

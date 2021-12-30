@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../components/body/homePage/HomePage.vue";
 import StorePage from "../components/body/shop/StorePage";
-import ShopCart from "../components/header/ShopCart";
-import UserFav from "../components/header/UserFav";
-import AccountManagement from "../components/header/myaccount/AccountManagement";
+import ShopCart from "../components/header/myaccount/checkout/ShopCart";
+import UserFav from "../components/header/myaccount/checkout/UserFav";
+import AccountManagement from "../components/header/myaccount/admin/AccountManagement";
 import ItemPreview from "../components/body/shop/ItemPreview.vue";
 import SubscriptionPage from "../components/header/myaccount/AccountDetails/SubscriptionPage";
 import MerchantPolicy from "../components/header/myaccount/AccountDetails/MerchantPolicy";
@@ -17,10 +17,15 @@ import WomanClothing from "../components/body/clothing/WomanClothing";
 import MenClothing from "../components/body/clothing/MenClothing";
 import CreateProduct from "../components/header/myaccount/AccountDetails/CreateProduct";
 import ManageProducts from "../components/header/myaccount/AccountDetails/ManageProduct";
+import SearchResult from "../components/body/search/SearchResults.vue";
+import MyResult from "../components/body/search/MyResult.vue";
+import AddProduct from "../components/body/StoreProdManagement/AddProduct.vue";
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/store", component: StorePage },
+    { path: "/add-a-product", component: AddProduct },
     {
       path: "/clothing",
       component: ClothingPage,
@@ -32,6 +37,11 @@ const router = createRouter({
     { path: "/", component: HomePage },
     { path: "/store/:id", component: ItemPreview },
     { path: "/my-cart", component: ShopCart },
+    {
+      path: "/search-Result",
+      component: SearchResult,
+      children: [{ path: ":id", component: MyResult }]
+    },
     { path: "/my-favorites", component: UserFav },
     {
       path: "/my-account",

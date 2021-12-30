@@ -9,7 +9,11 @@
         <h4>
           <span v-if="authState">
             Welcome: {{ authState.displayName }}
-            <i style="" @click="logout" class="fas fa-sign-out-alt">logOut</i>
+            <i
+              style
+              @click="logout"
+              class="fas fa-sign-out-alt"
+            >logOut</i>
           </span>
           <span style="padding: 20px" v-else>Please login or register</span>
         </h4>
@@ -19,76 +23,39 @@
     <div v-if="authState" class="accountContainer__nav">
       <ul>
         <li class="navSelector">
-          <a @click="showCategory('account')" to="/my-account/authentication"
-            >account</a
-          >
+          <a @click="showCategory('account')" to="/my-account/authentication">account</a>
           <div v-if="subCategoryActive === 'account'" class="subCategory">
-            <router-link style="color: black" to="/my-account/authentication"
-              >Login / Register</router-link
-            >
-            <router-link style="color: black" to="/my-account/profile"
-              >My Profile</router-link
-            >
+            <router-link style="color: black" to="/my-account/authentication">Login / Register</router-link>
+            <router-link style="color: black" to="/my-account/profile">My Profile</router-link>
             <!-- <router-link style="color: black" to="/my-account/profile">CreateProfile</router-link> -->
           </div>
         </li>
         <li>
-          <router-link
-            @click="showCategory('plan')"
-            to="/my-account/subscription"
-            >subscription</router-link
-          >
+          <router-link @click="showCategory('plan')" to="/my-account/subscription">subscription</router-link>
         </li>
         <li class="navSelector">
-          <a @click="showCategory('bank')" to="/my-account/Statemnt"
-            >Bank StatMent</a
-          >
-          <div v-if="subCategoryActive === 'bank'" class="subCategory">
-            <!-- <router-link style="color: black" to="/my-account/profile"
-              >CreateProfile</router-link
-            >
-            <router-link style="color: black" to="/my-account/profile"
-              >CreateProfile</router-link
-            >
-            <router-link style="color: black" to="/my-account/profile"
-              >CreateProfile</router-link
-            > -->
-          </div>
+          <a @click="showCategory('bank')" to="/my-account/Statemnt">Bank StatMent</a>
+          <div v-if="subCategoryActive === 'bank'" class="subCategory"></div>
         </li>
 
         <li class="navSelector">
-          <a @click="showCategory('stock')" to="/my-account/manage_products"
-            >Stock management</a
-          >
+          <a @click="showCategory('stock')" to="/my-account/manage_products">Stock management</a>
           <div v-if="subCategoryActive === 'stock'" class="subCategory">
-            <router-link style="color: black" to="/my-account/create_product"
-              >add product</router-link
-            >
-            <router-link style="color: black" to="/my-account/manage_products"
-              >edit my stock</router-link
-            >
-            <!-- <router-link style="color: black" to="/my-account/profile"></router-link> -->
+            <router-link style="color: black" to="/my-account/create_product">add product</router-link>
+            <router-link style="color: black" to="/my-account/manage_products">edit my stock</router-link>
           </div>
         </li>
 
         <li class="navSelector">
           <a @click="showCategory('buy_history')">Purchase history</a>
           <div v-if="subCategoryActive === 'buy_history'" class="subCategory">
-            <router-link style="color: black" to="/my-account/BuyerRecipt"
-              >Buyer Recipt</router-link
-            >
-            <router-link style="color: black" to="/my-account/SellerRecipt"
-              >Seller Recipts</router-link
-            >
-
-            <!--  <router-link style="color:black" to="/my-account/profile">CreateProfile</router-link> -->
+            <router-link style="color: black" to="/my-account/BuyerRecipt">Buyer Recipt</router-link>
+            <router-link style="color: black" to="/my-account/SellerRecipt">Seller Recipts</router-link>
           </div>
         </li>
 
         <li>
-          <router-link @click="showCategory('policy')" to="/my-account/policy"
-            >policy & privacy</router-link
-          >
+          <router-link @click="showCategory('policy')" to="/my-account/policy">policy & privacy</router-link>
         </li>
       </ul>
     </div>
@@ -106,7 +73,7 @@ export default {
   },
   data() {
     return {
-      subCategoryActive: "",
+      subCategoryActive: ""
     };
   },
   mounted() {
@@ -120,26 +87,27 @@ export default {
       const auth = this.$store.getters["UserState/getAuthState"];
       console.log(auth);
       return auth;
-    },
+    }
   },
   methods: {
     logout() {
       this.$store.dispatch("UserState/logOutUser");
+      this.$router.push("/my-account/authentication");
     },
     showCategory(val) {
       return (this.subCategoryActive = val);
     },
     getProductList() {
       return fetch("http://localhost:3000/my-server/product", {
-        method: "GET",
+        method: "GET"
       })
-        .then(function (res) {
+        .then(function(res) {
           //   console.log(data);
           console.log(res);
 
           return res.json();
         })
-        .then(function (data) {
+        .then(function(data) {
           console.log(data);
           return data.id;
         });
@@ -159,21 +127,21 @@ export default {
       return fetch("http://localhost:3000/my-server/pay-clients", {
         method: "POST",
         headers: {
-          "content-type": "application/json",
-        },
+          "content-type": "application/json"
+        }
       })
-        .then(function (res) {
+        .then(function(res) {
           //   console.log(data);
           console.log(res);
 
           return res.json();
         })
-        .then(function (data) {
+        .then(function(data) {
           console.log(data);
           return data.id;
         });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss">

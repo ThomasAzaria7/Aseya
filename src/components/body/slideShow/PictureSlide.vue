@@ -10,6 +10,13 @@
             <router-link :to="slideObject[index].buttonLink ">subscribe</router-link>
           </button>
         </div>
+        <div class="icons">
+          <i :class="{icon:index == 0}" @click="changeSlide(0)" class="far fa-circle"></i>
+          <i :class="{icon:index == 1}" @click="changeSlide(1)" class="far fa-circle"></i>
+          <i :class="{icon:index == 2}" @click="changeSlide(2)" class="far fa-circle"></i>
+          <i :class="{icon:index == 3}" @click="changeSlide(3)" class="far fa-circle"></i>
+          <i :class="{icon:index == 4}" @click="changeSlide(4)" class="far fa-circle"></i>
+        </div>
       </div>
     </transition>
   </div>
@@ -85,7 +92,11 @@ export default {
       }, 10);
     }, 10000);
   },
-  methods: {}
+  methods: {
+    changeSlide(x) {
+      this.index = x;
+    }
+  }
 };
 </script>
 
@@ -104,7 +115,6 @@ export default {
   background: black;
   transform: perspective(5em);
   // transform: scale(0.7);
-
   // transform: translateY(100vw);
 }
 .slider-enter-active {
@@ -132,6 +142,11 @@ export default {
   transition: all 0.5s ease-out;
 }
 
+.icon {
+  background-color: white;
+  border-radius: 50%;
+}
+
 .slideContainer {
   position: relative;
   height: 100%;
@@ -140,6 +155,25 @@ export default {
   .imageBox {
     height: 100%;
     position: relative;
+
+    .icons {
+      position: absolute;
+      top: 95%;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      i {
+        color: white;
+        font-size: 14px;
+
+        &:hover {
+          background-color: white;
+          border-radius: 50%;
+        }
+      }
+    }
     &::before {
       position: absolute;
       content: "";

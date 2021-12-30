@@ -13,39 +13,38 @@
       <div class="selectionBox">
         <div>
           <br />
-          <br />
           <h2>{{ getItemData.name }}</h2>
           <p>{{ getItemData.description }}</p>
 
           <p>$ {{ getItemData.exchangePrice }} {{getCurrency.type}}</p>
         </div>
-        <form @submit.prevent="addItemToCart">
-          <div class="formControl">
-            <label for>Select your Style</label>
-            <select name id>
-              <option selected disabled hidden>select</option>
-              <option value>D</option>
-              <option value>C</option>
-              <option value>B</option>
-              <option value>A</option>
-            </select>
-          </div>
-          <!--  -->
-          <div class="formControl">
-            <label for>Quantity</label>
-            <input type="number" v-model="quantity" />
-          </div>
-          <!--  -->
-          <div class="buttons">
-            <button type="submit">Add to cart</button>
-            <i @click="addToFavList" class="fas fa-heart">
-              <span>fav</span>
-            </i>
-          </div>
-          <p class="helpText" v-if="checkIfItemExists">
-            <span style="color:red; font-size:20px">*</span> This item exists in your cart, please change Quantity Instead.
-          </p>
-        </form>
+
+        <div class="formControl">
+          <label for>Select your Style</label>
+          <select name id>
+            <option selected disabled hidden>select</option>
+            <option value>D</option>
+            <option value>C</option>
+            <option value>B</option>
+            <option value>A</option>
+          </select>
+        </div>
+        <!--  -->
+        <div class="formControl">
+          <label for>Quantity</label>
+          <input type="number" v-model="quantity" />
+        </div>
+        <!--  -->
+        <div class="buttons">
+          <button @click="addItemToCart">Add to cart</button>
+          <i @click="addToFavList" class="fas fa-heart">
+            <span>fav</span>
+          </i>
+        </div>
+        <p class="helpText" v-if="checkIfItemExists">
+          <span style="color:red; font-size:20px">*</span> This item exists in your cart, please change Quantity Instead.
+        </p>
+
         <br />
       </div>
     </section>
@@ -85,7 +84,7 @@
       <br />
       <div class="itemsContainer">
         <div class="item" v-for="data in getdata" :key="data">
-          <img :src="data.imgLink" alt />
+          <img @click="getDisplayItem(data.code)" :src="data.imgLink" alt />
           <p>
             {{data.name}}
             <span>${{data.price}} {{getCurrency.type}}</span>
@@ -120,13 +119,11 @@ export default {
     // console.log(this.$store.getters["items/getdata"]);
   },
   mounted() {
-    const itemCode = this.$route.params;
-    if (itemCode) {
-      setTimeout(() => {
-        this.$store.dispatch("items/getSelectedProduct", itemCode);
-      }, 2000);
-    }
-    this.$store.dispatch("items/getSelectedProduct", itemCode);
+    this.quantity = 1;
+    console.log(this.quantity);
+
+    this.getDisplayItem();
+    window.scrollTo(0, 0);
   },
   computed: {
     getCurrency() {
@@ -152,19 +149,40 @@ export default {
       }
     },
 
-    quantity() {
-      this.getItemData.quantity = this.quantity.toString();
-    },
-    itemCode(newVal, oldVal) {
-      console.log(newVal);
-      console.log(oldVal);
-    },
-    getItemData(newVal, old) {
-      console.log(newVal, "new value");
-      console.log(old, "old value");
+    quantity(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        console.log("new value", newVal, "oldVal", oldVal);
+        this.getItemData.quantity = newVal;
+      }
     }
+    // itemCode(newVal, oldVal) {
+    //   console.log(newVal);
+    //   console.log(oldVal);
+    // },
+    // getItemData(newVal, old) {
+    //   console.log(newVal, "new value");
+    //   console.log(old, "old value");
+    // }
   },
   methods: {
+    getDisplayItem(code) {
+      console.log("my code", code);
+
+      this.$router.replace(code);
+      const itemCode = this.$route.params;
+      if (code) {
+        //
+        this.$store.dispatch("items/getSelectedProduct", code);
+      }
+      if (itemCode) {
+        setTimeout(() => {
+          this.$store.dispatch("items/getSelectedProduct", itemCode);
+        }, 2000);
+        this.$store.dispatch("items/getSelectedProduct", itemCode);
+      }
+
+      window.scrollTo(0, 0);
+    },
     addToFavList() {
       const auth = this.$store.getters["UserState/getAuthState"];
       const userUID = auth.uid;
@@ -179,6 +197,9 @@ export default {
       // value = favCart|| shopCart
       const auth = this.$store.getters["UserState/getAuthState"];
       const userUID = auth.uid;
+      console.log(this.getItemData);
+
+      console.log("cost of itemsss", this.getItemData.cost);
 
       const userData = {
         item: this.getItemData,

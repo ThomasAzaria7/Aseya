@@ -16,11 +16,7 @@
       <div v-if="recentSelected" class="RecentContainer">
         <h2>Recent</h2>
 
-        <ul
-          class="recipts recent"
-          v-for="recipt in getRecipts"
-          :key="recipt.reciptId"
-        >
+        <ul class="recipts recent" v-for="recipt in getRecipts" :key="recipt.reciptId">
           <div class="recipts__id">
             <li>
               <h4>Recipt Number :</h4>
@@ -34,7 +30,7 @@
 
             <li>
               {{
-                recipt.payer.name.given_name + "" + recipt.payer.name.surname
+              recipt.payer.name.given_name + "" + recipt.payer.name.surname
               }}
             </li>
             <li>{{ recipt.payer.payer_id }}</li>
@@ -52,16 +48,14 @@
             <form @submit.prevent="addTrackingInfo()">
               <label for="title">Add tracking Info</label>
 
-              <select name="" id="">
-                <option value="select shipping method" selected disabled>
-                  shipping method
-                </option>
+              <select name id>
+                <option value="select shipping method" selected disabled>shipping method</option>
                 <option value="AusPost">AusPost</option>
                 <option value="AusPost">AusPost</option>
                 <option value="AusPost">AusPost</option>
                 <option value="AusPost">other</option>
               </select>
-              <input placeholder="tracking id" type="text" name="" id="" />
+              <input placeholder="tracking id" type="text" name id />
               <button>add</button>
             </form>
             <br />
@@ -72,8 +66,8 @@
                 <hr />
                 <p>my Profit $</p>
               </div>
-              <div>
-                <p>$ {{ recipt.total }}</p>
+              <div class="summary">
+                <p>$ {{ (recipt.total).toFixed(2) }}</p>
                 <p>$ {{ recipt.PaypalFee }}</p>
                 <hr />
                 <p>$ {{ (recipt.total - recipt.PaypalFee).toFixed(2) }}</p>
@@ -98,9 +92,7 @@
                     @click="
                       getPaid(recipt.total - recipt.PaypalFee, recipt.reciptId)
                     "
-                  >
-                    YES
-                  </button>
+                  >YES</button>
                 </div>
 
                 <div v-if="success">
@@ -121,11 +113,7 @@
       <!--  -->
       <div v-if="!recentSelected" class="claimedContainer">
         <h2>Claimed</h2>
-        <ul
-          class="recipts"
-          v-for="recipt in getClaimedItemRecipt"
-          :key="recipt.reciptId"
-        >
+        <ul class="recipts" v-for="recipt in getClaimedItemRecipt" :key="recipt.reciptId">
           <div class="recipts__id">
             <li>
               <h4>Recipt Number :</h4>
@@ -134,23 +122,17 @@
             <li>payout confirmation code {{ recipt.payoutReciptId }}</li>
             <br />
 
-            <i
-              style="font-size: 2rem; color: green"
-              class="fas fa-check-circle"
-            >
-              Paid</i
-            >
+            <i style="font-size: 2rem; color: green" class="fas fa-check-circle">Paid</i>
 
             <br />
           </div>
 
           <div class="recipts__info">
             <h4>Buyer info</h4>
-      
 
             <li style="text-transform: capitalize">
               {{
-                recipt.payer.name.given_name + " " + recipt.payer.name.surname
+              recipt.payer.name.given_name + " " + recipt.payer.name.surname
               }}
             </li>
             <li>{{ recipt.payer.payer_id }}</li>
@@ -165,7 +147,7 @@
 
           <!-- <li>{{ recipt.status }}</li> -->
           <div class="recipts__claim">
-            <br>
+            <br />
             <div class="total">
               <div>
                 <p>Items total</p>
@@ -186,7 +168,7 @@
     </div>
 
     <!-- <claimed-items></claimed-items>
-    <recent-items></recent-items> -->
+    <recent-items></recent-items>-->
   </div>
 </template>
 
@@ -204,7 +186,7 @@ export default {
       payout: null,
       modal: false,
       success: false,
-      recentSelected: true,
+      recentSelected: true
     };
   },
   computed: {
@@ -218,7 +200,7 @@ export default {
         this.$store.getters["UserState/getClaimedRecipt"]
       );
       return this.$store.getters["UserState/getClaimedRecipt"];
-    },
+    }
   },
   mounted() {
     console.log(this.getRecipts);
@@ -226,7 +208,7 @@ export default {
   watch: {
     getRecipts(newVal) {
       console.log("hello", newVal);
-    },
+    }
   },
   methods: {
     viewClaimed() {
@@ -243,14 +225,14 @@ export default {
       return fetch("http://localhost:3000/my-server/confirm-payout", {
         method: "Get",
         headers: {
-          "content-type": "application/json",
-        },
+          "content-type": "application/json"
+        }
       })
-        .then((x) => {
+        .then(x => {
           // console.log(y);
           return x.json();
         })
-        .then((data) => {
+        .then(data => {
           console.log(data.Response.status);
         });
     },
@@ -267,7 +249,7 @@ export default {
       console.log(cost);
       const data = JSON.stringify({
         payoutPrice: cost.toFixed(2),
-        authToken: mytoken,
+        authToken: mytoken
       });
 
       const userUid = this.$store.getters["UserState/getAuthState"].uid;
@@ -275,21 +257,21 @@ export default {
       fetch("http://localhost:3000/my-server/pay-clients", {
         method: "POST",
         headers: {
-          "content-type": "application/json",
+          "content-type": "application/json"
         },
-        body: data,
+        body: data
       })
-        .then((x) => {
+        .then(x => {
           return x.json();
         })
-        .then((data) => {
+        .then(data => {
           console.log(data);
           const payoutId = data.id.batch_header.payout_batch_id;
           // console.log(data.id.batch_header.payout_batch_id);
           const userData = {
             id: reciptId,
             uid: userUid,
-            payoutReciptId: payoutId,
+            payoutReciptId: payoutId
           };
           console.log(userData);
 
@@ -298,8 +280,8 @@ export default {
             this.$store.dispatch("UserState/claimRecipts", userData);
           }
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -361,7 +343,7 @@ export default {
     &__claim {
       background-color: rgba(242, 243, 176, 0.3);
 
-      padding: 10px 30px;
+      padding: 10px 20px;
 
       form {
         label {
@@ -392,6 +374,11 @@ export default {
         display: flex;
         justify-content: space-around;
         background-color: white;
+
+        .summary {
+          p {
+          }
+        }
       }
 
       .claimButton {
@@ -399,8 +386,8 @@ export default {
         font-size: 18px;
         position: relative;
         top: 10px;
-        width: 50%;
-        left: 50%;
+        width: 100%;
+        // left: 20%;
         padding: 10px 20px;
         box-sizing: border-box;
       }

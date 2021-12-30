@@ -13,7 +13,7 @@
               Qty: {{item.quantity}}
               <!-- <input type="number"  v-model="" /> -->
             </li>
-            <li>$ {{ item.cost }}</li>
+            <li>$ {{ item.cost}}</li>
           </div>
           <li>
             <i @click="removeItemFromCart(item.code)" class="far fa-times-circle"></i>
@@ -47,8 +47,8 @@ export default {
       cartTotalPrice: 0
     };
   },
-  created() {
-    // this.shopCartItems = cartItems;
+  mounte() {
+    console.log(this.shopCartItems);
   },
   watch: {},
   computed: {
@@ -73,28 +73,14 @@ export default {
     checkCart() {},
     removeItemFromCart(itemCode) {
       const auth = this.$store.getters["UserState/getAuthState"];
-      console.log(auth.uid);
-
-      console.log(itemCode);
-
-      console.log(this.shopCartItems);
-
+      // console.log(auth.uid);
+      // console.log(itemCode);
+      // console.log(this.shopCartItems);
       const userData = {
         uid: auth.uid,
         itemId: itemCode
       };
-
       this.$store.dispatch("UserState/deleteCartItem", userData);
-      // const result = this.shopCartItems.filter(x => {
-      //   return x.code !== key;
-      // });
-      // // console.log(key);
-      // // console.log(this.shopCartItems);
-      // // console.log(result);
-      // //
-      // const cartItems = JSON.stringify(result);
-      // localStorage.setItem("cartItems", cartItems);
-      // this.checkCart();
     }
   }
 };
