@@ -29,7 +29,7 @@ export default {
       slideObject: [
         {
           img:
-            "https://images.pexels.com/photos/3334778/pexels-photo-3334778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+            "https://images.pexels.com/photos/1086711/pexels-photo-1086711.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
           style: "left",
           text: "ASEYEA ONLINE MARKETPLACE",
           subtext: "onsale",
@@ -47,7 +47,7 @@ export default {
         },
         {
           img:
-            "https://images.pexels.com/photos/2376190/pexels-photo-2376190.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+            "https://images.pexels.com/photos/1051744/pexels-photo-1051744.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
           style: "center",
           text: "Subscribe to sell with us",
           subtext: "",
@@ -181,7 +181,8 @@ export default {
       bottom: 0;
       right: 0;
       left: 0;
-      background-color: rgba(206, 6, 212, 0.233);
+      // background-color: rgba(206, 6, 212, 0.233);
+      background-color: rgba(102, 0, 197, 0.15);
     }
     //   width: 100%;
     img {

@@ -1,19 +1,12 @@
 <template>
   <div>
     <!-- <p>app payment works</p> -->
-
     <!-- <button @click="getAccessToken">access token</button> -->
-
     <!-- <button @click="getItemObject">get final items</button> -->
-
     <!-- <button @click="testRecipt">test recipt</button> -->
-
     <!-- <button @click="sellerRecipts">test seller recipt</button> -->
-
     <!-- <h2>{{ getToken }}</h2> -->
-
     <!-- <button @click="buyerRecipts()">buyer recipt testing</button> -->
-
     <div id="paypal-button-container"></div>
   </div>
 </template>
@@ -21,6 +14,7 @@
 
 <script>
 // import paypal from "";
+
 export default {
   data() {
     return {
@@ -38,7 +32,6 @@ export default {
     getTotalPrice() {
       return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
     },
-
     getUser() {
       return this.$store.getters["UserState/getAuthState"]; //  get total cart item priice
     },
@@ -47,12 +40,8 @@ export default {
     }
   },
   mounted() {
-    // console.log(window.paypal);
-
     this.$store.dispatch("UserState/retreiveToken", "myToken");
-
     const mytoken = JSON.parse(this.getToken);
-
     let myItems = null;
     let mydata = null;
     let uid = null;
@@ -64,9 +53,6 @@ export default {
         items: myItems
       });
       uid = this.getUser;
-
-      // console.log(uid);
-      // console.log(myToken, myItems.items);
 
       window.paypal
         .Buttons({

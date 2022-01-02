@@ -175,7 +175,7 @@ export default {
   top: 0;
   z-index: 5;
   background-color: rgb(255, 255, 255);
-  box-shadow: 2px 2px 0.5rem rgba(0, 0, 0, 0.486);
+  box-shadow: 2px 2px 0.5rem rgba(0, 0, 0, 0.2);
 
   &__promo {
     margin: 0;
@@ -183,6 +183,8 @@ export default {
     position: relative;
     display: flex;
     justify-content: center;
+    // clip-path: polygon(50% 10%, 90% 49%, 50% 90%, 10% 50%);
+    // padding: 2px 0;
     .currencySelector {
       position: relative;
       // right: 50px;
@@ -354,10 +356,10 @@ export default {
     background-color: rgba(211, 211, 211, 0.692);
     margin: 0;
     // height: 100px;
+
     position: fixed;
     width: 100vw;
     box-sizing: border-box;
-
     display: flex;
     justify-content: first baseline;
     flex-wrap: wrap;
@@ -367,6 +369,7 @@ export default {
     li {
       // float: left;
       // background-color: yellow;
+
       a {
         // background-color: rgba(230, 230, 230, 0.404);
         text-align: center;
