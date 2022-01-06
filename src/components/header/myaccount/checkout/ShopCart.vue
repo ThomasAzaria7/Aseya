@@ -4,18 +4,25 @@
       <h2>My Cart</h2>
       <div class="cartItems">
         <ul v-for="item in shopCartItems" :key="item.code">
-          <li>
+          <li class="imageBox">
             <img :src="item.imgLink" alt />
           </li>
-          <li>{{ item.name }}</li>
-          <div class="price">
-            <li>
-              Qty: {{item.quantity}}
-              <!-- <input type="number"  v-model="" /> -->
-            </li>
-            <li>$ {{ item.cost}}</li>
+          <div class="information">
+            <div class="price">
+              <li>{{ item.name }}</li>
+              <li>
+                Quantity: {{item.quantity}}
+                <!-- <input type="number"  v-model="" /> -->
+              </li>
+              <li>price $ {{ item.cost}}</li>
+            </div>
+            <div class="itemDetail">
+              <li>style : {{item.itemDetail.type}}</li>
+              <li>color: {{item.itemDetail.color}}</li>
+              <li>size: {{item.itemDetail.size}}</li>
+            </div>
           </div>
-          <li>
+          <li class="deleteButton">
             <i @click="removeItemFromCart(item.code)" class="far fa-times-circle"></i>
           </li>
         </ul>
@@ -27,7 +34,16 @@
       <div>
         <h3>$ {{getTotalPrice}}</h3>
       </div>
-      <app-payment></app-payment>
+      <div class="payment">
+        <!-- <p>app payment works</p> -->
+        <!-- <button @click="getAccessToken">access token</button> -->
+        <!-- <button @click="getItemObject">get final items</button> -->
+        <!-- <button @click="testRecipt">test recipt</button> -->
+        <button @click="sellerRecipts">test seller recipt</button>
+        <!-- <h2>{{ getToken }}</h2> -->
+        <!-- <button @click="buyerRecipts()">buyer recipt testing</button> -->
+        <div id="paypal-button-container"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -35,20 +51,91 @@
 <script>
 // import Cookies from "js-cookie";
 
-import AppPayment from "./AppPayment.vue";
-
 export default {
-  components: {
-    AppPayment
-  },
+  components: {},
   data() {
     return {
       // shopCartItems: [{}]
-      cartTotalPrice: 0
+      cartTotalPrice: 0,
+      //app payment
+      accessToken: "",
+      mydata: {}
     };
   },
-  mounte() {
-    console.log(this.shopCartItems);
+  mounted() {
+    this.$store.dispatch("UserState/retreiveToken", "myToken");
+    const mytoken = JSON.parse(this.getToken);
+    let myItems = null;
+    let mydata = null;
+    let uid = null;
+
+    setTimeout(() => {
+      myItems = this.getItemObject();
+      mydata = JSON.stringify({
+        token: mytoken,
+        items: myItems
+      });
+      uid = this.getUser;
+
+      window.paypal
+        .Buttons({
+          createOrder: function() {
+            return fetch("http://localhost:3000/my-server/create-order", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: mydata
+            })
+              .then(function(res) {
+                return res.json();
+              })
+              .then(function(data) {
+                return data.id;
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          },
+          onApprove: data => {
+            return fetch(
+              "http://localhost:3000/my-server/capture-order/" + data.orderID,
+              {
+                method: "POST",
+                body: this.getToken
+              }
+            )
+              .then(res => {
+                return res.json();
+              })
+              .then(details => {
+                console.log();
+                const OnSuccess = JSON.parse(details.status);
+                console.log(OnSuccess);
+
+                const itemId = OnSuccess.id;
+                // this.testRecipt(itemId);
+                return fetch(
+                  "http://localhost:3000/my-server/product/" + itemId,
+                  {
+                    method: "Get"
+                  }
+                )
+                  .then(x => x.json())
+                  .then(reciptData => {
+                    console.log(reciptData);
+                    console.log(uid);
+                    const orderId = reciptData.body.id;
+
+                    this.sellerRecipts(orderId);
+                    this.buyerRecipts(orderId);
+                  });
+              })
+              .catch(err => console.log(err));
+          }
+        })
+        .render("#paypal-button-container");
+    }, 3000);
   },
   watch: {},
   computed: {
@@ -62,11 +149,28 @@ export default {
 
     getFavTotal() {
       return this.$store.getters["UserState/getfavTotal"]; // get total number of items in fav list
-    }
+    },
 
     // getUser() {
     //   // return this.$store.getters["UserState/getAuthState"];
     // }
+
+    ///app apayment
+    getCurrency() {
+      return this.$store.getters["items/getCurrencyValue"];
+    },
+    // shopCartItems() {
+    //   return this.$store.getters["UserState/refreshCart"]; // get cart items from database
+    // },
+    // getTotalPrice() {
+    //   return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
+    // },
+    getUser() {
+      return this.$store.getters["UserState/getAuthState"]; //  get total cart item priice
+    },
+    getToken() {
+      return this.$store.getters["UserState/getMyToken"];
+    }
   },
 
   methods: {
@@ -81,6 +185,156 @@ export default {
         itemId: itemCode
       };
       this.$store.dispatch("UserState/deleteCartItem", userData);
+    },
+
+    /// app payment
+
+    buyerRecipts(id) {
+      // console.log(buyerDetail);
+      const uid = this.getUser;
+
+      // 5SJ92192WU205192X
+      // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
+      return (
+        // fetch(
+        //   "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
+        //   {
+        //     method: "Get",
+        //   }
+        // )
+        fetch("http://localhost:3000/my-server/product/" + id, {
+          method: "Get"
+        })
+          .then(x => x.json())
+          .then(reciptData => {
+            // console.log(reciptData);
+            // console.log(uid);
+            const buyerDetail = {
+              reciptData: reciptData,
+              uid: uid.uid
+            };
+
+            this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipts
+
+            // this.$store.dispatch("UserState/SendSellerRecipt", data);
+          })
+      );
+    },
+    //
+    sellerRecipts(id) {
+      // add id as parameter
+      // 5SJ92192WU205192X
+      // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
+      return (
+        // for testing purposess
+        // fetch(
+        //   "http://localhost:3000/my-server/product/" + "5E787487BL240014A",
+        //   {
+        //     method: "Get"
+        //   }
+        // )
+        fetch("http://localhost:3000/my-server/product/" + id, {
+          method: "Get"
+        })
+          .then(x => x.json())
+          .then(reciptData => {
+            const data = this.extraInfo(reciptData); //  set cart itemdetails to recipt retreieved from paypal
+            this.$store.dispatch("UserState/SendSellerRecipt", data); // send data to mutation to be processeed
+          })
+      );
+    },
+
+    // function that adds extra information to recipt, size, color, type.
+
+    extraInfo(reciptData) {
+      const reciptArr = reciptData.body.purchase_units[0].items;
+      const cartArr = this.shopCartItems;
+      for (let i = 0; i < reciptArr.length; i++) {
+        const searchName = reciptArr[i].name;
+        const itemFound = cartArr.find(x => x.name === searchName);
+        console.log(itemFound);
+        reciptArr[i].itemDetail = itemFound.itemDetail;
+      }
+      reciptData.body.purchase_units[0].items = reciptArr;
+      return reciptData;
+    },
+
+    //
+    testRecipt(itemId) {
+      const orderId = itemId;
+      const uid = this.getUser.uid;
+      return fetch("http://localhost:3000/my-server/product/" + orderId, {
+        method: "GET"
+        // body: ""
+      })
+        .then(x => x.json())
+        .then(reciptData => {
+          // modify recipt here
+
+          //
+          const buyerDetail = {
+            reciptData: reciptData,
+            uid: uid
+          };
+
+          this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipt
+        });
+    },
+    getItemObject() {
+      let paypalItems = null;
+      // console.log(this.shopCartItems);
+
+      for (let i = 0; i < this.shopCartItems.length; i++) {
+        if (!paypalItems) {
+          paypalItems = [
+            {
+              name: this.shopCartItems[i].name,
+              // "second Product Name" /* Shows within upper-right dropdown during payment approval */,
+              description: this.shopCartItems[i].description,
+              sku: this.shopCartItems[i].sellerID,
+              // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
+              size: "L",
+              item_details: {
+                weight: "100kg"
+              },
+              unit_amount: {
+                currency_code: this.getCurrency.type,
+                value: this.shopCartItems[i].exchangePrice
+              },
+              quantity: this.shopCartItems[i].quantity
+            }
+          ];
+        } else {
+          // console.log("theresss");
+          paypalItems.push({
+            name: this.shopCartItems[i].name, // "second Product Name" /* Shows within upper-right dropdown during payment approval */,
+            description: this.shopCartItems[i].description, // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
+            sku: this.shopCartItems[i].sellerID,
+            size: "L",
+            item_details: {
+              weight: "100kg"
+            },
+            unit_amount: {
+              currency_code: this.getCurrency.type,
+              value: this.shopCartItems[i].exchangePrice
+            },
+            quantity: this.shopCartItems[i].quantity
+          });
+        }
+      }
+      //
+
+      // console.log(typeof this.getTotalPrice);
+      console.log("cuurency type", this.getCurrency.type);
+
+      let checkout = {
+        items: paypalItems,
+        cartTotalPrice: this.getTotalPrice,
+        currency: this.getCurrency.type
+      };
+      // console.log("final checkout object", checkout);
+      return checkout;
+      //
     }
   }
 };
@@ -90,6 +344,13 @@ export default {
 
 <style lang="scss" scoped>
 // @import "./";
+
+#paypal-button-container {
+  position: relative;
+  color: pink;
+  padding: 0 50px;
+  z-index: 0;
+}
 
 .cartContainer {
   position: relative;
@@ -125,6 +386,7 @@ export default {
     .cartItems {
       ul {
         display: flex;
+        // justify-content: spac;
         list-style-type: none;
         margin: 0;
         padding: 5px;
@@ -132,22 +394,52 @@ export default {
           background-color: rgba(248, 190, 235, 0.205);
         }
 
-        .price {
-          display: flex;
-          flex: 1 0 20%;
-          input {
-            height: 20px;
-            width: 30px;
-          }
-        }
-        li {
-          width: 100%;
+        .imageBox {
+          height: 200px;
+          width: 150px;
+          flex: 0 0 23%;
           img {
             height: 200px;
-            width: 200px;
+            width: 100%;
             object-fit: contain;
           }
         }
+
+        .information {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+          flex: 0 0 70%;
+          background-color: white;
+
+          .itemDetail {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            // background-color: rgb(146, 58, 58);
+          }
+
+          .price {
+            // background-color: rgb(121, 138, 187);
+          }
+        }
+
+        .deleteButton {
+          display: flex;
+          flex-direction: column;
+          align-self: center;
+          background-color: rgb(255, 255, 255);
+        }
+
+        // .price {
+        //   display: flex;
+        //   flex-direction: column;
+        //   flex: 1 0 20%;
+        //   input {
+        //     height: 20px;
+        //     width: 30px;
+        //   }
+        // }
       }
     }
   }

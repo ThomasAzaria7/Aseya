@@ -1,8 +1,50 @@
 import { db } from "../../../database/database";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 //
 
 export default {
+  async addProductToDB(_, payload) {
+    // console.log(state, );
+
+    console.log(payload);
+
+    const docRef = doc(db, "Products", "store");
+    const docSnap = await getDoc(docRef);
+
+    let items = [];
+
+    try {
+      console.log(docSnap.data().items);
+      if (docSnap.data().items) {
+        items = docSnap.data().items;
+        items.push(payload);
+      } else {
+        //
+        items = [payload];
+      }
+      //
+    } catch (error) {
+      console.log(error);
+      items = [payload];
+
+      //
+    }
+
+    try {
+      updateDoc(docRef, {
+        items: items
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  async getStoreItems(state) {
+    const docRef = doc(db, "Products", "store");
+
+    onSnapshot(docRef, doc => {
+      state.storeProducts = doc.data().items;
+    });
+  },
   async newCurrency(state, payload) {
     console.log(state, payload);
     const docRef = doc(db, "Products", "items");
@@ -73,9 +115,16 @@ export default {
     // console.log( state.shopItems.filter((x)=> payload.id === x.code));\
     // console.log(state.shopItems[]);
 
-    return (state.selectedItem = state.shopItems.filter(
-      x => payload.id === x.code
-    ));
+    let cart1 = state.shopItems.filter(x => payload.id === x.code);
+
+    console.log("item found", cart1);
+
+    if (cart1.length == 0) {
+      cart1 = state.storeProducts.filter(x => payload.id === x.code);
+    }
+    // another if statement if there is more cart
+
+    return (state.selectedItem = cart1);
     // state.data
     // state.greet = payload;
     // console.log(payload);

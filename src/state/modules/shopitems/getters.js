@@ -19,5 +19,10 @@ export default {
 
   getCurrencyValue(state) {
     return state.currency;
+  },
+
+  //
+  getStoreItems(state) {
+    return state.storeProducts;
   }
 };

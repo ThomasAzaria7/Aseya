@@ -59,10 +59,10 @@
     <!-- v-if="slideActive" -->
     <ul v-if="slideActive" class="header__nav">
       <li>
-        <router-link to="/">MarketPlace</router-link>
+        <router-link to="/">Home</router-link>
       </li>
       <li>
-        <router-link to="/store">New Releases</router-link>
+        <router-link to="/marketplace">MarketPlace</router-link>
       </li>
       <li>
         <router-link to="/clothing">Clothing</router-link>
@@ -83,7 +83,7 @@
         <a>Discount Sale</a>
       </li>
       <li>
-        <a>limited Offer</a>
+        <router-link to="/add-a-product">add to market</router-link>
       </li>
     </ul>
   </div>

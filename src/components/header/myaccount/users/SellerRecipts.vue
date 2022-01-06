@@ -33,12 +33,15 @@
               recipt.payer.name.given_name + "" + recipt.payer.name.surname
               }}
             </li>
-            <li>{{ recipt.payer.payer_id }}</li>
+            <!-- <li>{{ recipt.payer.payer_id }}</li> -->
             <li>{{ recipt.payer.email_address }}</li>
-            <li>{{ recipt.payer.address }}</li>
+            <li>
+              <b>shipping address:</b>
+              {{ recipt.shipping.address.address_line_1 }} {{ recipt.shipping.address.admin_area_2}} {{ recipt.shipping.address.admin_area_1}} {{ recipt.shipping.address.country_code}}
+            </li>
             <h4>items Sold</h4>
             <li class="items" v-for="item in recipt.items" :key="item.name">
-              <a>{{ item.name }} x{{ item.quantity }}</a>
+              <a>{{ item.name }} x{{ item.quantity }} {{ item.itemDetail.color }} {{ item.itemDetail.size }}</a>
               <a>${{ item.unit_amount.value }}</a>
             </li>
           </div>
@@ -137,7 +140,7 @@
             </li>
             <li>{{ recipt.payer.payer_id }}</li>
             <li>{{ recipt.payer.email_address }}</li>
-            <li>{{ recipt.payer.address }}</li>
+            <li>{{ recipt.shipping }}</li>
             <h4>items Sold</h4>
             <li class="items" v-for="item in recipt.items" :key="item.name">
               <a>{{ item.name }} x{{ item.quantity }}</a>

@@ -24,7 +24,7 @@ import AddProduct from "../components/body/StoreProdManagement/AddProduct.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/store", component: StorePage },
+    { path: "/marketplace", component: StorePage },
     { path: "/add-a-product", component: AddProduct },
     {
       path: "/clothing",

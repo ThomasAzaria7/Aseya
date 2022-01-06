@@ -18,5 +18,16 @@ export default {
 
   updateCurrency(context, payload) {
     context.commit("newCurrency", payload);
+  },
+
+  // adding item to DB
+  addNewItem(context, payload) {
+    context.commit("addProductToDB", payload);
+  },
+
+  getStoreItems(context) {
+    context.commit("getStoreItems");
   }
+
+  //
 };

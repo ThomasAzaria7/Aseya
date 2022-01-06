@@ -5,7 +5,7 @@
         <router-link @click="close()" to="/">Home</router-link>
       </li>
       <li>
-        <router-link @click="close()" to="/store">BestSellers</router-link>
+        <router-link @click="close()" to="/marketplace">marketplace</router-link>
       </li>
       <li>
         <router-link @click="close" to="/clothing">Clothing</router-link>
@@ -32,14 +32,14 @@ export default {
   emits: ["close"],
   data() {
     return {
-      show: true,
+      show: true
     };
   },
 
   computed: {
     cal() {
       return this.toggleMenu;
-    },
+    }
   },
 
   created() {
@@ -54,8 +54,8 @@ export default {
   methods: {
     close() {
       this.$emit("close");
-    },
-  },
+    }
+  }
 };
 </script>
 

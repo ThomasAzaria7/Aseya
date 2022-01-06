@@ -376,6 +376,10 @@ export default {
     const uid = payload.uid;
 
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    await updateDoc(docRef, {
+      myCart: []
+    });
+
     let data = [{}];
     const docSnap = await getDoc(docRef); // retrieve user data from database
     data = docSnap.data().buyHistory;
@@ -429,15 +433,16 @@ export default {
     const status = reciptData.body.status;
     const payerDetails = reciptData.body.payer;
     const links = reciptData.body.links;
+    const shipping = reciptData.body.purchase_units[0].shipping;
 
     let reciptInfo = {
       reciptId: reciptId,
-      // created: date,
       status: status,
       payer: payerDetails,
       link: links,
       items: [{}],
       total: 0,
+      shipping: shipping,
       PaypalFee: 0,
       finalvalue: 0,
       claimed: "false"
@@ -457,9 +462,17 @@ export default {
       if (!userExists) {
         const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
         const docSnap = await getDoc(docRef); // retrieve user data from database
-        let myHistory = docSnap.data().sellHistory.recent; // get recipt data from DB
+        let myHistory;
+        let completed;
+
+        try {
+          myHistory = docSnap.data().sellHistory.recent; // get recipt data from DB
+          completed = docSnap.data().sellHistory.completed; // get recipt data from DB			sellHistory: {recent: recent, completed: myRecipt},
+        } catch (error) {
+          console.log(error);
+        }
+
         // console.log(myHistory);
-        let completed = docSnap.data().sellHistory.completed; // get recipt data from DB			sellHistory: {recent: recent, completed: myRecipt},
         if (!completed) {
           //
           completed = []; //

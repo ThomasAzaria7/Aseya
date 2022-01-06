@@ -39,6 +39,7 @@ export default {
   },
   beforeMount() {},
   mounted() {
+    this.$store.dispatch("items/getStoreItems");
     this.$store.dispatch("UserState/callForToken");
     this.$store.dispatch("UserState/retreiveToken", "myToken");
     const auth = getAuth();

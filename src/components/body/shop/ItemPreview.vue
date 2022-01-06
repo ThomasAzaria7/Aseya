@@ -21,12 +21,19 @@
 
         <div class="formControl">
           <label for>Select your Style</label>
-          <select name id>
+          <select v-model="type" v-if="typeArr">
             <option selected disabled hidden>select</option>
-            <option value>D</option>
-            <option value>C</option>
-            <option value>B</option>
-            <option value>A</option>
+            <option v-for="item in typeArr" :key="item" :value="item">{{item}}</option>
+          </select>
+          <label for>Select your color</label>
+          <select v-model="color">
+            <option selected disabled hidden>select</option>
+            <option v-for="item in colorArr" :key="item" :value="item">{{item}}</option>
+          </select>
+          <label for>Select your size</label>
+          <select v-model="size">
+            <option selected disabled hidden>select</option>
+            <option v-for="item in sizeArr" :key="item" :value="item">{{item}}</option>
           </select>
         </div>
         <!--  -->
@@ -108,7 +115,15 @@ export default {
         "https://static.wixstatic.com/media/4663cc_646e17d9620242ac9ba65edeed2062e6~mv2.png/v1/fill/w_625,h_938,al_c,q_90,usm_0.66_1.00_0.01/4663cc_646e17d9620242ac9ba65edeed2062e6~mv2.webp",
         "https://static.wixstatic.com/media/4663cc_f4d0890f69004da782c60d368f1c652d~mv2_d_3456_5184_s_4_2.jpg/v1/fill/w_489,h_734,al_c,q_80,usm_0.66_1.00_0.01/4663cc_f4d0890f69004da782c60d368f1c652d~mv2_d_3456_5184_s_4_2.webp",
         "https://static.wixstatic.com/media/4663cc_3c0e79bd3f2a498b8070bfb320d84a55~mv2.png/v1/fill/w_625,h_938,al_c,q_90,usm_0.66_1.00_0.01/4663cc_3c0e79bd3f2a498b8070bfb320d84a55~mv2.webp"
-      ]
+      ],
+
+      type: "",
+      size: "",
+      color: "",
+      //
+      colorArr: [],
+      sizeArr: [],
+      typeArr: []
     };
   },
 
@@ -117,6 +132,15 @@ export default {
     // console.log(this.items);
     // console.log(this.$store.getters["items/getItems"][0]);
     // console.log(this.$store.getters["items/getdata"]);
+
+    setTimeout(() => {
+      console.log("dettttttaillls", this.getItemData.itemDetail);
+      this.colorArr = this.getItemData.itemDetail.color;
+      this.typeArr = this.getItemData.itemDetail.type;
+      this.sizeArr = this.getItemData.itemDetail.size;
+
+      console.log("colorARR", this.colorArr);
+    }, 2000);
   },
   mounted() {
     this.quantity = 1;
@@ -199,7 +223,17 @@ export default {
       const userUID = auth.uid;
       console.log(this.getItemData);
 
+      console.log("type selected", this.type);
+
       console.log("cost of itemsss", this.getItemData.cost);
+
+      //update fields
+
+      this.getItemData.itemDetail = {
+        color: this.color,
+        size: this.size,
+        type: this.type
+      };
 
       const userData = {
         item: this.getItemData,
@@ -270,7 +304,7 @@ export default {
       }
 
       .formControl {
-        width: 100%;
+        width: 50%;
         margin: 10px 0;
         box-sizing: border-box;
 
@@ -280,7 +314,7 @@ export default {
         }
 
         input {
-          width: 10%;
+          width: 30%;
           box-sizing: border-box;
         }
 

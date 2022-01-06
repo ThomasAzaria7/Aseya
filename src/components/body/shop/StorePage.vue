@@ -53,6 +53,19 @@
           <p>${{ item.exchangePrice }} {{currency.type}}</p>
         </div>
       </div>
+
+      <div class="items" v-for="item in storeItems" :key="item.code">
+        <router-link :to="'/store/' + item.code">
+          <div class="imageBox">
+            <img :src="item.imgLink" alt />
+          </div>
+        </router-link>
+        <div class="textDescription">
+          <h2>{{ item.name }}</h2>
+
+          <p>${{ item.exchangePrice }} {{currency.type}}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +89,10 @@ export default {
     currency(currencySelected) {
       console.log(currencySelected);
       return this.$store.getters["items/getCurrencyValue"];
+    },
+
+    storeItems() {
+      return this.$store.getters["items/getStoreItems"];
     }
   },
   methods: {
