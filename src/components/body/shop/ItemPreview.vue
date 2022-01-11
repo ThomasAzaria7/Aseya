@@ -224,7 +224,6 @@ export default {
       console.log(this.getItemData);
 
       console.log("type selected", this.type);
-
       console.log("cost of itemsss", this.getItemData.cost);
 
       //update fields
@@ -252,7 +251,7 @@ export default {
   background-color: #eeeeee;
 
   .itemDisplay {
-    padding: 50px 10%;
+    padding: 30px 10%;
     background-color: rgba(255, 255, 255, 0.637);
     height: 70vh;
     display: grid;
@@ -261,6 +260,7 @@ export default {
     .itemImgageBox {
       height: 70vh;
       position: relative;
+      background-color: rgb(255, 255, 255);
 
       &__altImages {
         position: absolute;
@@ -286,7 +286,7 @@ export default {
       img {
         height: 100%;
         width: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
     }
     .selectionBox {
