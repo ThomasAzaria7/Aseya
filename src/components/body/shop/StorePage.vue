@@ -42,7 +42,7 @@
       <button @click="myData">getdata</button>-->
 
       <div class="items" v-for="item in getdata" :key="item.code">
-        <router-link :to="'/store/' + item.code">
+        <router-link :to="'/marketplace/' + item.code">
           <div class="imageBox">
             <img :src="item.imgLink" alt />
           </div>
@@ -55,7 +55,7 @@
       </div>
 
       <div class="items" v-for="item in storeItems" :key="item.code">
-        <router-link :to="'/store/' + item.code">
+        <router-link :to="'/marketplace/' + item.code">
           <div class="imageBox">
             <img :src="item.imgLink" alt />
           </div>
@@ -86,8 +86,8 @@ export default {
       return this.$store.getters["items/getItems"];
       // return null;
     },
-    currency(currencySelected) {
-      console.log(currencySelected);
+    currency() {
+      // console.log(currencySelected);
       return this.$store.getters["items/getCurrencyValue"];
     },
 
@@ -97,18 +97,17 @@ export default {
   },
   methods: {
     myData() {
-      const dataX = this.$store.getters["items/getSelectedItem"];
-      console.log(dataX);
-      const x = this.$store.getters["items/getItems"];
-      console.log(x);
-
+      // const dataX = this.$store.getters["items/getSelectedItem"];
+      // console.log(dataX);
+      // const x = this.$store.getters["items/getItems"];
+      // console.log(x);
       // console.log();
     },
     sendData() {
       this.$store.dispatch("items/addProductToStore", data);
     },
     created() {
-      console.log("hi");
+      // console.log("hi");
       // console.log(data);
     }
   }

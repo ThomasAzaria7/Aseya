@@ -14,39 +14,51 @@
         <div>
           <br />
           <h2>{{ getItemData.name }}</h2>
+          <hr />
           <p>{{ getItemData.description }}</p>
 
           <p>$ {{ getItemData.exchangePrice }} {{getCurrency.type}}</p>
         </div>
 
         <div class="formControl">
-          <label for>Select your Style</label>
-          <select v-model="type" v-if="typeArr">
-            <option selected disabled hidden>select</option>
-            <option v-for="item in typeArr" :key="item" :value="item">{{item}}</option>
-          </select>
-          <label for>Select your color</label>
-          <select v-model="color">
-            <option selected disabled hidden>select</option>
-            <option v-for="item in colorArr" :key="item" :value="item">{{item}}</option>
-          </select>
-          <label for>Select your size</label>
-          <select v-model="size">
-            <option selected disabled hidden>select</option>
-            <option v-for="item in sizeArr" :key="item" :value="item">{{item}}</option>
-          </select>
+          <div v-if="typeArr.length !== 0">
+            <label for>Select your Style</label>
+            <select v-model="type">
+              <option selected disabled hidden>select</option>
+              <option v-for="item in typeArr" :key="item" :value="item">{{item}}</option>
+            </select>
+          </div>
+          <div v-if="colorArr.length !== 0">
+            <label for>Select your color</label>
+            <select v-model="color">
+              <option selected disabled hidden>select</option>
+              <option v-for="item in colorArr" :key="item" :value="item">{{item}}</option>
+            </select>
+          </div>
+          <div v-if="sizeArr.length !== 0">
+            <label for>Select your size</label>
+            <select v-model="size">
+              <option selected disabled hidden>select</option>
+              <option v-for="item in sizeArr" :key="item" :value="item">{{item}}</option>
+            </select>
+          </div>
         </div>
         <!--  -->
         <div class="formControl">
-          <label for>Quantity</label>
-          <input type="number" v-model="quantity" />
+          <div>
+            <label for>Quantity</label>
+            <input type="number" v-model="quantity" />
+          </div>
         </div>
+        <br />
         <!--  -->
-        <div class="buttons">
-          <button @click="addItemToCart">Add to cart</button>
-          <i @click="addToFavList" class="fas fa-heart">
-            <span>fav</span>
-          </i>
+        <div class="buttons formControl">
+          <div>
+            <button @click="addItemToCart">Add to cart</button>
+            <i @click="addToFavList" class="fas fa-heart">
+              <span>fav</span>
+            </i>
+          </div>
         </div>
         <p class="helpText" v-if="checkIfItemExists">
           <span style="color:red; font-size:20px">*</span> This item exists in your cart, please change Quantity Instead.
@@ -134,17 +146,19 @@ export default {
     // console.log(this.$store.getters["items/getdata"]);
 
     setTimeout(() => {
-      console.log("dettttttaillls", this.getItemData.itemDetail);
+      // console.log("dettttttaillls", this.getItemData.itemDetail);
       this.colorArr = this.getItemData.itemDetail.color;
       this.typeArr = this.getItemData.itemDetail.type;
       this.sizeArr = this.getItemData.itemDetail.size;
 
-      console.log("colorARR", this.colorArr);
-    }, 2000);
+      console.log(this.getItemData.itemDetail);
+
+      // console.log("colorARR", this.colorArr);
+    }, 3000);
   },
   mounted() {
     this.quantity = 1;
-    console.log(this.quantity);
+    // console.log(this.quantity);
 
     this.getDisplayItem();
     window.scrollTo(0, 0);
@@ -175,7 +189,7 @@ export default {
 
     quantity(newVal, oldVal) {
       if (newVal !== oldVal) {
-        console.log("new value", newVal, "oldVal", oldVal);
+        // console.log("new value", newVal, "oldVal", oldVal);
         this.getItemData.quantity = newVal;
       }
     }
@@ -190,7 +204,7 @@ export default {
   },
   methods: {
     getDisplayItem(code) {
-      console.log("my code", code);
+      // console.log("my code", code);
 
       this.$router.replace(code);
       const itemCode = this.$route.params;
@@ -215,16 +229,16 @@ export default {
         uid: userUID
       };
       this.$store.dispatch("UserState/putToFav", userData);
-      console.log("clickws");
+      // console.log("clickws");
     },
     addItemToCart() {
       // value = favCart|| shopCart
       const auth = this.$store.getters["UserState/getAuthState"];
       const userUID = auth.uid;
-      console.log(this.getItemData);
+      // console.log(this.getItemData);
 
-      console.log("type selected", this.type);
-      console.log("cost of itemsss", this.getItemData.cost);
+      // console.log("type selected", this.type);
+      // console.log("cost of itemsss", this.getItemData.cost);
 
       //update fields
 
@@ -251,7 +265,7 @@ export default {
   background-color: #eeeeee;
 
   .itemDisplay {
-    padding: 30px 10%;
+    padding: 20px 10%;
     background-color: rgba(255, 255, 255, 0.637);
     height: 70vh;
     display: grid;
@@ -292,11 +306,18 @@ export default {
     .selectionBox {
       width: 100%;
       // flex: 0 0 50%;
-      background-color: #eeeeee86;
+      background-color: #ffffff;
       padding: 0 10%;
       box-sizing: border-box;
+      border-left: solid 2px rgba(134, 134, 134, 0.075);
+
       h2 {
         margin: 0;
+        color: #68016b;
+      }
+      p {
+        color: #450347;
+        font-size: 18px;
       }
 
       .fa-heart {
@@ -304,30 +325,37 @@ export default {
       }
 
       .formControl {
-        width: 50%;
+        width: 70%;
         margin: 10px 0;
         box-sizing: border-box;
+        div {
+          display: flex;
 
-        select {
-          // width: 100%;
-          box-sizing: border-box;
-        }
+          select {
+            // width: 100%;
+            box-sizing: border-box;
+            color: #68016b;
+          }
 
-        input {
-          width: 30%;
-          box-sizing: border-box;
-        }
+          input {
+            width: 30%;
+            box-sizing: border-box;
+            color: #68016b;
+          }
 
-        label {
-          margin: 5px 0;
-          padding: 0;
-        }
+          label {
+            margin: 5px 0;
+            padding: 0;
+            font-size: 20px;
+            color: #68016b;
+          }
 
-        & > * {
-          padding: 5px;
-          box-sizing: border-box;
-          display: block;
-          width: 100%;
+          & > * {
+            padding: 5px;
+            box-sizing: border-box;
+            display: block;
+            width: 100%;
+          }
         }
       }
       .helpText {
@@ -336,10 +364,8 @@ export default {
       }
 
       .buttons {
-        display: flex;
-        position: relative;
+        // position: relative;
         cursor: pointer;
-        gap: 20px;
 
         i {
           position: relative;

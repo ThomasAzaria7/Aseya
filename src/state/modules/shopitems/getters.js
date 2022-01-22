@@ -6,7 +6,7 @@ export default {
   },
 
   getSelectedItem(state) {
-    console.log(state.selectedItem);
+    // console.log(state.selectedItem);
 
     // state.selectedItem[0].exchangePrice * state.currency.value;
 

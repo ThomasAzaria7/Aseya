@@ -32,20 +32,20 @@ export default {
     // console.log(state, payload);
 
     if (payload === "google") {
-      console.log(payload);
+      // console.log(payload);
     }
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then(result => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log(token);
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // console.log(token);
 
         // The signed-in user info.
         const user = result.user;
         const userId = user.uid;
-        console.log(user);
+        // console.log(user);
 
         /////////////////////////////
         // only if new user
@@ -55,8 +55,7 @@ export default {
         docSnap.then().then(data => {
           if (data.exists()) {
             /// user exists
-
-            console.log("Document data:", data.data());
+            // console.log("Document data:", data.data());
           } else {
             // run if no user profile found in database
             // doc.data() will be undefined in this case
@@ -90,7 +89,18 @@ export default {
                 provider: payload // usepayload to get dcoument name information
               });
 
-              console.log("Document written with ID: ", docSnap);
+              //
+              // send  welcome email
+              fetch("http://localhost:3000/my-server/register-welcome", {
+                headers: {
+                  "content-type": "application/json"
+                },
+                method: "POST",
+                body: JSON.stringify({ email: user.email })
+              }).then(y => console.log(y));
+              //
+
+              console.log("Document written with IDX: ", docSnap);
             } catch (e) {
               console.error("Error adding document: ", e);
             }
@@ -119,7 +129,7 @@ export default {
   },
 
   authenticatedStatus(state, user) {
-    console.log("authhh", user);
+    // console.log("authhh", user);
 
     return (state.auth = user);
     //
@@ -127,7 +137,7 @@ export default {
 
   createProfile() {
     const userId = auth.currentUser.uid;
-    console.log(userId);
+    // console.log(userId);
 
     let userSchema = {
       address: "",
@@ -147,18 +157,19 @@ export default {
       // sellHistory: [],
       // buyHistory: [],
       mySellProductList: [{}],
-      myFavList: [{}],
-      myCart: [{}]
+      myFavList: [],
+      myCart: []
     };
 
     try {
       // contact firebase to add user using
       const docRef = updateDoc(doc(db, "users", userId), userSchema);
+
       console.log("Document written with ID: ", docRef);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-    console.log(userSchema);
+    // console.log(userSchema);
   },
 
   /*
@@ -180,7 +191,7 @@ export default {
 
     if (cartItems.length == 0) {
       // check if cart in db is empty
-      console.log("im here");
+      // console.log("im here");
       cartItems = [item];
 
       await updateDoc(docRef, {
@@ -189,22 +200,22 @@ export default {
     } else {
       // if cart is not empty.
       for (let x = 0; x < cartItems.length; x++) {
-        console.log("cart items", cartItems[x], "my item", item.Proxy);
+        // console.log("cart items", cartItems[x], "my item", item.Proxy);
         if (
           cartItems[x].code == item.code &&
           cartItems[x].quantity == item.quantity
         ) {
-          console.log("identical");
+          // console.log("identical");
           return;
           //
         } else {
-          console.log("not identical");
+          // console.log("not identical");
 
           cartItems.filter((x, i) => {
             if (x.code == item.code) {
               cartItems.splice(i, 1);
             }
-            console.log(x, i);
+            // console.log(x, i);
           });
           cartItems.unshift(item);
           await updateDoc(docRef, {
@@ -235,18 +246,18 @@ export default {
   },
 
   async putItemInFav(state, userData) {
-    console.log(state, userData);
+    // console.log(state, userData);
 
     const item = userData.item; //
     const docRef = doc(db, "users", userData.uid); // refrence to user location on database based on individual user UID;
     const docSnap = await getDoc(docRef); // retrieve user data from database
     const retrievedFavItems = docSnap.data().myFavList; //  get FavLIst items
-    console.log(retrievedFavItems);
+    // console.log(retrievedFavItems);
     let favItems = retrievedFavItems;
     //
     if (favItems.length == 0) {
       // check if cart in db is empty
-      console.log("im here");
+      // console.log("im here");
       favItems = [item];
 
       await updateDoc(docRef, {
@@ -255,22 +266,22 @@ export default {
     } else {
       // if cart is not empty.
       for (let x = 0; x < favItems.length; x++) {
-        console.log("cart items", favItems[x], "my item", item.Proxy);
+        // console.log("cart items", favItems[x], "my item", item.Proxy);
         if (
           favItems[x].code == item.code &&
           favItems[x].quantity == item.quantity
         ) {
-          console.log("identical");
+          // console.log("identical");
           return;
           //
         } else {
-          console.log("not identical");
+          // console.log("not identical");
 
           favItems.filter((x, i) => {
             if (x.code == item.code) {
               favItems.splice(i, 1);
             }
-            console.log(x, i);
+            // console.log(x, i);
           });
           favItems.unshift(item);
           await updateDoc(docRef, {
@@ -305,22 +316,26 @@ export default {
   //
 
   async getCartItemsFromDB(state, uid) {
-    console.log(state, uid);
+    // console.log(state, uid);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
-    const docSnap = await getDoc(docRef); // retrieve user data from database
-    console.log(docSnap.data().myCart);
+    // const docSnap = await getDoc(docRef); // retrieve user data from database
+
     //
     let retreieveCartItems = [];
     //
 
-    await onSnapshot(docRef, doc => {
-      retreieveCartItems = doc.data().myCart;
-      state.cartItems = retreieveCartItems;
-      state.cartTotal = retreieveCartItems.length;
-      console.log("mycartss", retreieveCartItems);
+    try {
+      await onSnapshot(docRef, doc => {
+        retreieveCartItems = doc.data().myCart;
+        state.cartItems = retreieveCartItems;
+        state.cartTotal = retreieveCartItems.length;
+        // console.log("mycartss", retreieveCartItems);
 
-      // console.log("Current data: ", );
-    });
+        // console.log("Current data: ", );
+      });
+    } catch (error) {
+      retreieveCartItems = [];
+    }
 
     // const retrievedCartItems = docSnap.data().myFavList; //  get FavLIst items
     // console.log(retrievedCartItems, state);
@@ -329,19 +344,21 @@ export default {
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
     let retreieveFavItems = [];
 
-    await onSnapshot(docRef, doc => {
-      retreieveFavItems = doc.data().myFavList;
-      state.favItems = retreieveFavItems;
-      state.favTotal = retreieveFavItems.length;
-      console.log("myfavas", retreieveFavItems);
-
-      // console.log("Current data: ", );
-    });
+    try {
+      await onSnapshot(docRef, doc => {
+        retreieveFavItems = doc.data().myFavList;
+        state.favItems = retreieveFavItems;
+        state.favTotal = retreieveFavItems.length;
+        // console.log("myfavas", retreieveFavItems);
+      });
+    } catch (error) {
+      // console.log(error);
+    }
   },
 
   //deleting items from user cart and favourite
   async removeItemFromCart(state, userData) {
-    console.log(state, userData.uid);
+    // console.log(state, userData.uid);
     const docRef = doc(db, "users", userData.uid);
     const docSnap = await getDoc(docRef); // retrieve user data from database
     let retrievedCartItems = docSnap.data().myCart;
@@ -353,10 +370,10 @@ export default {
     await updateDoc(docRef, {
       myCart: updateItems
     });
-    console.log(updateItems); //
+    // console.log(updateItems); //
   },
   async removeItemFromFav(state, userData) {
-    console.log(state, userData.uid);
+    // console.log(state, userData.uid);
     const docRef = doc(db, "users", userData.uid);
     const docSnap = await getDoc(docRef); // retrieve user data from database
     let retrievedFavItems = docSnap.data().myFavList;
@@ -368,7 +385,7 @@ export default {
     await updateDoc(docRef, {
       myFavList: updateItems
     });
-    console.log(updateItems); //
+    // console.log(updateItems); //
   },
 
   async makeBuyerRecipts(state, payload) {
@@ -492,7 +509,7 @@ export default {
           //
           let itemPrice = userItems[i].unit_amount.value;
           // loop through items belonging to a single user to retireve total cost
-          console.log("my iiiiiittttteeeemmms", userItems);
+          // consol.log("my iiiiiittttteeeemmms", userItems);
 
           // add extra item details to 'userItemms here , i.e userItems = xtraObject
 
@@ -545,9 +562,9 @@ export default {
         // if recipt does NOT exists push current recipt on to the database/ otherwise skip do not save,
         if (!reciptExist) {
           myRecipt.unshift(reciptInfo);
-          console.log("item added to recippts");
+          // consol.log("item added to recippts");
         } else {
-          console.log("skip");
+          // consol.log("skip");
         }
 
         await updateDoc(docRef, {
@@ -566,7 +583,7 @@ export default {
    */
 
   async soldItemRecipts(state, uid) {
-    console.log(state);
+    // console.log(state);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
     let myRecipt;
     await onSnapshot(docRef, doc => {
@@ -587,7 +604,7 @@ export default {
     let myRecipt;
     const uid = payload.uid;
     const reciptId = payload.id;
-    console.log(state, payload, "uid", uid);
+    // consol.log(state, payload, "uid", uid);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
     const docSnap = await getDoc(docRef); // retrieve user data from database
     let recent = docSnap.data().sellHistory.recent; // get recipt data from DB
@@ -598,32 +615,32 @@ export default {
     recent.filter((x, i) => {
       if (x.reciptId === reciptId) {
         index = i;
-        console.log("itemFound", i);
+        // consol.log("itemFound", i);
       }
     });
-    console.log(index);
+    // consol.log(index);
     const item = recent.splice(index, 1)[0];
-    console.log("item removed", item);
-    console.log("recentItems", recent);
+    // consol.log("item removed", item);
+    // consol.log("recentItems", recent);
 
     //
 
     item.payoutReciptId = payload.payoutReciptId;
     item.claimed = true;
 
-    console.log("completed", completed);
+    // consol.log("completed", completed);
 
     if (!completed) {
       myRecipt = [item];
     } else {
       myRecipt = completed;
       myRecipt.unshift(item);
-      console.log("adding");
+      // consol.log("adding");
     }
 
     state.sellerClaimedRecipt = myRecipt;
 
-    console.log("recipt", recent);
+    // consol.log("recipt", recent);
     await updateDoc(docRef, {
       sellHistory: { recent: recent, completed: myRecipt }
     });
@@ -638,18 +655,18 @@ export default {
   async getClaimedItemsfromDB(state, payload) {
     const uid = payload.uid;
     let myRecipt;
-    console.log("uid", uid);
+    // consol.log("uid", uid);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
 
     await onSnapshot(docRef, doc => {
       myRecipt = doc.data().sellHistory.completed;
-      console.log(myRecipt);
+      // consol.log(myRecipt);
       state.sellerClaimedRecipt = myRecipt;
     });
   },
 
   async boughtItemRecipts(state, uid) {
-    console.log(state);
+    // consol.log(state);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
     // const docSnap = await getDoc(docRef); // retrieve user data from database
     let myRecipt;
@@ -714,26 +731,26 @@ export default {
   /* create communication between seller and buyer */
 
   async sellerBuyerCommunication(state, data) {
-    console.log(data);
+    // consol.log(data);
 
     const uid = data.product.sku;
     const reciptId = data.recipt_id;
     const productCode = data.product.name;
-    const message = data.message;
+    // const message = data.message;
     let myMessages = {};
 
-    console.log(uid, reciptId);
+    // consol.log(uid, reciptId);
     const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
     onSnapshot(docRef, doc => {
       // myHistory = doc.data().sellHistory;
       const recipts = doc.data().sellHistory; // get recipt arrays
-      console.log(recipts);
+      // consol.log(recipts);
 
       const myMesssageContainer = recipts.filter(x => x.reciptId === reciptId);
 
-      console.log(
-        myMesssageContainer[0].items.filter(x => x.name === productCode)
-      );
+      // console.log(
+      //   myMesssageContainer[0].items.filter(x => x.name === productCode)
+      // );
 
       let itemIndex;
 
@@ -753,13 +770,13 @@ export default {
 
       let products = {};
 
-      console.log(message);
-      console.log(itemIndex);
+      // console.log(message);
+      // console.log(itemIndex);
 
       let selectedItemName = myMesssageContainer[0].items[itemIndex].name;
 
       products[selectedItemName] = [{ message: "hi" }, { message: "helo" }];
-      console.log(products);
+      // console.log(products);
 
       myMessages[reciptId] = products;
       //
@@ -771,6 +788,6 @@ export default {
     updateDoc(docRef, {
       inbox: myMessages
     });
-    console.log(myMessages);
+    // console.log(myMessages);
   }
 };

@@ -48,10 +48,9 @@ export default {
         headers: {
           "content-type": "application/json"
         },
-        method: "POST"
-      })
-        .then(x => x.json())
-        .then(y => console.log(y));
+        method: "POST",
+        body: JSON.stringify({ email: "yungblackhumbl3@gmail.com" })
+      }).then(y => console.log(y));
     },
 
     subscribed() {

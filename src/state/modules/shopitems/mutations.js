@@ -89,7 +89,7 @@ export default {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log(docSnap.data().storeProducts);
+      // console.log(docSnap.data().storeProducts);
       return (state.shopItems = docSnap.data().storeProducts);
     } else {
       try {

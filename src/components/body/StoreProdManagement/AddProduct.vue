@@ -132,7 +132,7 @@ export default {
         altImages: [""],
         description: this.description,
         price: this.price,
-        cost: this.price,
+        cost: 0,
         exchangePrice: this.price,
         quantity: 1,
         itemDetail: {

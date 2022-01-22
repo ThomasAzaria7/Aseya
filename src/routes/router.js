@@ -25,6 +25,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/marketplace", component: StorePage },
+    { path: "/marketplace/:id", component: ItemPreview },
     { path: "/add-a-product", component: AddProduct },
     {
       path: "/clothing",
@@ -35,7 +36,6 @@ const router = createRouter({
       ]
     },
     { path: "/", component: HomePage },
-    { path: "/store/:id", component: ItemPreview },
     { path: "/my-cart", component: ShopCart },
     {
       path: "/search-Result",

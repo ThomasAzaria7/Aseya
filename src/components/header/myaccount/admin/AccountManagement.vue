@@ -85,7 +85,7 @@ export default {
   computed: {
     authState() {
       const auth = this.$store.getters["UserState/getAuthState"];
-      console.log(auth);
+      // console.log(auth);
       return auth;
     }
   },
@@ -114,13 +114,17 @@ export default {
     },
 
     getsellerRecipt() {
-      const uid = this.authState.uid;
-      this.$store.dispatch("UserState/retrieveSellerRecipts", uid);
+      if (this.authState) {
+        const uid = this.authState.uid;
+        this.$store.dispatch("UserState/retrieveSellerRecipts", uid);
+      }
     },
 
     getBuyerRecipt() {
-      const uid = this.authState.uid;
-      this.$store.dispatch("UserState/retrieveBuyerRecipts", uid);
+      if (this.authState) {
+        const uid = this.authState.uid;
+        this.$store.dispatch("UserState/retrieveBuyerRecipts", uid);
+      }
     },
 
     sendPayouts() {

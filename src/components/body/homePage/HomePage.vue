@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     viewProduct() {
-      this.$router.replace("/store/seddggs344");
+      this.$router.replace("/marketplace/seddggs344");
     }
   }
 };

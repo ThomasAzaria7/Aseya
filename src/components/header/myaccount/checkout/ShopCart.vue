@@ -42,7 +42,11 @@
         <button @click="sellerRecipts">test seller recipt</button>
         <!-- <h2>{{ getToken }}</h2> -->
         <!-- <button @click="buyerRecipts()">buyer recipt testing</button> -->
-        <div id="paypal-button-container"></div>
+        <div v-if="removeButton">
+          <div id="paypal-button-container"></div>
+        </div>
+
+        <button @click="remove">remove</button>
       </div>
     </div>
   </div>
@@ -59,23 +63,70 @@ export default {
       cartTotalPrice: 0,
       //app payment
       accessToken: "",
-      mydata: {}
+      mydata: {},
+      removeButton: true
     };
   },
   mounted() {
     this.$store.dispatch("UserState/retreiveToken", "myToken");
-    const mytoken = JSON.parse(this.getToken);
-    let myItems = null;
-    let mydata = null;
-    let uid = null;
+    // call paypal here
+    this.getPaypal();
+  },
+  watch: {},
+  computed: {
+    shopCartItems() {
+      return this.$store.getters["UserState/refreshCart"]; // get cart items from database
+    },
 
-    setTimeout(() => {
-      myItems = this.getItemObject();
-      mydata = JSON.stringify({
-        token: mytoken,
-        items: myItems
-      });
-      uid = this.getUser;
+    getTotalPrice() {
+      return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
+    },
+
+    getFavTotal() {
+      return this.$store.getters["UserState/getfavTotal"]; // get total number of items in fav list
+    },
+
+    // getUser() {
+    //   // return this.$store.getters["UserState/getAuthState"];
+    // }
+
+    ///app apayment
+    getCurrency() {
+      return this.$store.getters["items/getCurrencyValue"];
+    },
+    // shopCartItems() {
+    //   return this.$store.getters["UserState/refreshCart"]; // get cart items from database
+    // },
+    // getTotalPrice() {
+    //   return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
+    // },
+    getUser() {
+      return this.$store.getters["UserState/getAuthState"]; //  get total cart item priice
+    },
+    getToken() {
+      return this.$store.getters["UserState/getMyToken"];
+    }
+  },
+
+  methods: {
+    getPaypal() {
+      this.removeButton = true;
+      const mytoken = JSON.parse(this.getToken);
+      let myItems = null;
+      let mydata = null;
+      let uid = null;
+
+      setTimeout(() => {
+        myItems = this.getItemObject();
+        mydata = JSON.stringify({
+          token: mytoken,
+          items: myItems
+        });
+        uid = this.getUser;
+
+        // call paypal here
+        // this.getPaypal(mydata, uid);
+      }, 3000);
 
       window.paypal
         .Buttons({
@@ -135,56 +186,25 @@ export default {
           }
         })
         .render("#paypal-button-container");
-    }, 3000);
-  },
-  watch: {},
-  computed: {
-    shopCartItems() {
-      return this.$store.getters["UserState/refreshCart"]; // get cart items from database
     },
-
-    getTotalPrice() {
-      return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
-    },
-
-    getFavTotal() {
-      return this.$store.getters["UserState/getfavTotal"]; // get total number of items in fav list
-    },
-
-    // getUser() {
-    //   // return this.$store.getters["UserState/getAuthState"];
-    // }
-
-    ///app apayment
-    getCurrency() {
-      return this.$store.getters["items/getCurrencyValue"];
-    },
-    // shopCartItems() {
-    //   return this.$store.getters["UserState/refreshCart"]; // get cart items from database
-    // },
-    // getTotalPrice() {
-    //   return this.$store.getters["UserState/cartTotalPrice"]; //  get total cart item priice
-    // },
-    getUser() {
-      return this.$store.getters["UserState/getAuthState"]; //  get total cart item priice
-    },
-    getToken() {
-      return this.$store.getters["UserState/getMyToken"];
-    }
-  },
-
-  methods: {
     checkCart() {},
     removeItemFromCart(itemCode) {
       const auth = this.$store.getters["UserState/getAuthState"];
-      // console.log(auth.uid);
-      // console.log(itemCode);
-      // console.log(this.shopCartItems);
       const userData = {
         uid: auth.uid,
         itemId: itemCode
       };
       this.$store.dispatch("UserState/deleteCartItem", userData);
+      this.getItemObject();
+      this.removeButton = false;
+
+      setTimeout(() => {
+        this.removeButton = true;
+      }, 200);
+
+      setTimeout(() => {
+        this.getPaypal();
+      }, 500);
     },
 
     /// app payment
@@ -290,13 +310,9 @@ export default {
             {
               name: this.shopCartItems[i].name,
               // "second Product Name" /* Shows within upper-right dropdown during payment approval */,
-              description: this.shopCartItems[i].description,
+              description: this.shopCartItems[i].name,
               sku: this.shopCartItems[i].sellerID,
               // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
-              size: "L",
-              item_details: {
-                weight: "100kg"
-              },
               unit_amount: {
                 currency_code: this.getCurrency.type,
                 value: this.shopCartItems[i].exchangePrice
@@ -308,12 +324,9 @@ export default {
           // console.log("theresss");
           paypalItems.push({
             name: this.shopCartItems[i].name, // "second Product Name" /* Shows within upper-right dropdown during payment approval */,
-            description: this.shopCartItems[i].description, // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
+            description: this.shopCartItems[i].name, // "Optional descriptive text.." /* Item details will also be in the completed paypal.com transaction view */,
             sku: this.shopCartItems[i].sellerID,
-            size: "L",
-            item_details: {
-              weight: "100kg"
-            },
+
             unit_amount: {
               currency_code: this.getCurrency.type,
               value: this.shopCartItems[i].exchangePrice
@@ -367,6 +380,7 @@ export default {
   margin-bottom: 50px;
   background-color: #eeeeee;
   margin: 0;
+
   h2 {
     background-color: rgba(253, 255, 127, 0.37);
     padding: 5px;
@@ -411,7 +425,6 @@ export default {
           justify-content: space-evenly;
           flex: 0 0 70%;
           background-color: white;
-
           .itemDetail {
             display: flex;
             flex-direction: column;
