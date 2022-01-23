@@ -81,10 +81,10 @@
 
     <div class="newlyArrivals">
       <div class="newlyArrivals__itemBox item1">
-        <h2>hellow world</h2>
+        <picture-slide></picture-slide>
       </div>
       <div class="newlyArrivals__itemBox item2">
-        <h2>hellow world</h2>
+        <picture-slide></picture-slide>
       </div>
     </div>
 
@@ -266,7 +266,7 @@ h2 {
   position: relative;
   // background-image: url("https://static.wixstatic.com/media/11062b_310e55b9b2c1408692560493e8049629~mv2.jpg/v1/crop/x_0,y_553,w_3000,h_894/fill/w_1213,h_361,al_c,q_85,usm_0.66_1.00_0.01/African-Textiles.webp");
   // background-color: green;
-  height: 75vh;
+  height: 80vh;
 
   img {
     width: 100%;
@@ -357,17 +357,17 @@ h2 {
 .newlyArrivals {
   position: relative;
   display: grid;
-  height: 80vh;
+  height: 88vh;
   // grid-template-columns: auto auto; // b;ackground-color: green;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  background-color: white;
 
   // background-image: url("https://images.pexels.com/photos/6939165/pexels-photo-6939165.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-  gap: 10px;
-  padding: 50px 10%;
+  gap: 5px;
+  padding: 50px 5px;
+
   &__itemBox {
     position: relative;
-    border-radius: 25% 0;
+    border-radius: 15% 0;
 
     &::before {
       content: "";
@@ -376,8 +376,7 @@ h2 {
       bottom: 0;
       right: 0;
       left: 0;
-      border-radius: 25% 0;
-      background-color: rgba(100, 41, 238, 0.219);
+      background-color: rgba(132, 1, 150, 0.219);
     }
     h2 {
       color: white;
@@ -387,14 +386,15 @@ h2 {
       margin: 0;
     }
   }
-  .item1 {
-    position: relative;
-    background-image: url("https://images.pexels.com/photos/932401/pexels-photo-932401.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-    background-size: cover;
-  }
-  .item2 {
-    background-image: url("https://images.pexels.com/photos/1230352/pexels-photo-1230352.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-    background-size: cover;
-  }
+
+  // .item1 {
+  //   position: relative;
+  //   background-image: url("https://images.pexels.com/photos/932401/pexels-photo-932401.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  //   background-size: cover;
+  // }
+  // .item2 {
+  //   background-image: url("https://images.pexels.com/photos/1230352/pexels-photo-1230352.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  //   background-size: cover;
+  // }
 }
 </style>

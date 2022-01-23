@@ -266,7 +266,7 @@ export default {
 
   .itemDisplay {
     padding: 20px 10%;
-    background-color: rgba(255, 255, 255, 0.637);
+    background-color: rgb(255, 255, 255);
     height: 70vh;
     display: grid;
     grid-template-columns: 50% 50%;
@@ -393,7 +393,7 @@ export default {
   }
 
   .itemDescription {
-    background-color: rgba(255, 255, 255, 0.938);
+    background-color: rgba(255, 255, 255, 0.575);
     height: 80vh;
     // margin: 20px 0;
     position: relative;
@@ -435,7 +435,7 @@ export default {
   .productReccomendations {
     position: relative;
     box-sizing: border-box;
-    background-color: rgba(255, 255, 255, 0.637);
+    background-color: rgb(255, 255, 255);
     padding: 2% 10%;
 
     .itemsContainer {
