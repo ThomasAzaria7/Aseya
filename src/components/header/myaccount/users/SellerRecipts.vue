@@ -76,7 +76,10 @@
                 <p>$ {{ (recipt.total - recipt.PaypalFee).toFixed(2) }}</p>
               </div>
             </div>
-            <button class="claimButton" @click="popUp">claim now</button>
+            <button
+              class="claimButton"
+              @click="popUp(recipt.total,recipt.PaypalFee, recipt.reciptId)"
+            >claim now</button>
 
             <p v-if="payout">payout successful</p>
             <br />
@@ -87,13 +90,13 @@
                 <div v-if="!success" class="check">
                   <p>
                     Do You Want To Proceed with Withdrawal Payment
-                    {{ (recipt.total - recipt.PaypalFee).toFixed(2) }}
+                    {{( price -fee).toFixed(2) }}
                     AUD?
                   </p>
                   <button @click="clear">NO</button>
                   <button
                     @click="
-                      getPaid(recipt.total - recipt.PaypalFee, recipt.reciptId)
+                      getPaid(price - fee, recipt.reciptId)
                     "
                   >YES</button>
                 </div>
@@ -138,9 +141,13 @@
               recipt.payer.name.given_name + " " + recipt.payer.name.surname
               }}
             </li>
-            <li>{{ recipt.payer.payer_id }}</li>
+            <!-- <li>{{ recipt.payer.payer_id }}</li> -->
             <li>{{ recipt.payer.email_address }}</li>
-            <li>{{ recipt.shipping }}</li>
+            <li>
+              <b>shipping address:</b>
+              {{ recipt.shipping.address.address_line_1 }} {{ recipt.shipping.address.admin_area_2}} {{ recipt.shipping.address.admin_area_1}} {{ recipt.shipping.address.country_code}}
+            </li>
+            <!-- <li>{{ recipt.shipping }}</li> -->
             <h4>items Sold</h4>
             <li class="items" v-for="item in recipt.items" :key="item.name">
               <a>{{ item.name }} x{{ item.quantity }}</a>
@@ -189,7 +196,10 @@ export default {
       payout: null,
       modal: false,
       success: false,
-      recentSelected: true
+      recentSelected: true,
+      price: 0,
+      fee: 0,
+      reciptId: ""
     };
   },
   computed: {
@@ -243,11 +253,16 @@ export default {
     clear() {
       this.modal = false;
     },
-    popUp() {
+    popUp(price, fee, id) {
       this.modal = true;
+      console.log(price);
+      this.price = price;
+      this.fee = fee;
+      this.reciptId = id;
+      console.log(id);
     },
     // myMoney() {},
-    getPaid(cost, reciptId) {
+    getPaid(cost) {
       const mytoken = this.$store.getters["UserState/getMyToken"];
       console.log(cost);
       const data = JSON.stringify({
@@ -271,8 +286,10 @@ export default {
           console.log(data);
           const payoutId = data.id.batch_header.payout_batch_id;
           // console.log(data.id.batch_header.payout_batch_id);
+          console.log(this.reciptId);
+
           const userData = {
-            id: reciptId,
+            id: this.reciptId,
             uid: userUid,
             payoutReciptId: payoutId
           };

@@ -7,7 +7,9 @@
           <component :is="Component"></component>
         </transition>
       </router-view>
-      <main-footer></main-footer>
+      <main-footer class="desktopNav"></main-footer>
+
+      <mobile-footer class="mobileFooter"></mobile-footer>
       <!-- <div>{{getAuthData}}</div> -->
     </div>
   </div>
@@ -16,11 +18,14 @@
 <script>
 import MainFooter from "./components/footer/MainFooter.vue";
 // import PictureSlide from './components/body/slideShow/PictureSlide'
+import MobileFooter from "./components/footer/MobileFooter";
+
 // import { db } from "./database/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 export default {
   components: {
-    MainFooter
+    MainFooter,
+    MobileFooter
     // PictureSlide
   },
   data() {
@@ -42,7 +47,9 @@ export default {
     this.$store.dispatch("items/getStoreItems");
     this.$store.dispatch("UserState/callForToken");
     this.$store.dispatch("UserState/retreiveToken", "myToken");
+
     const auth = getAuth();
+
     onAuthStateChanged(auth, user => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -51,6 +58,11 @@ export default {
         this.$store.dispatch("UserState/getCartItems", user.uid);
       } else {
         // User is signed out
+        const GuestUID = localStorage.getItem("uid");
+        console.log(GuestUID);
+        const data = ["guest", GuestUID];
+        this.$store.dispatch("UserState/getFavItems", data);
+        this.$store.dispatch("UserState/getCartItems", data);
         // ...
       }
     });
@@ -93,6 +105,7 @@ export default {
 // }
 .routerContainer {
   overflow: hidden;
+  background-color: #eeeeee;
   // padding-top: 50px;
 }
 
@@ -112,5 +125,23 @@ export default {
 
 .route-leave-active {
   transition: all 0.2s ease-out;
+}
+
+@media (max-width: 766px) {
+  .mobileFooter {
+  }
+
+  .desktopNav {
+    display: none;
+  }
+}
+/* tablets */
+@media (min-width: 768px) and (max-width: 768px) {
+}
+/* laptops and beyond */
+@media (min-width: 769px) {
+  .mobileFooter {
+    display: none;
+  }
 }
 </style>

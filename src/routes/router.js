@@ -12,29 +12,29 @@ import UserAuthentication from "../components/header/myaccount/users/UserAuthent
 import UserProfile from "../components/header/myaccount/users/UserProfile";
 import SellerRecipt from "../components/header/myaccount/users/SellerRecipts";
 import BuyerRecipt from "../components/header/myaccount/users/BuyerRecipt";
-import ClothingPage from "../components/body/clothing/ClothingPage.vue";
-import WomanClothing from "../components/body/clothing/WomanClothing";
-import MenClothing from "../components/body/clothing/MenClothing";
+// import ClothingPage from "../components/body/clothing/ClothingPage.vue";
+// import WomanClothing from "../components/body/clothing/WomanClothing";
+// import MenClothing from "../components/body/clothing/MenClothing";
 import CreateProduct from "../components/header/myaccount/AccountDetails/CreateProduct";
 import ManageProducts from "../components/header/myaccount/AccountDetails/ManageProduct";
 import SearchResult from "../components/body/search/SearchResults.vue";
 import MyResult from "../components/body/search/MyResult.vue";
 import AddProduct from "../components/body/StoreProdManagement/AddProduct.vue";
-
+import NotFound from "../components/pages/NotFound.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/marketplace", component: StorePage },
     { path: "/marketplace/:id", component: ItemPreview },
     { path: "/add-a-product", component: AddProduct },
-    {
-      path: "/clothing",
-      component: ClothingPage,
-      children: [
-        { path: "/clothing/woman", component: WomanClothing, props: true },
-        { path: "men", component: MenClothing }
-      ]
-    },
+    // {
+    //   path: "/clothing",
+    //   component: ClothingPage,
+    //   children: [
+    //     { path: "/clothing/woman", component: WomanClothing, props: true },
+    //     { path: "men", component: MenClothing }
+    //   ]
+    // },
     { path: "/", component: HomePage },
     { path: "/my-cart", component: ShopCart },
     {
@@ -64,7 +64,8 @@ const router = createRouter({
         { path: "/my-account/SellerRecipt", component: SellerRecipt },
         { path: "/my-account/BuyerRecipt", component: BuyerRecipt }
       ]
-    }
+    },
+    { path: "/:catchAll(.*)", component: NotFound }
   ]
 });
 

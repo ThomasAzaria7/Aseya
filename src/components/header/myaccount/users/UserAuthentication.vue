@@ -62,7 +62,13 @@ export default {
   // margin: 0% 10%;
   position: relative;
   left: 0;
+  padding: 2% 30%;
+  height: 600px;
 
+  @media (max-width: 500px) {
+    padding: 0;
+    margin: 0;
+  }
   &::before {
     position: absolute;
     content: "";
@@ -72,11 +78,12 @@ export default {
     right: 0;
     // background-color: rgba(0, 0, 0, 0.5);
   }
-  // background-color: rgb(240, 240, 240);
-  padding: 2% 30%;
-  height: 600px;
   form {
     width: 100%;
+    @media (max-width: 500px) {
+      padding: 0 10%;
+      box-sizing: border-box;
+    }
   }
 
   .alternativeSignIn {

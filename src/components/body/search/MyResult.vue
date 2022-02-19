@@ -1,12 +1,14 @@
 <template>
   <div>
-    <p style="margin:0; position:absolute; top:-40px;">
+    <p style="margin:0; position:absolute; top:0px;">
       <strong>Search results for :</strong>
       <i>{{searchQuery}}</i>
     </p>
+    <br />
+    <br />
 
+    <button @click="getResult">get resuultss</button>
     <!-- <input type="text" v-model="words" />
-
     <h2>my word{{words}}</h2>-->
 
     <div class="results">
@@ -37,6 +39,17 @@ export default {
     getdata() {
       return this.$store.getters["items/getItems"];
       // return null;
+    }
+  },
+  methods: {
+    getResult() {
+      console.log(this.words);
+
+      this.getdata.includes(x => {
+        if (x.name == this.searchQuery) {
+          console.log(x.name);
+        }
+      });
     }
   }
 };

@@ -79,14 +79,14 @@
       </div>
     </div>
 
-    <div class="newlyArrivals">
+    <!-- <div class="newlyArrivals">
       <div class="newlyArrivals__itemBox item1">
         <picture-slide></picture-slide>
       </div>
       <div class="newlyArrivals__itemBox item2">
         <picture-slide></picture-slide>
       </div>
-    </div>
+    </div>-->
 
     <div class="itemSpotlight">
       <h2 style="position:absolute; top:0">Item Spotlight</h2>

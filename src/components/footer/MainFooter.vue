@@ -90,8 +90,16 @@
         <img src="https://cdn-icons-png.flaticon.com/512/888/888920.png" alt />
       </div>
     </div>
+
+    <div class="MobileFooter" style="background:white"></div>
   </div>
 </template>
+
+<script>
+export default {
+  component: []
+};
+</script>
 
 <style lang="scss" scoped>
 .footerContainer {

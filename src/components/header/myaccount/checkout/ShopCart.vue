@@ -8,18 +8,33 @@
             <img :src="item.imgLink" alt />
           </li>
           <div class="information">
-            <div class="price">
-              <li>{{ item.name }}</li>
-              <li>
-                Quantity: {{item.quantity}}
-                <!-- <input type="number"  v-model="" /> -->
-              </li>
-              <li>price $ {{ item.cost}}</li>
+            <div class="itemInfo">
+              <div class="price">
+                <li>{{ item.name }}</li>
+                <li>
+                  QTY: {{item.quantity}}
+                  <!-- <input type="number"  v-model="" /> -->
+                </li>
+                <li>$ {{ item.cost}}</li>
+              </div>
+              <div class="itemDetail">
+                <li>style : {{item.itemDetail.type}}</li>
+                <li>color: {{item.itemDetail.color}}</li>
+                <li>size: {{item.itemDetail.size}}</li>
+              </div>
             </div>
-            <div class="itemDetail">
-              <li>style : {{item.itemDetail.type}}</li>
-              <li>color: {{item.itemDetail.color}}</li>
-              <li>size: {{item.itemDetail.size}}</li>
+            <div class="shippingDetail">
+              <label for>shipping details</label>
+              <br />
+              <select name id>
+                <option value="AUSPOST">AUSPOST Regular</option>
+                <option value="AusExpress">AUSPOST Express</option>
+                <option value>Sendle</option>
+                <option value>ParcelPoint</option>
+                <option value>Omni Parcel</option>
+                <option value>Fastway</option>
+                <option value>Toll</option>
+              </select>
             </div>
           </div>
           <li class="deleteButton">
@@ -39,14 +54,19 @@
         <!-- <button @click="getAccessToken">access token</button> -->
         <!-- <button @click="getItemObject">get final items</button> -->
         <!-- <button @click="testRecipt">test recipt</button> -->
-        <button @click="sellerRecipts">test seller recipt</button>
+        <!-- <button @click="sellerRecipts">test seller recipt</button> -->
         <!-- <h2>{{ getToken }}</h2> -->
         <!-- <button @click="buyerRecipts()">buyer recipt testing</button> -->
+        <div class="formControl">
+          <input type="text" placeholder="your full name" />
+          <input width="100%" type="email" placeholder="your email please" />
+        </div>
+        <br />
         <div v-if="removeButton">
           <div id="paypal-button-container"></div>
         </div>
 
-        <button @click="remove">remove</button>
+        <!-- <button @click="remove">remove</button> -->
       </div>
     </div>
   </div>
@@ -131,13 +151,16 @@ export default {
       window.paypal
         .Buttons({
           createOrder: function() {
-            return fetch("http://localhost:3000/my-server/create-order", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: mydata
-            })
+            return fetch(
+              "https://aseyea.herokuapp.com/my-server/create-order",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: mydata
+              }
+            )
               .then(function(res) {
                 return res.json();
               })
@@ -150,7 +173,8 @@ export default {
           },
           onApprove: data => {
             return fetch(
-              "http://localhost:3000/my-server/capture-order/" + data.orderID,
+              "https://aseyea.herokuapp.com/my-server/capture-order/" +
+                data.orderID,
               {
                 method: "POST",
                 body: this.getToken
@@ -167,7 +191,7 @@ export default {
                 const itemId = OnSuccess.id;
                 // this.testRecipt(itemId);
                 return fetch(
-                  "http://localhost:3000/my-server/product/" + itemId,
+                  "https://aseyea.herokuapp.com/my-server/product/" + itemId,
                   {
                     method: "Get"
                   }
@@ -189,9 +213,19 @@ export default {
     },
     checkCart() {},
     removeItemFromCart(itemCode) {
-      const auth = this.$store.getters["UserState/getAuthState"];
+      const auth = this.$store.getters["UserState/getAuthState"]; //check if user is authenticated
+      // if guest
+      let uid; // variable to store user uid
+      if (auth) {
+        uid = auth.uid;
+      } else {
+        const dataUid = localStorage.getItem("uid");
+        uid = ["guest", dataUid];
+      }
+
+      //
       const userData = {
-        uid: auth.uid,
+        uid: uid,
         itemId: itemCode
       };
       this.$store.dispatch("UserState/deleteCartItem", userData);
@@ -211,7 +245,12 @@ export default {
 
     buyerRecipts(id) {
       // console.log(buyerDetail);
-      const uid = this.getUser;
+      let uid = this.getUser.uid; // variable to store user uid
+
+      if (!uid) {
+        const dataUid = localStorage.getItem("uid");
+        uid = ["guest", dataUid];
+      }
 
       // 5SJ92192WU205192X
       // "http://localhost:3000/my-server/product/5E787487BL240014A"  // for testing
@@ -222,7 +261,7 @@ export default {
         //     method: "Get",
         //   }
         // )
-        fetch("http://localhost:3000/my-server/product/" + id, {
+        fetch("https://aseyea.herokuapp.com/my-server/product/" + id, {
           method: "Get"
         })
           .then(x => x.json())
@@ -231,7 +270,7 @@ export default {
             // console.log(uid);
             const buyerDetail = {
               reciptData: reciptData,
-              uid: uid.uid
+              uid: uid
             };
 
             this.$store.dispatch("UserState/SendBuyerRecipt", buyerDetail); // buyer recipts
@@ -253,7 +292,7 @@ export default {
         //     method: "Get"
         //   }
         // )
-        fetch("http://localhost:3000/my-server/product/" + id, {
+        fetch("https://aseyea.herokuapp.com/my-server/product/" + id, {
           method: "Get"
         })
           .then(x => x.json())
@@ -283,10 +322,13 @@ export default {
     testRecipt(itemId) {
       const orderId = itemId;
       const uid = this.getUser.uid;
-      return fetch("http://localhost:3000/my-server/product/" + orderId, {
-        method: "GET"
-        // body: ""
-      })
+      return fetch(
+        "https://aseyea.herokuapp.com/my-server/product/" + orderId,
+        {
+          method: "GET"
+          // body: ""
+        }
+      )
         .then(x => x.json())
         .then(reciptData => {
           // modify recipt here
@@ -358,6 +400,18 @@ export default {
 <style lang="scss" scoped>
 // @import "./";
 
+.formControl {
+  margin: 10px 9%;
+  display: none;
+  input {
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 5px;
+
+    width: 100%;
+  }
+}
+
 #paypal-button-container {
   position: relative;
   color: pink;
@@ -411,7 +465,7 @@ export default {
         .imageBox {
           height: 200px;
           width: 150px;
-          flex: 0 0 23%;
+          flex: 0 0 30%;
           img {
             height: 200px;
             width: 100%;
@@ -422,13 +476,21 @@ export default {
         .information {
           display: flex;
           flex-direction: column;
-          justify-content: space-evenly;
-          flex: 0 0 70%;
+          // justify-content: space-evenly;
+          flex: 0 0 65%;
           background-color: white;
+          // flex-wrap: wrap;
+
+          .itemInfo {
+            flex: 0 0 70%;
+          }
+
+          .shippingDetail {
+          }
           .itemDetail {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            // display: flex;
+            // flex-direction: column;
+            justify-content: left;
             // background-color: rgb(146, 58, 58);
           }
 

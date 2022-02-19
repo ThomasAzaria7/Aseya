@@ -117,7 +117,7 @@ export default {
 
     let cart1 = state.shopItems.filter(x => payload.id === x.code);
 
-    console.log("item found", cart1);
+    // console.log("item found", cart1);
 
     if (cart1.length == 0) {
       cart1 = state.storeProducts.filter(x => payload.id === x.code);

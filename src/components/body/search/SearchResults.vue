@@ -1,14 +1,14 @@
 <template>
   <div class="searchContainer">
-    <ul class="nav">
+    <!-- <ul class="nav">
       <li>
         <a>Marketplace</a> /
         <a href>home</a>
       </li>
-    </ul>
+    </ul>-->
 
     <div class="innerContainer">
-      <ul class="sideNav">
+      <!-- <ul class="sideNav">
         <li>
           <a href>shipping methods</a>
         </li>
@@ -27,7 +27,7 @@
         <li>
           <a href>shipping methods</a>
         </li>
-      </ul>
+      </ul>-->
       <!-- <h1>my search</h1> -->
       <div class="outlet">
         <router-view></router-view>

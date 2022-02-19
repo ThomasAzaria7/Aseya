@@ -91,7 +91,7 @@ export default {
 
               //
               // send  welcome email
-              fetch("http://localhost:3000/my-server/register-welcome", {
+              fetch("https://aseyea.herokuapp.com/my-server/register-welcome", {
                 headers: {
                   "content-type": "application/json"
                 },
@@ -179,72 +179,143 @@ export default {
 
   async putItemInCart(state, userData) {
     // console.log(state, userData);
-    let item = userData.item;
 
-    const docRef = doc(db, "users", userData.uid); // refrence to user location on database based on individual user UID;
-    const docSnap = await getDoc(docRef);
-    const retrievedCartItems = docSnap.data().myCart;
-    // console.log(retrievedCartItems);
-    let cartItems = retrievedCartItems;
+    let auth = userData.auth;
+    let item = userData.item;
+    let uid = userData.uid;
 
     // let check = retrievedCartItems.filter((x) => x === userData);
+    console.log("user stats", userData.auth);
 
-    if (cartItems.length == 0) {
+    // if user is authenticated
+    if (auth == "registered") {
+      const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+      const docSnap = await getDoc(docRef);
+      const retrievedCartItems = docSnap.data().myCart;
+      let cartItems = retrievedCartItems;
       // check if cart in db is empty
-      // console.log("im here");
-      cartItems = [item];
+      if (cartItems.length == 0) {
+        // console.log("im here");
+        cartItems = [item];
 
-      await updateDoc(docRef, {
-        myCart: cartItems
-      });
-    } else {
-      // if cart is not empty.
-      for (let x = 0; x < cartItems.length; x++) {
-        // console.log("cart items", cartItems[x], "my item", item.Proxy);
-        if (
-          cartItems[x].code == item.code &&
-          cartItems[x].quantity == item.quantity
-        ) {
-          // console.log("identical");
-          return;
-          //
-        } else {
-          // console.log("not identical");
+        await updateDoc(docRef, {
+          myCart: cartItems
+        });
+      } else {
+        // if cart is not empty.
+        for (let x = 0; x < cartItems.length; x++) {
+          // console.log("cart items", cartItems[x], "my item", item.Proxy);
+          if (
+            cartItems[x].code == item.code &&
+            cartItems[x].quantity == item.quantity
+          ) {
+            // console.log("identical");
+            return;
+            //
+          } else {
+            // console.log("not identical");
 
-          cartItems.filter((x, i) => {
-            if (x.code == item.code) {
-              cartItems.splice(i, 1);
-            }
-            // console.log(x, i);
-          });
-          cartItems.unshift(item);
-          await updateDoc(docRef, {
-            myCart: cartItems
-          });
-          return;
+            cartItems.filter((x, i) => {
+              if (x.code == item.code) {
+                cartItems.splice(i, 1);
+              }
+              // console.log(x, i);
+            });
+            cartItems.unshift(item);
+            await updateDoc(docRef, {
+              myCart: cartItems
+            });
+            return;
+          }
         }
       }
+    } else if (auth == "guest") {
+      console.log("here");
+
+      // retrieve data and create ref
+      const docRefGuest = doc(db, "Guestusers", uid); // refrence to user location on database based on individual user UID;
+
+      const docSnapGuest = await getDoc(docRefGuest);
+
+      let retrievedGuestCartItems;
+      let cartItems;
+      try {
+        retrievedGuestCartItems = docSnapGuest.data().myCart;
+        cartItems = retrievedGuestCartItems;
+        console.log("guest cart item", cartItems);
+      } catch (error) {
+        setDoc(docRefGuest, {
+          displayName: "",
+          email: null,
+          address: "",
+          phoneNumber: "",
+          photoUrl: "",
+          myFavList: [],
+          myCart: [],
+          provider: "guest" // usepayload to get dcoument name information
+        });
+        //
+        console.log(error);
+      }
+
+      if (cartItems.length == 0) {
+        // check if cart in db is empty
+        // console.log("im here");
+        cartItems = [item];
+
+        await updateDoc(docRefGuest, {
+          myCart: cartItems
+        });
+      } else {
+        // if cart is not empty.
+        for (let x = 0; x < cartItems.length; x++) {
+          // console.log("cart items", cartItems[x], "my item", item.Proxy);
+          if (
+            cartItems[x].code == item.code &&
+            cartItems[x].quantity == item.quantity
+          ) {
+            // console.log("identical");
+            return;
+            //
+          } else {
+            // console.log("not identical");
+
+            cartItems.filter((x, i) => {
+              if (x.code == item.code) {
+                cartItems.splice(i, 1);
+              }
+              // console.log(x, i);
+            });
+            cartItems.unshift(item);
+            await updateDoc(docRefGuest, {
+              myCart: cartItems
+            });
+            return;
+          }
+        }
+
+        //
+      }
+
+      // console.log("cart itessssss", check);
+
+      // try {
+      //   console.log("hi");
+      //   // contact firebase to update itemscart  // myCart // object
+      //   const result = await updateDoc(docRef, {
+      //     myCart: cartItems
+      //   });
+
+      //   console.log("Document written with ID: ", result);
+      // } catch (e) {
+      //   console.error("Error adding document: ", e);
+      // }
+      //   console.log("else");
+      //   state.error = "product already in cart";
+
+      //
     }
-
-    // console.log("cart itessssss", check);
-
-    // try {
-    //   console.log("hi");
-    //   // contact firebase to update itemscart  // myCart // object
-    //   const result = await updateDoc(docRef, {
-    //     myCart: cartItems
-    //   });
-
-    //   console.log("Document written with ID: ", result);
-    // } catch (e) {
-    //   console.error("Error adding document: ", e);
-    // }
-    //   console.log("else");
-    //   state.error = "product already in cart";
-
-    //
   },
-
   async putItemInFav(state, userData) {
     // console.log(state, userData);
 
@@ -316,8 +387,15 @@ export default {
   //
 
   async getCartItemsFromDB(state, uid) {
+    let docRef;
     // console.log(state, uid);
-    const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    if (uid[0] == "guest") {
+      console.log("guest");
+      docRef = doc(db, "Guestusers", uid[1]); // refrence to user location on database based on individual user UID;
+    } else {
+      console.log("user");
+      docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    }
     // const docSnap = await getDoc(docRef); // retrieve user data from database
 
     //
@@ -340,8 +418,17 @@ export default {
     // const retrievedCartItems = docSnap.data().myFavList; //  get FavLIst items
     // console.log(retrievedCartItems, state);
   },
+
   async getFavItemsFromDB(state, uid) {
-    const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    let docRef;
+    // console.log(state, uid);
+    if (uid[0] == "guest") {
+      console.log("guest");
+      docRef = doc(db, "Guestusers", uid[1]); // refrence to user location on database based on individual user UID;
+    } else {
+      console.log("user");
+      docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    }
     let retreieveFavItems = [];
 
     try {
@@ -359,7 +446,17 @@ export default {
   //deleting items from user cart and favourite
   async removeItemFromCart(state, userData) {
     // console.log(state, userData.uid);
-    const docRef = doc(db, "users", userData.uid);
+    let docRef;
+    // = doc(db, "users", userData.uid);
+
+    if (userData.uid[0] == "guest") {
+      console.log("guest");
+      docRef = doc(db, "Guestusers", userData.uid[1]); // refrence to user location on database based on individual user UID;
+    } else {
+      console.log("user");
+      docRef = doc(db, "users", userData.uid); // refrence to user location on database based on individual user UID;
+    }
+
     const docSnap = await getDoc(docRef); // retrieve user data from database
     let retrievedCartItems = docSnap.data().myCart;
 
@@ -390,9 +487,18 @@ export default {
 
   async makeBuyerRecipts(state, payload) {
     const items = payload.reciptData.body;
-    const uid = payload.uid;
 
-    const docRef = doc(db, "users", uid); // refrence to user location on database based on individual user UID;
+    let docRef; // refrence to user location on database based on individual user UID;
+    // = doc(db, "users", userData.uid);
+
+    if (payload.uid[0] == "guest") {
+      console.log("guest");
+      docRef = doc(db, "Guestusers", payload.uid[1]); // refrence to user location on database based on individual user UID;
+    } else {
+      console.log("user");
+      docRef = doc(db, "users", payload.uid); // refrence to user location on database based on individual user UID;
+    }
+
     await updateDoc(docRef, {
       myCart: []
     });
@@ -414,7 +520,7 @@ export default {
       current_SEller_email: "sellerEmail"
     };
     const dataY = JSON.stringify(mailData);
-    fetch("http://localhost:3000/my-server/buyer-recipt", {
+    fetch("https://aseyea.herokuapp.com/my-server/buyer-recipt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -546,7 +652,7 @@ export default {
         // first loop prepare seller infor and data to be emailed.
         // console.log(sellerEmail);
 
-        await fetch("http://localhost:3000/my-server/send-recipt", {
+        await fetch("https://aseyea.herokuapp.com/my-server/send-recipt", {
           // this is inside of a loop,
           method: "POST",
           headers: {
@@ -684,7 +790,7 @@ export default {
    */
 
   updateToken(state) {
-    return fetch("http://localhost:3000/my-server/token", {
+    return fetch("https://aseyea.herokuapp.com/my-server/token", {
       method: "POST"
     })
       .then(function(res) {

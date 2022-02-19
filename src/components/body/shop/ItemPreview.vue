@@ -1,41 +1,48 @@
 <template>
   <div class="previewContainer">
-    <br />
-    <section v-if="getItemData" class="itemDisplay">
-      <div class="itemImgageBox">
-        <img :src="getItemData.imgLink" alt />
+    <div class="loading" v-if="!previewItem">
+      <div class="lds-hourglass"></div>
+    </div>
+    <section v-if="previewItem" class="itemDisplay">
+      <div>
+        <div class="itemImgageBox">
+          <img :src="displayPic" alt />
+        </div>
         <div class="itemImgageBox__altImages">
           <div v-for="item in altImages" :key="item">
-            <img :src="item" alt />
+            <img @click="changeDisplayPic(item) " :src="item" alt />
           </div>
         </div>
       </div>
       <div class="selectionBox">
         <div>
-          <br />
-          <h2>{{ getItemData.name }}</h2>
-          <hr />
-          <p>{{ getItemData.description }}</p>
-
-          <p>$ {{ getItemData.exchangePrice }} {{getCurrency.type}}</p>
+          <!-- <br /> -->
+          <h2 class="title">{{ previewItem.name }}</h2>
+          <!-- <hr /> -->
+          <p>{{ previewItem.description }}</p>
+          <p class="price">
+            $ {{ previewItem.exchangePrice}}
+            <span style="font-size:16px">AUD</span>
+          </p>
         </div>
 
+        <!--  -->
         <div class="formControl">
-          <div v-if="typeArr.length !== 0">
+          <div v-if="typeArr">
             <label for>Select your Style</label>
             <select v-model="type">
               <option selected disabled hidden>select</option>
               <option v-for="item in typeArr" :key="item" :value="item">{{item}}</option>
             </select>
           </div>
-          <div v-if="colorArr.length !== 0">
+          <div v-if="colorArr">
             <label for>Select your color</label>
             <select v-model="color">
               <option selected disabled hidden>select</option>
               <option v-for="item in colorArr" :key="item" :value="item">{{item}}</option>
             </select>
           </div>
-          <div v-if="sizeArr.length !== 0">
+          <div v-if="sizeArr">
             <label for>Select your size</label>
             <select v-model="size">
               <option selected disabled hidden>select</option>
@@ -60,9 +67,9 @@
             </i>
           </div>
         </div>
-        <p class="helpText" v-if="checkIfItemExists">
+        <!-- <p class="helpText" v-if="checkIfItemExists">
           <span style="color:red; font-size:20px">*</span> This item exists in your cart, please change Quantity Instead.
-        </p>
+        </p>-->
 
         <br />
       </div>
@@ -73,16 +80,16 @@
       <br />
       <nav>
         <ul>
-          <li>
+          <li @click="descriptionStat('desc')" :class="{active: slectionTab == 'desc'}">
             <a>Product Dsescription</a>
           </li>
-          <li class="active">
+          <li @click="descriptionStat('shipping')" :class="{active: slectionTab == 'shipping'}">
             <a>Shipping and Handling</a>
           </li>
-          <li>
+          <li @click="descriptionStat('other')" :class="{active: slectionTab == 'other'}">
             <a>description</a>
           </li>
-          <li>
+          <li @click="descriptionStat('review')" :class="{active: slectionTab == 'review'}">
             <a>Reviews</a>
           </li>
         </ul>
@@ -97,17 +104,23 @@
         <div class="itemDescription__contents-reviews"></div>
       </div>
     </section>
-
+    <!--  -->
     <section class="productReccomendations">
       <h2 style="text-align:center">Similar Products</h2>
       <br />
       <div class="itemsContainer">
         <div class="item" v-for="data in getdata" :key="data">
-          <img @click="getDisplayItem(data.code)" :src="data.imgLink" alt />
-          <p>
-            {{data.name}}
-            <span>${{data.price}} {{getCurrency.type}}</span>
-          </p>
+          <img @click="getPreviewItem(data.code)" :src="data.imgLink" alt />
+          <div class="itemDesc">
+            <p class="name">
+              {{data.name}}
+              <!-- <span>${{data.price}} {{getCurrency.type}}</span> -->
+            </p>
+            <p class="price">
+              ${{data.price}}
+              <span style="font-size:16px">AUD</span>
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -119,7 +132,8 @@
 export default {
   data() {
     return {
-      // items: "Thomas",
+      previewItem: null,
+      displayPic: null,
       quantity: 1,
       load: false,
       altImages: [
@@ -133,124 +147,179 @@ export default {
       size: "",
       color: "",
       //
-      colorArr: [],
-      sizeArr: [],
-      typeArr: []
+      colorArr: null,
+      sizeArr: null,
+      typeArr: null,
+
+      slectionTab: "desc" // for selecting different tabs in product descriptions
     };
   },
-
   created() {
-    // this.items = this.$store.getters["items/getItems"];
-    // console.log(this.items);
-    // console.log(this.$store.getters["items/getItems"][0]);
-    // console.log(this.$store.getters["items/getdata"]);
-
-    setTimeout(() => {
-      // console.log("dettttttaillls", this.getItemData.itemDetail);
-      this.colorArr = this.getItemData.itemDetail.color;
-      this.typeArr = this.getItemData.itemDetail.type;
-      this.sizeArr = this.getItemData.itemDetail.size;
-
-      console.log(this.getItemData.itemDetail);
-
-      // console.log("colorARR", this.colorArr);
-    }, 3000);
+    console.log("created");
   },
   mounted() {
-    this.quantity = 1;
-    // console.log(this.quantity);
+    console.log("mounted");
 
-    this.getDisplayItem();
-    window.scrollTo(0, 0);
+    this.getPreviewItem();
+    // console.log(this.getItemData);
+    // this.getPreviewItem();
+    // console.log(this.previewItem);
   },
   computed: {
-    getCurrency() {
-      return this.$store.getters["items/getCurrencyValue"];
-    },
-    getItemData() {
-      return this.$store.getters["items/getSelectedItem"];
-    },
-    checkIfItemExists() {
-      return this.$store.getters["UserState/itemExists"]; // get total number of items in fav list
-    },
+    // getItemData() {
+    //   return ;
+    // }
     getdata() {
       return this.$store.getters["items/getItems"];
-      // return null;
     }
   },
   watch: {
-    checkIfItemExists(newVal) {
-      if (newVal) {
-        setTimeout(() => {
-          this.$store.dispatch("UserState/clearCartExistError");
-        }, 5000);
-      }
-    },
-
-    quantity(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        // console.log("new value", newVal, "oldVal", oldVal);
-        this.getItemData.quantity = newVal;
-      }
+    quantity(newVal, old) {
+      console.log("new", newVal, "old", old);
+      this.quantity = newVal;
+      // this.colorArr;
     }
-    // itemCode(newVal, oldVal) {
-    //   console.log(newVal);
-    //   console.log(oldVal);
-    // },
-    // getItemData(newVal, old) {
-    //   console.log(newVal, "new value");
-    //   console.log(old, "old value");
-    // }
   },
   methods: {
-    getDisplayItem(code) {
-      // console.log("my code", code);
+    descriptionStat(x) {
+      console.log(x);
 
-      this.$router.replace(code);
-      const itemCode = this.$route.params;
-      if (code) {
-        //
-        this.$store.dispatch("items/getSelectedProduct", code);
-      }
-      if (itemCode) {
-        setTimeout(() => {
-          this.$store.dispatch("items/getSelectedProduct", itemCode);
-        }, 2000);
-        this.$store.dispatch("items/getSelectedProduct", itemCode);
-      }
-
-      window.scrollTo(0, 0);
+      this.slectionTab = x;
     },
-    addToFavList() {
-      const auth = this.$store.getters["UserState/getAuthState"];
-      const userUID = auth.uid;
-      const userData = {
-        item: this.getItemData,
-        uid: userUID
-      };
-      this.$store.dispatch("UserState/putToFav", userData);
-      // console.log("clickws");
+    getPreviewItem(x) {
+      let itemCode;
+
+      if (x) {
+        itemCode = x;
+        this.$router.replace(itemCode);
+      }
+      setTimeout(() => {
+        itemCode = this.$route.params;
+        this.$store.dispatch("items/getSelectedProduct", itemCode);
+        this.previewItem = this.$store.getters["items/getSelectedItem"];
+        this.displayPic = this.previewItem.imgLink;
+
+        this.colorArr = JSON.parse(
+          JSON.stringify(this.previewItem.itemDetail.color)
+        );
+        console.log(this.colorArr[0]);
+
+        //
+        try {
+          this.previewItem.itemDetail.color[0]
+            ? (this.colorArr = this.previewItem.itemDetail.color)
+            : null;
+          this.previewItem.itemDetail.type[0]
+            ? (this.typeArr = this.previewItem.itemDetail.type)
+            : null;
+          this.previewItem.itemDetail.size[0]
+            ? (this.sizeArr = this.previewItem.itemDetail.size)
+            : null;
+        } catch (error) {
+          //
+        }
+        console.log(this.previewItem.itemDetail.color);
+        console.log(this.previewItem);
+      }, 2000);
+      scroll(0, 0);
+    },
+    changeDisplayPic(pic) {
+      this.displayPic = pic;
     },
     addItemToCart() {
-      // value = favCart|| shopCart
+      // value = favCart || shopCart
       const auth = this.$store.getters["UserState/getAuthState"];
-      const userUID = auth.uid;
+
+      let userUID = null;
+      let user = null;
+
+      if (auth) {
+        userUID = auth.uid;
+        user = "registered";
+      } else {
+        //
+        user = "guest";
+
+        let GuestUID = localStorage.getItem("uid");
+        if (!GuestUID) {
+          // if user is a guest account
+          let result = [];
+          let hexRef = [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z"
+          ];
+
+          for (let n = 0; n < 25; n++) {
+            result.push(hexRef[Math.floor(Math.random() * 16)]);
+          }
+          const uid = result.join("");
+
+          // console.log(uid);
+
+          // gen id & store in localStoreage or cookie
+
+          window.localStorage.setItem("uid", uid);
+        }
+
+        GuestUID = localStorage.getItem("uid");
+        userUID = GuestUID;
+        console.log("guest uid", GuestUID);
+      }
       // console.log(this.getItemData);
+
+      console.log(this.quantity);
 
       // console.log("type selected", this.type);
       // console.log("cost of itemsss", this.getItemData.cost);
 
       //update fields
 
-      this.getItemData.itemDetail = {
+      this.previewItem.quantity = this.quantity;
+
+      this.previewItem.itemDetail = {
         color: this.color,
         size: this.size,
         type: this.type
       };
 
       const userData = {
-        item: this.getItemData,
-        uid: userUID
+        item: this.previewItem,
+        uid: userUID,
+        auth: user
       };
       this.$store.dispatch("UserState/putToCart", userData);
     }
@@ -258,33 +327,33 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
 .previewContainer {
   min-height: 100vh;
   background-color: #eeeeee;
 
   .itemDisplay {
-    padding: 20px 10%;
+    padding: 50px 10%;
     background-color: rgb(255, 255, 255);
-    height: 70vh;
+    height: 80vh;
     display: grid;
     grid-template-columns: 50% 50%;
 
     .itemImgageBox {
-      height: 70vh;
+      height: 65vh;
       position: relative;
-      background-color: rgb(255, 255, 255);
+      background-color: rgb(233, 233, 233);
 
       &__altImages {
-        position: absolute;
+        // position: absolute;
         bottom: 0;
         // height: 50px;
-        width: 100%;
+        // width: 100%;
         display: flex;
         justify-content: center;
         gap: 5px;
-        background-color: rgba(0, 0, 0, 0.274);
+        padding: 20px 0;
+        // background-color: rgba(0, 0, 0, 0.274);
 
         div {
           display: flex;
@@ -294,6 +363,7 @@ export default {
         img {
           height: 100%;
           width: 100%;
+          object-fit: cover;
         }
       }
 
@@ -311,13 +381,15 @@ export default {
       box-sizing: border-box;
       border-left: solid 2px rgba(134, 134, 134, 0.075);
 
-      h2 {
+      .title {
         margin: 0;
-        color: #68016b;
+        padding: 0;
+        color: #330135;
+        background-color: #cfcfcf23;
       }
       p {
-        color: #450347;
-        font-size: 18px;
+        color: #330135;
+        font-size: 17px;
       }
 
       .fa-heart {
@@ -325,7 +397,7 @@ export default {
       }
 
       .formControl {
-        width: 70%;
+        // width: 70%;
         margin: 10px 0;
         box-sizing: border-box;
         div {
@@ -334,24 +406,25 @@ export default {
           select {
             // width: 100%;
             box-sizing: border-box;
-            color: #68016b;
+            color: #330135;
+            margin: 4px;
           }
 
           input {
             width: 30%;
             box-sizing: border-box;
-            color: #68016b;
+            color: #330135;
           }
 
           label {
-            margin: 5px 0;
+            margin: 4px 0;
             padding: 0;
-            font-size: 20px;
-            color: #68016b;
+            font-size: 18px;
+            color: #330135;
           }
 
           & > * {
-            padding: 5px;
+            padding: 2px;
             box-sizing: border-box;
             display: block;
             width: 100%;
@@ -394,11 +467,11 @@ export default {
 
   .itemDescription {
     background-color: rgba(255, 255, 255, 0.575);
-    height: 80vh;
+    height: 90vh;
     // margin: 20px 0;
     position: relative;
     box-sizing: border-box;
-    padding: 0px 10%;
+    padding: 0px 5%;
 
     nav {
       ul {
@@ -411,6 +484,11 @@ export default {
         margin: 0;
         padding: 0;
         width: 60%;
+        @media (max-width: 500px) {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
 
         li {
           // float: left;
@@ -441,11 +519,11 @@ export default {
     .itemsContainer {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
+      // flex-wrap: wrap;
       .item {
-        width: 300px;
-        flex: 1 1 20%;
-        height: 300px;
+        width: 100px;
+        flex: 1 1 15%;
+        height: 200px;
 
         img {
           width: 100%;
@@ -458,5 +536,114 @@ export default {
       margin: 0;
     }
   }
+  //
+  /* tablets */
+  @media (min-width: 500px) and (max-width: 768px) {
+    .itemDisplay {
+      padding: 10px 0%;
+      // display: flex;
+      // flex-direction: column;
+      height: 100%;
+    }
+  }
+
+  /*mobile */
+  @media (max-width: 500px) {
+    .itemDisplay {
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      .itemImgageBox {
+        background-color: white;
+        padding: 0 5%;
+        img {
+          object-fit: cover;
+        }
+      }
+      .selectionBox {
+        .price {
+          font-size: 35px;
+          color: black;
+        }
+      }
+    }
+
+    .productReccomendations {
+      position: relative;
+      // height: 100vh;
+      padding: 20px 5%;
+      .itemsContainer {
+        display: flex;
+        flex-wrap: wrap;
+
+        .item {
+          flex: 1 1 30%;
+          padding: 10px 0;
+
+          .itemDesc {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            p {
+              margin: 0;
+              padding: 0;
+            }
+            .name {
+              font-size: 14px;
+            }
+            .price {
+              // position: absolute;
+              // right: 10px;
+              // top: 16px;
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+  //end of mobile
+
+  //
+  .loading {
+    position: relative;
+    height: 80vh;
+  }
+  .lds-hourglass {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+  }
+  .lds-hourglass:after {
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    margin: 8px;
+    box-sizing: border-box;
+    border: 32px solid rgb(8, 3, 3);
+    border-color: rgb(73, 34, 34) transparent rgb(117, 58, 58) transparent;
+    animation: lds-hourglass 1.2s infinite;
+  }
+  @keyframes lds-hourglass {
+    0% {
+      transform: rotate(0);
+      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    50% {
+      transform: rotate(900deg);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    100% {
+      transform: rotate(1800deg);
+    }
+  }
+  //
 }
 </style>
